@@ -1,411 +1,356 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Risk Management Pro v4.1</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Risk Manager 98 Pro</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
-        
+        /* --- 90s SYSTEM THEME --- */
+        :root {
+            --win-gray: #c0c0c0;
+            --win-dark-gray: #808080;
+            --win-white: #ffffff;
+            --win-black: #000000;
+            --win-blue: #000080;
+            --desktop-teal: #008080;
+            --lcd-bg: #1a1a1a;
+            --lcd-text: #00ff00;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0f172a;
-            color: #e2e8f0;
-            padding-top: 100px; 
-            padding-bottom: 50px;
-            overflow-x: hidden;
+            background-color: var(--desktop-teal);
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            margin: 0; padding: 10px;
+            min-height: 100vh;
+            display: flex; justify-content: center; align-items: flex-start;
+            color: black; font-size: 14px;
         }
 
-        .navbar {
-            background-color: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid #334155;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 50;
-            height: 70px;
+        /* UTILS */
+        .win-box {
+            background-color: var(--win-gray);
+            border-top: 2px solid var(--win-white); border-left: 2px solid var(--win-white);
+            border-right: 2px solid var(--win-black); border-bottom: 2px solid var(--win-black);
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
         }
 
-        .input-dark {
-            background-color: #1e293b;
-            border: 1px solid #334155;
-            color: white;
-            transition: all 0.3s ease;
+        .win-inset {
+            background-color: white;
+            border-top: 2px solid var(--win-dark-gray); border-left: 2px solid var(--win-dark-gray);
+            border-right: 2px solid var(--win-white); border-bottom: 2px solid var(--win-white);
         }
 
-        .input-dark:focus {
-            border-color: #3b82f6;
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        .win-btn {
+            background-color: var(--win-gray);
+            border-top: 2px solid var(--win-white); border-left: 2px solid var(--win-white);
+            border-right: 2px solid var(--win-black); border-bottom: 2px solid var(--win-black);
+            cursor: pointer; font-weight: bold; display: flex; justify-content: center; align-items: center;
         }
+        .win-btn:active { border-style: inset; }
 
-        .tab-btn {
-            background-color: transparent;
-            color: #94a3b8;
-            border: 1px solid #334155;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
+        .window-container { width: 100%; max-width: 600px; display: flex; flex-direction: column; margin-bottom: 20px; }
         
-        .tab-btn:hover {
-            background-color: #1e293b;
-            color: #fff;
+        .title-bar {
+            background: linear-gradient(90deg, var(--win-blue), #1084d0);
+            padding: 6px 8px; display: flex; justify-content: space-between; align-items: center;
+            color: white; font-weight: bold;
         }
 
+        /* TABS AS BUTTONS */
+        .tabs-wrapper { padding: 8px 8px 0 8px; display: flex; gap: 4px; overflow-x: auto; }
+        .tab-btn {
+            flex: 1; padding: 10px 5px; border: none; background: var(--win-gray);
+            border-top: 2px solid var(--win-white); border-left: 2px solid var(--win-white);
+            border-right: 2px solid var(--win-black); border-bottom: none;
+            cursor: pointer; position: relative; font-weight: normal; font-size: 13px;
+        }
         .tab-btn.active {
-            background-color: #3b82f6 !important;
-            color: white !important;
-            border-color: #3b82f6 !important;
-            font-weight: bold;
-            box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.5);
+            font-weight: bold; padding-bottom: 12px; margin-top: -4px; z-index: 10;
+            border-top: 2px solid var(--win-white); border-left: 2px solid var(--win-white);
+            border-right: 2px solid var(--win-dark-gray);
         }
 
-        #loading-screen {
-            position: fixed;
-            inset: 0;
-            background-color: #0f172a;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 0.5s ease-out, visibility 0.5s;
-        }
+        .content-area { padding: 15px; margin: 0 8px 8px 8px; background: var(--win-gray); border: 2px solid var(--win-white); border-right-color: black; border-bottom-color: black; }
+
+        /* INPUTS */
+        .form-row { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 12px; }
+        .form-col { flex: 1; min-width: 140px; display: flex; flex-direction: column; }
+        .form-col label { margin-bottom: 5px; font-size: 13px; font-weight: 600; }
+        input, select { width: 100%; height: 35px; padding: 0 8px; border: none; background: transparent; font-size: 16px; font-weight: bold; font-family: monospace; outline: none; }
+        
+        .risk-group { display: flex; align-items: center; background: white; border: 2px inset gray; }
+        .risk-group input { flex: 1; border: none; }
+        .risk-group select { width: 50px; background: #eee; border-left: 1px solid gray; }
+
+        .radio-panel { background: #ddd; padding: 8px; border: 1px dotted #888; margin-bottom: 15px; display: flex; gap: 15px; align-items: center; }
+        
+        /* LCD SCREEN */
+        .lcd-display { background: var(--lcd-bg); color: var(--lcd-text); padding: 15px; border: 4px inset gray; margin-top: 20px; font-family: monospace; text-shadow: 0 0 2px rgba(0,255,0,0.4); }
+        .lcd-row { display: flex; justify-content: space-between; border-bottom: 1px dashed #333; padding-bottom: 4px; margin-bottom: 5px; }
+        .lcd-big { font-size: 24px; font-weight: bold; text-align: right; color: #fff; margin: 10px 0; }
+        
+        .tp-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; margin-top: 10px; text-align: center; font-size: 11px; }
+        .tp-box { border: 1px solid #444; padding: 4px; }
+        .tp-val { color: yellow; font-weight: bold; font-size: 12px; }
+        
+        .footer { margin-top: 10px; padding: 4px; border: 1px inset white; font-size: 11px; display: flex; justify-content: space-between; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center px-4">
+<body>
 
-    <!-- Loading Screen -->
-    <div id="loading-screen">
-        <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500 mb-6"></div>
-        <h1 class="text-3xl font-bold text-white tracking-wider mb-2">Risk<span class="text-blue-500">Manager</span></h1>
-        <p class="text-slate-400 text-sm animate-pulse">Initializing...</p>
-    </div>
-
-    <!-- Navbar -->
-    <nav class="navbar px-6 flex justify-between items-center shadow-lg">
-        <div class="flex items-center gap-3">
-            <div class="bg-blue-600 w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold shadow-blue-500/50 shadow-lg">
-                RM
-            </div>
-            <h1 class="text-lg font-bold text-white tracking-wide">Risk<span class="text-blue-500">Manager</span></h1>
-        </div>
-        <div class="hidden md:flex gap-6 text-sm font-medium text-slate-400">
-            <a href="#" class="text-white hover:text-blue-400 transition">Calculator</a>
-            <a href="#" class="hover:text-blue-400 transition">Settings</a>
-        </div>
-    </nav>
-
-    <!-- Main Container -->
-    <div class="w-full max-w-lg bg-slate-800 rounded-2xl shadow-2xl overflow-hidden border border-slate-700 relative z-10">
-        
-        <!-- Header Container -->
-        <div class="bg-slate-900/50 p-4 border-b border-slate-700">
-            <h2 class="text-sm font-semibold text-white flex items-center gap-2">
-                <i class="fas fa-calculator text-blue-500"></i> Calculator Mode
-            </h2>
-        </div>
-
-        <!-- Asset Type Selector -->
-        <div class="grid grid-cols-4 gap-2 p-4 pb-0">
-            <button onclick="changeMode('forex')" id="btn-forex" class="tab-btn active py-3 rounded-lg text-[10px] md:text-xs">
-                <i class="fas fa-money-bill-wave block md:inline mb-1 md:mb-0"></i> Forex
-            </button>
-            <button onclick="changeMode('gold')" id="btn-gold" class="tab-btn py-3 rounded-lg text-[10px] md:text-xs">
-                <i class="fas fa-gem block md:inline mb-1 md:mb-0"></i> Gold
-            </button>
-            <button onclick="changeMode('crypto')" id="btn-crypto" class="tab-btn py-3 rounded-lg text-[10px] md:text-xs">
-                <i class="fab fa-bitcoin block md:inline mb-1 md:mb-0"></i> Crypto
-            </button>
-            <button onclick="changeMode('stock')" id="btn-stock" class="tab-btn py-3 rounded-lg text-[10px] md:text-xs">
-                <i class="fas fa-chart-line block md:inline mb-1 md:mb-0"></i> Stock
-            </button>
-        </div>
-
-        <div class="p-6 space-y-4">
-            
-            <!-- Forex Options -->
-            <div id="forexOptions" style="display: block;" class="bg-slate-700/30 p-3 rounded-lg border border-slate-600">
-                <div class="flex items-center justify-between mb-2">
-                    <span class="text-xs text-slate-400 font-semibold">Forex Pair Type</span>
-                </div>
-                <div class="flex gap-2 text-xs">
-                    <label class="flex items-center gap-2 cursor-pointer p-1">
-                        <input type="radio" name="pairType" value="standard" checked onclick="calculate()" class="accent-blue-500">
-                        <span>Standard (.../USD)</span>
-                    </label>
-                    <label class="flex items-center gap-2 cursor-pointer p-1">
-                        <input type="radio" name="pairType" value="cross" onclick="calculate()" class="accent-blue-500">
-                        <span>Cross/JPY</span>
-                    </label>
-                </div>
-                <div id="conversionBox" style="display: none;" class="mt-3 pt-2 border-t border-slate-600">
-                    <label class="block text-xs font-medium text-yellow-400 mb-1">Conversion Pair Price (USD/XXX)</label>
-                    <input type="number" id="conversionRate" placeholder="e.g. 145.50 (USDJPY)" class="input-dark w-full px-3 py-2 rounded text-sm" oninput="calculate()">
-                </div>
-            </div>
-
-            <!-- Gold Options -->
-            <div id="goldOptions" style="display: none;" class="bg-slate-700/30 p-3 rounded-lg border border-slate-600">
-                <div class="flex items-center justify-between mb-2">
-                    <span class="text-xs text-slate-400 font-semibold">Gold Account Type</span>
-                </div>
-                <div class="flex gap-4 text-xs">
-                    <label class="flex items-center gap-2 cursor-pointer p-1">
-                        <input type="radio" name="goldAccountType" value="standard" checked onclick="updateGoldCurrency()" class="accent-yellow-500">
-                        <span>Standard (USD)</span>
-                    </label>
-                    <label class="flex items-center gap-2 cursor-pointer p-1">
-                        <input type="radio" name="goldAccountType" value="cent" onclick="updateGoldCurrency()" class="accent-orange-500">
-                        <span>Cent (USC)</span>
-                    </label>
-                </div>
-            </div>
-
-            <!-- Stock Options -->
-            <div id="stockOptions" style="display: none;" class="bg-slate-700/30 p-3 rounded-lg border border-slate-600">
-                <div class="flex items-center justify-between mb-2">
-                    <span class="text-xs text-slate-400 font-semibold">Stock Currency</span>
-                </div>
-                <div class="flex gap-4 text-xs">
-                    <label class="flex items-center gap-2 cursor-pointer p-1">
-                        <input type="radio" name="stockCurrency" value="idr" checked onclick="updateStockCurrency()" class="accent-red-500">
-                        <span>IDR (Rp) - Indo</span>
-                    </label>
-                    <label class="flex items-center gap-2 cursor-pointer p-1">
-                        <input type="radio" name="stockCurrency" value="usd" onclick="updateStockCurrency()" class="accent-green-500">
-                        <span>USD ($) - US</span>
-                    </label>
-                </div>
-            </div>
-
-            <!-- Balance & Leverage Row -->
-            <div class="flex gap-4">
-                <div class="w-full transition-all duration-300" id="balanceContainer">
-                    <label class="block text-xs font-medium text-slate-400 mb-1">Account Balance</label>
-                    <div class="relative">
-                        <span class="absolute left-3 top-3 text-slate-500 currency-symbol">$</span>
-                        <input type="number" id="balance" placeholder="1000" class="input-dark w-full pl-10 pr-4 py-2.5 rounded-lg font-semibold" oninput="calculate()">
-                    </div>
-                </div>
-                <div class="w-1/3 transition-all duration-300" id="leverageContainer">
-                    <label class="block text-xs font-medium text-slate-400 mb-1">Leverage 1:</label>
-                    <input type="number" id="leverage" placeholder="100" class="input-dark w-full px-2 py-2.5 rounded-lg font-semibold text-sm" oninput="calculate()">
-                </div>
-            </div>
-
-            <!-- Risk Input -->
-            <div class="flex gap-4">
-                <div class="w-1/2">
-                    <label class="block text-xs font-medium text-slate-400 mb-1">Risk Limit</label>
-                    <div class="flex items-center">
-                        <input type="number" id="riskValue" placeholder="1" class="input-dark w-full px-4 py-2.5 rounded-l-lg font-semibold" oninput="calculate()">
-                        <select id="riskType" class="bg-slate-700 border border-l-0 border-slate-600 text-white py-2.5 px-2 rounded-r-lg text-sm outline-none" onchange="calculate()">
-                            <option value="percent">%</option>
-                            <option value="money" class="currency-symbol-opt">$</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="w-1/2">
-                    <label class="block text-xs font-medium text-slate-400 mb-1">Max Loss</label>
-                    <div class="input-dark w-full px-4 py-2.5 rounded-lg font-semibold text-red-400 bg-opacity-50 flex items-center" id="riskAmountDisplay">
-                        0.00
-                    </div>
-                </div>
-            </div>
-
-            <!-- Price Inputs -->
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-xs font-medium text-slate-400 mb-1">Entry Price</label>
-                    <input type="number" id="entryPrice" placeholder="0.00" step="any" class="input-dark w-full px-4 py-2.5 rounded-lg font-mono" oninput="calculate()">
-                </div>
-                <div>
-                    <label class="block text-xs font-medium text-slate-400 mb-1">Stop Loss</label>
-                    <input type="number" id="stopLoss" placeholder="0.00" step="any" class="input-dark w-full px-4 py-2.5 rounded-lg font-mono border-red-900/50 focus:border-red-500" oninput="calculate()">
-                </div>
-            </div>
-
-            <!-- Result Card -->
-            <div class="bg-gradient-to-br from-slate-700 to-slate-800 rounded-xl p-1 shadow-lg border border-slate-600">
-                <div class="bg-slate-800/80 rounded-lg p-4">
-                    <div class="flex justify-between items-start mb-2">
-                        <span class="text-slate-400 text-xs uppercase font-bold tracking-wider" id="lotLabel">Safe Lot Size</span>
-                        <span class="bg-slate-600 text-xs py-0.5 px-2 rounded text-white" id="positionType">Neutral</span>
-                    </div>
-                    
-                    <div class="flex justify-between items-end">
-                        <div>
-                            <div class="text-3xl font-bold text-white" id="lotResult">0.00</div>
-                            <div class="text-slate-400 text-xs mt-1" id="pipsResult">SL Distance: 0</div>
-                        </div>
-                        <div class="text-right">
-                            <div class="text-[10px] text-slate-400 uppercase">Required Margin</div>
-                            <div class="text-lg font-bold text-emerald-400" id="marginResult">0.00</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- TPs -->
-            <div class="grid grid-cols-3 gap-2 text-center mt-2">
-                <div class="bg-slate-700/30 p-2 rounded-lg border border-slate-700/50">
-                    <div class="text-[10px] text-slate-500">TP 1:1</div>
-                    <div class="text-emerald-400 font-mono text-sm font-bold" id="tp1">0.00</div>
-                </div>
-                <div class="bg-slate-700/30 p-2 rounded-lg border border-slate-700/50">
-                    <div class="text-[10px] text-slate-500">TP 1:2</div>
-                    <div class="text-emerald-400 font-mono text-sm font-bold" id="tp2">0.00</div>
-                </div>
-                <div class="bg-slate-700/30 p-2 rounded-lg border border-slate-700/50">
-                    <div class="text-[10px] text-slate-500">TP 1:3</div>
-                    <div class="text-emerald-400 font-mono text-sm font-bold" id="tp3">0.00</div>
-                </div>
-            </div>
-
-            <div id="contractInfo" class="text-[10px] text-slate-500 text-center italic mt-1"></div>
-
+<div class="window-container win-box">
+    <div class="title-bar">
+        <span>Risk_Manager_vFinal.exe</span>
+        <div style="display:flex; gap:2px;">
+            <button class="win-btn" style="width:20px;">_</button>
+            <button class="win-btn" style="width:20px;">X</button>
         </div>
     </div>
 
-    <script>
-        // --- 1. SETUP LOADING SCREEN (Fail-Safe) ---
-        // Script ini akan berjalan segera setelah dibaca browser, tanpa menunggu gambar/font.
-        (function() {
-            function hideLoader() {
-                const loader = document.getElementById('loading-screen');
-                if (loader) {
-                    loader.style.opacity = '0';
-                    loader.style.visibility = 'hidden'; // Force hidden property
-                    setTimeout(() => {
-                        loader.style.display = 'none'; // Remove from flow
-                        // Init App Mode
-                        if(typeof changeMode === 'function') {
-                            changeMode('forex'); 
-                        }
-                    }, 500);
-                }
-            }
+    <!-- TABS -->
+    <div class="tabs-wrapper">
+        <button class="tab-btn active" onclick="setMode('forex')" id="tab-forex">FOREX</button>
+        <button class="tab-btn" onclick="setMode('gold')" id="tab-gold">GOLD</button>
+        <button class="tab-btn" onclick="setMode('crypto')" id="tab-crypto">CRYPTO</button>
+        <button class="tab-btn" onclick="setMode('stock')" id="tab-stock">STOCK</button>
+    </div>
 
-            // Jalankan setelah 1 detik, tidak peduli apapun yang terjadi
-            setTimeout(hideLoader, 1000);
-        })();
-
-        // --- 2. GLOBAL VARIABLES ---
-        let currentMode = 'forex';
-        let currentSymbol = '$';
-
-        // --- 3. CORE FUNCTIONS ---
+    <div class="content-area">
         
-        function changeMode(mode) {
-            currentMode = mode;
-            console.log("Mode:", mode);
+        <!-- CONFIG AREA -->
+        <div id="config-area" style="display:none;">
+            <div id="cfg-stock" class="radio-panel" style="display:none;">
+                <b>Curr:</b>
+                <label><input type="radio" name="stockCurr" value="IDR" checked onchange="updateUI()"> IDR</label>
+                <label><input type="radio" name="stockCurr" value="USD" onchange="updateUI()"> USD</label>
+            </div>
+            <div id="cfg-forex" class="radio-panel" style="display:none;">
+                <b>Pair:</b>
+                <label><input type="radio" name="fxPair" value="std" checked onchange="updateUI()"> Std</label>
+                <label><input type="radio" name="fxPair" value="cross" onchange="updateUI()"> Cross/JPY</label>
+                <div id="cross-input" style="display:none; margin-left:10px;">
+                    <input type="number" id="crossRate" placeholder="Price (e.g 150)" style="width:80px; background:white; border:1px solid gray;" oninput="calculate()">
+                </div>
+            </div>
+        </div>
 
-            // Button Styles
-            const buttons = ['forex', 'gold', 'crypto', 'stock'];
-            buttons.forEach(b => {
-                const btn = document.getElementById('btn-' + b);
-                if(btn) btn.classList.remove('active');
-            });
-            const activeBtn = document.getElementById('btn-' + mode);
-            if(activeBtn) activeBtn.classList.add('active');
+        <!-- INPUTS -->
+        <div class="form-row">
+            <div class="form-col">
+                <label id="lbl-balance">Balance ($):</label>
+                <div class="win-inset"><input type="number" id="balance" placeholder="1000" oninput="calculate()"></div>
+            </div>
+            <div class="form-col" id="col-leverage">
+                <label>Leverage (1:x):</label>
+                <div class="win-inset"><input type="number" id="leverage" placeholder="100" value="100" oninput="calculate()"></div>
+            </div>
+        </div>
 
-            // Hide Options
-            const opts = ['forexOptions', 'goldOptions', 'stockOptions'];
-            opts.forEach(o => {
-                const el = document.getElementById(o);
-                if(el) el.style.display = 'none';
-            });
+        <div class="form-row">
+            <div class="form-col">
+                <label>Risk:</label>
+                <div class="risk-group">
+                    <input type="number" id="riskVal" placeholder="2" oninput="calculate()">
+                    <select id="riskType" onchange="calculate()"><option value="%">%</option><option value="$">$</option></select>
+                </div>
+            </div>
+            <div class="form-col">
+                <label>Max Loss:</label>
+                <div class="win-inset" style="background:#ddd;">
+                    <input type="text" id="maxLoss" readonly style="color:red;" placeholder="0.00">
+                </div>
+            </div>
+        </div>
 
-            // Reset Layout Defaults
-            const lev = document.getElementById('leverageContainer');
-            const bal = document.getElementById('balanceContainer');
-            if(lev) lev.style.display = 'block';
-            if(bal) bal.className = "w-2/3 transition-all duration-300";
+        <div class="form-row">
+            <div class="form-col">
+                <label>Entry Price:</label>
+                <div class="win-inset"><input type="number" id="entry" placeholder="0.00" step="any" oninput="calculate()"></div>
+            </div>
+            <div class="form-col">
+                <label>Stop Loss:</label>
+                <div class="win-inset"><input type="number" id="sl" placeholder="0.00" step="any" oninput="calculate()"></div>
+            </div>
+        </div>
+
+        <!-- LCD OUTPUT -->
+        <div class="lcd-display">
+            <div class="lcd-row"><span>MODE</span><span id="lcd-mode" style="color:cyan">FOREX</span></div>
+            <div class="lcd-big" id="lcd-lot">0.00 LOT</div>
+            <div class="lcd-row"><span>MARGIN</span><span id="lcd-margin">0.00</span></div>
+            <div class="lcd-row" style="border:none"><span>VOLUME</span><span id="lcd-units">-</span></div>
             
-            document.getElementById('lotLabel').innerText = "Safe Lot Size";
-            document.getElementById('contractInfo').innerHTML = "";
+            <div class="tp-grid">
+                <div class="tp-box"><div style="color:#888">1:1</div><div class="tp-val" id="tp1">0.00</div></div>
+                <div class="tp-box"><div style="color:#888">1:2</div><div class="tp-val" id="tp2">0.00</div></div>
+                <div class="tp-box"><div style="color:#888">1:3</div><div class="tp-val" id="tp3">0.00</div></div>
+            </div>
+        </div>
 
-            // Show Active Option
-            if (mode === 'forex') {
-                document.getElementById('forexOptions').style.display = 'block';
-                document.getElementById('entryPrice').placeholder = "1.0850";
-                document.getElementById('stopLoss').placeholder = "1.0820";
-                setSymbol('$');
-            } 
-            else if (mode === 'gold') {
-                document.getElementById('goldOptions').style.display = 'block';
-                document.getElementById('entryPrice').placeholder = "2025.50";
-                document.getElementById('stopLoss').placeholder = "2020.00";
-                updateGoldCurrency();
-            } 
-            else if (mode === 'crypto') {
-                document.getElementById('entryPrice').placeholder = "65000";
-                document.getElementById('stopLoss').placeholder = "64500";
-                document.getElementById('lotLabel').innerText = "Unit Size";
-                setSymbol('$');
-            } 
-            else if (mode === 'stock') {
-                document.getElementById('stockOptions').style.display = 'block';
-                if(lev) lev.style.display = 'none';
-                if(bal) bal.className = "w-full transition-all duration-300";
-                
-                document.getElementById('lotLabel').innerText = "Shares / Quantity";
-                updateStockCurrency();
-            }
+        <div class="footer"><span>Status: Ready</span><span>GitHub Edition</span></div>
+    </div>
+</div>
 
-            calculate();
+<!-- SCRIPT DILETAKKAN LANGSUNG DISINI AGAR GLOBAL SCOPE AMAN -->
+<script>
+    // 1. Definisikan Variabel Global
+    var currentMode = 'forex';
+
+    // 2. Fungsi Set Mode (Dipanggil oleh tombol)
+    function setMode(mode) {
+        currentMode = mode;
+        console.log("Mode changed to:", mode);
+
+        // Update Tombol Tab
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById('tab-' + mode).classList.add('active');
+
+        // Logic Tampilan Config
+        var configArea = document.getElementById('config-area');
+        var cfgForex = document.getElementById('cfg-forex');
+        var cfgStock = document.getElementById('cfg-stock');
+        var colLev = document.getElementById('col-leverage');
+
+        // Reset
+        configArea.style.display = 'none';
+        cfgForex.style.display = 'none';
+        cfgStock.style.display = 'none';
+        colLev.style.display = 'flex';
+
+        if (mode === 'forex') {
+            configArea.style.display = 'block';
+            cfgForex.style.display = 'flex';
+        } else if (mode === 'stock') {
+            configArea.style.display = 'block';
+            cfgStock.style.display = 'flex';
+            colLev.style.display = 'none';
         }
 
-        function setSymbol(sym) {
-            currentSymbol = sym;
-            document.querySelectorAll('.currency-symbol').forEach(el => el.innerText = sym);
-            const optMoney = document.querySelector('.currency-symbol-opt');
-            if (optMoney) optMoney.innerText = sym;
+        updateUI();
+    }
+
+    // 3. Update UI Label & Placeholder
+    function updateUI() {
+        var lblBal = document.getElementById('lbl-balance');
+        var entry = document.getElementById('entry');
+        var sl = document.getElementById('sl');
+        
+        document.getElementById('lcd-mode').innerText = currentMode.toUpperCase();
+
+        if (currentMode === 'forex') {
+            lblBal.innerText = "Balance ($):";
+            entry.placeholder = "1.0850"; sl.placeholder = "1.0820";
+            var isCross = document.querySelector('input[name="fxPair"]:checked').value === 'cross';
+            document.getElementById('cross-input').style.display = isCross ? 'block' : 'none';
+        } 
+        else if (currentMode === 'gold') {
+            lblBal.innerText = "Balance ($):";
+            entry.placeholder = "2025.50"; sl.placeholder = "2020.00";
+        }
+        else if (currentMode === 'crypto') {
+            lblBal.innerText = "Balance ($):";
+            entry.placeholder = "65000"; sl.placeholder = "64000";
+        }
+        else if (currentMode === 'stock') {
+            var curr = document.querySelector('input[name="stockCurr"]:checked').value;
+            lblBal.innerText = "Balance (" + curr + "):";
+            entry.placeholder = "Price"; sl.placeholder = "SL";
+        }
+        calculate();
+    }
+
+    // 4. Hitung (Format Helper)
+    function fmt(num, sym) {
+        return sym + num.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    }
+
+    // 5. Kalkulasi Utama
+    function calculate() {
+        var bal = parseFloat(document.getElementById('balance').value) || 0;
+        var lev = parseFloat(document.getElementById('leverage').value) || 100;
+        var riskVal = parseFloat(document.getElementById('riskVal').value) || 0;
+        var riskType = document.getElementById('riskType').value;
+        var entry = parseFloat(document.getElementById('entry').value) || 0;
+        var sl = parseFloat(document.getElementById('sl').value) || 0;
+
+        var sym = '$';
+        if (currentMode === 'stock') {
+            sym = document.querySelector('input[name="stockCurr"]:checked').value === 'IDR' ? 'Rp ' : '$';
         }
 
-        function updateStockCurrency() {
-            if (currentMode !== 'stock') return;
-            const radio = document.querySelector('input[name="stockCurrency"]:checked');
-            const type = radio ? radio.value : 'idr';
-            
-            if (type === 'idr') {
-                setSymbol('Rp');
-                document.getElementById('balance').placeholder = "10000000";
-                document.getElementById('entryPrice').placeholder = "5000";
-                document.getElementById('stopLoss').placeholder = "4800";
-                document.getElementById('contractInfo').innerHTML = "*IDR Mode: 1 Lot = 100 Shares";
+        // Max Loss
+        var riskAmt = (riskType === '%') ? (bal * (riskVal / 100)) : riskVal;
+        document.getElementById('maxLoss').value = fmt(riskAmt, sym);
+
+        if (!entry || !sl) return;
+
+        var diff = Math.abs(entry - sl);
+        var lot = 0;
+        var margin = 0;
+        var units = "";
+
+        if (currentMode === 'forex') {
+            var contract = 100000;
+            var fxType = document.querySelector('input[name="fxPair"]:checked').value;
+            if (fxType === 'std') {
+                lot = riskAmt / (diff * contract);
             } else {
-                setSymbol('$');
-                document.getElementById('balance').placeholder = "1000";
-                document.getElementById('entryPrice').placeholder = "150.00";
-                document.getElementById('stopLoss').placeholder = "145.00";
-                document.getElementById('contractInfo').innerHTML = "*USD Mode: US Stock Market";
+                var cRate = parseFloat(document.getElementById('crossRate').value) || 1;
+                lot = (riskAmt * cRate) / (diff * contract);
             }
-            calculate();
+            margin = (lot * contract * entry) / lev;
+            units = (lot * 100000).toFixed(0) + " Units";
         }
-
-        function updateGoldCurrency() {
-            if (currentMode !== 'gold') return;
-            const radio = document.querySelector('input[name="goldAccountType"]:checked');
-            const type = radio ? radio.value : 'standard';
-            
-            if (type === 'cent') {
-                setSymbol('USC');
-                document.getElementById('balance').placeholder = "10000";
-                document.getElementById('contractInfo').innerHTML = "*Cent Account: 1 Lot = 100 oz (Units in USC)";
+        else if (currentMode === 'gold') {
+            lot = riskAmt / (diff * 100);
+            margin = (lot * 100 * entry) / lev;
+            units = (lot * 100).toFixed(1) + " Oz";
+        }
+        else if (currentMode === 'crypto') {
+            lot = riskAmt / diff; // Coins
+            margin = (lot * entry) / lev;
+            units = "Lev 1:" + lev;
+        }
+        else if (currentMode === 'stock') {
+            var shares = Math.floor(riskAmt / diff);
+            var isIDR = document.querySelector('input[name="stockCurr"]:checked').value === 'IDR';
+            if (isIDR) {
+                lot = shares / 100; // Lot Indo
+                margin = shares * entry;
+                units = shares + " Lembar";
             } else {
-                setSymbol('$');
-                document.getElementById('balance').placeholder = "1000";
-                document.getElementById('contractInfo').innerHTML = "*Standard Account: 1 Lot = 100 oz";
+                lot = shares;
+                margin = shares * entry;
+                units = "US Market";
             }
-            calculate();
         }
 
-        function formatMoney(amount) {
-            if (currentSymbol === 'Rp') {
-                return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigit
+        // Output Display
+        var lotTxt = lot.toFixed(2) + " LOT";
+        if (currentMode === 'crypto') lotTxt = lot.toFixed(4) + " COIN";
+        if (currentMode === 'stock' && sym === '$') lotTxt = lot + " SHARE";
+        
+        document.getElementById('lcd-lot').innerText = lotTxt;
+        document.getElementById('lcd-margin').innerText = fmt(margin, sym);
+        document.getElementById('lcd-units').innerText = units;
+
+        // TPs
+        var dir = (sl < entry) ? 1 : -1;
+        var d = (currentMode === 'forex' && entry < 50) ? 4 : 2;
+        if (currentMode === 'stock' && sym === 'Rp ') d = 0;
+
+        document.getElementById('tp1').innerText = (entry + (diff * 1 * dir)).toFixed(d);
+        document.getElementById('tp2').innerText = (entry + (diff * 2 * dir)).toFixed(d);
+        document.getElementById('tp3').innerText = (entry + (diff * 3 * dir)).toFixed(d);
+    }
+
+    // 6. Jalankan Pertama Kali
+    setMode('forex');
+
+</script>
+</body>
+</html>
+
+

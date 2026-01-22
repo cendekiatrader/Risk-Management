@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Risk Management Pro v4.0</title>
+    <title>Risk Management Pro v4.1</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -11,7 +11,7 @@
         
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0f172a; /* Slate 900 */
+            background-color: #0f172a;
             color: #e2e8f0;
             padding-top: 100px; 
             padding-bottom: 50px;
@@ -43,7 +43,6 @@
             box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
         }
 
-        /* Tab Buttons */
         .tab-btn {
             background-color: transparent;
             color: #94a3b8;
@@ -65,7 +64,6 @@
             box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.5);
         }
 
-        /* Loading Screen */
         #loading-screen {
             position: fixed;
             inset: 0;
@@ -75,7 +73,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            transition: opacity 0.5s ease-out;
+            transition: opacity 0.5s ease-out, visibility 0.5s;
         }
     </style>
 </head>
@@ -85,7 +83,7 @@
     <div id="loading-screen">
         <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500 mb-6"></div>
         <h1 class="text-3xl font-bold text-white tracking-wider mb-2">Risk<span class="text-blue-500">Manager</span></h1>
-        <p class="text-slate-400 text-sm animate-pulse">Initializing Calculator...</p>
+        <p class="text-slate-400 text-sm animate-pulse">Initializing...</p>
     </div>
 
     <!-- Navbar -->
@@ -274,32 +272,40 @@
         </div>
     </div>
 
-    <!-- SCRIPT UTAMA (DI GLOBAL SCOPE) -->
     <script>
-        // Variabel Global
+        // --- 1. SETUP LOADING SCREEN (Fail-Safe) ---
+        // Script ini akan berjalan segera setelah dibaca browser, tanpa menunggu gambar/font.
+        (function() {
+            function hideLoader() {
+                const loader = document.getElementById('loading-screen');
+                if (loader) {
+                    loader.style.opacity = '0';
+                    loader.style.visibility = 'hidden'; // Force hidden property
+                    setTimeout(() => {
+                        loader.style.display = 'none'; // Remove from flow
+                        // Init App Mode
+                        if(typeof changeMode === 'function') {
+                            changeMode('forex'); 
+                        }
+                    }, 500);
+                }
+            }
+
+            // Jalankan setelah 1 detik, tidak peduli apapun yang terjadi
+            setTimeout(hideLoader, 1000);
+        })();
+
+        // --- 2. GLOBAL VARIABLES ---
         let currentMode = 'forex';
         let currentSymbol = '$';
 
-        // Event Listener saat Loading Selesai
-        window.onload = function() {
-            setTimeout(() => {
-                const loader = document.getElementById('loading-screen');
-                loader.style.opacity = '0';
-                setTimeout(() => {
-                    loader.style.display = 'none';
-                    // Paksa inisialisasi awal setelah loading hilang
-                    changeMode('forex'); 
-                }, 500);
-            }, 1500); // Tampil selama 1.5 detik
-        };
-
-        // --- FUNGSI GLOBAL (Bisa dipanggil onclick) ---
-
+        // --- 3. CORE FUNCTIONS ---
+        
         function changeMode(mode) {
             currentMode = mode;
-            console.log("Switching Mode to: " + mode);
+            console.log("Mode:", mode);
 
-            // 1. Tombol
+            // Button Styles
             const buttons = ['forex', 'gold', 'crypto', 'stock'];
             buttons.forEach(b => {
                 const btn = document.getElementById('btn-' + b);
@@ -308,24 +314,23 @@
             const activeBtn = document.getElementById('btn-' + mode);
             if(activeBtn) activeBtn.classList.add('active');
 
-            // 2. Sembunyikan semua opsi
+            // Hide Options
             const opts = ['forexOptions', 'goldOptions', 'stockOptions'];
             opts.forEach(o => {
                 const el = document.getElementById(o);
                 if(el) el.style.display = 'none';
             });
 
-            // 3. Reset Layout
-            const levContainer = document.getElementById('leverageContainer');
-            if(levContainer) levContainer.style.display = 'block';
-            
-            const balContainer = document.getElementById('balanceContainer');
-            if(balContainer) balContainer.className = "w-2/3 transition-all duration-300";
+            // Reset Layout Defaults
+            const lev = document.getElementById('leverageContainer');
+            const bal = document.getElementById('balanceContainer');
+            if(lev) lev.style.display = 'block';
+            if(bal) bal.className = "w-2/3 transition-all duration-300";
             
             document.getElementById('lotLabel').innerText = "Safe Lot Size";
             document.getElementById('contractInfo').innerHTML = "";
 
-            // 4. Tampilkan opsi sesuai mode
+            // Show Active Option
             if (mode === 'forex') {
                 document.getElementById('forexOptions').style.display = 'block';
                 document.getElementById('entryPrice').placeholder = "1.0850";
@@ -346,9 +351,8 @@
             } 
             else if (mode === 'stock') {
                 document.getElementById('stockOptions').style.display = 'block';
-                // Sembunyikan Leverage
-                if(levContainer) levContainer.style.display = 'none';
-                if(balContainer) balContainer.className = "w-full transition-all duration-300";
+                if(lev) lev.style.display = 'none';
+                if(bal) bal.className = "w-full transition-all duration-300";
                 
                 document.getElementById('lotLabel').innerText = "Shares / Quantity";
                 updateStockCurrency();
@@ -404,6 +408,4 @@
 
         function formatMoney(amount) {
             if (currentSymbol === 'Rp') {
-                return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(amount);
-            } else if (currentSymbol === 'USC') {
-                return amount.toLocaleString('en-US', {
+                return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigit

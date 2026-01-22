@@ -228,11 +228,11 @@
         <div class="form-row">
             <div class="form-col">
                 <label id="lbl-balance">Balance ($):</label>
-                <div class="win-inset"><input type="number" id="balance" placeholder="1000" oninput="calculate()"></div>
+                <div class="win-inset"><input type="number" id="balance" placeholder="0" oninput="calculate()"></div>
             </div>
             <div class="form-col" id="col-leverage">
                 <label>Leverage (1:x):</label>
-                <div class="win-inset"><input type="number" id="leverage" placeholder="100" value="100" oninput="calculate()"></div>
+                <div class="win-inset"><input type="number" id="leverage" placeholder="0" oninput="calculate()"></div>
             </div>
         </div>
 
@@ -240,7 +240,7 @@
             <div class="form-col">
                 <label>Risk:</label>
                 <div class="risk-group">
-                    <input type="number" id="riskVal" placeholder="2" oninput="calculate()">
+                    <input type="number" id="riskVal" placeholder="0" oninput="calculate()">
                     <select id="riskType" onchange="calculate()"><option value="%">%</option><option value="$">$</option></select>
                 </div>
             </div>
@@ -339,23 +339,23 @@
 
         if (currentMode === 'forex') {
             lblBal.innerText = "Balance ($):";
-            entry.placeholder = "1.0850"; sl.placeholder = "1.0820";
+            entry.placeholder = "0"; sl.placeholder = "0";
             var isCross = document.querySelector('input[name="fxPair"]:checked').value === 'cross';
             document.getElementById('cross-input').style.display = isCross ? 'block' : 'none';
         } 
         else if (currentMode === 'gold') {
             var gAcc = document.querySelector('input[name="goldAcc"]:checked').value;
             lblBal.innerText = (gAcc === 'cent') ? "Balance (USC):" : "Balance ($):";
-            entry.placeholder = "2025.50"; sl.placeholder = "2020.00";
+            entry.placeholder = "0"; sl.placeholder = "0";
         }
         else if (currentMode === 'crypto') {
             lblBal.innerText = "Balance ($):";
-            entry.placeholder = "0.00150"; sl.placeholder = "0.00140";
+            entry.placeholder = "0"; sl.placeholder = "0";
         }
         else if (currentMode === 'stock') {
             var curr = document.querySelector('input[name="stockCurr"]:checked').value;
             lblBal.innerText = "Balance (" + curr + "):";
-            entry.placeholder = "Price"; sl.placeholder = "SL";
+            entry.placeholder = "0"; sl.placeholder = "0";
         }
         calculate();
     }

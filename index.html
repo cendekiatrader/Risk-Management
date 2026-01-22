@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Risk Manager</title>
+    <title>Risk Manager 98</title>
     <style>
         /* --- 90s SYSTEM THEME --- */
         :root {
@@ -20,20 +20,41 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
-            background-color: var(--desktop-teal);
+            background-color: var(--desktop-teal); /* Teal hanya terlihat di Desktop luas */
             font-family: 'Segoe UI', Tahoma, sans-serif;
-            margin: 0; padding: 10px;
+            margin: 0; 
+            padding: 0; /* Hapus padding body agar full */
             min-height: 100vh;
-            display: flex; justify-content: center; align-items: flex-start;
-            color: black; font-size: 14px;
+            display: flex; 
+            justify-content: center; 
+            align-items: flex-start;
+            color: black; 
+            font-size: 14px;
         }
 
         /* WINDOW BOX STYLES */
-        .win-box {
+        .window-container {
             background-color: var(--win-gray);
-            border-top: 2px solid var(--win-white); border-left: 2px solid var(--win-white);
-            border-right: 2px solid var(--win-black); border-bottom: 2px solid var(--win-black);
-            box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+            width: 100%;
+            min-height: 100vh; /* KUNCI FULL SCREEN: Tinggi minimal 100% layar */
+            display: flex; 
+            flex-direction: column;
+            box-shadow: none; /* Hilangkan shadow di mobile */
+            border: none; /* Hilangkan border luar di mobile */
+        }
+
+        /* Desktop Mode tweaks (agar tidak terlalu lebar di PC) */
+        @media (min-width: 600px) {
+            body { padding: 20px; align-items: center; } /* Center di Desktop */
+            .window-container {
+                max-width: 480px;
+                min-height: auto; /* Kembalikan ke auto di desktop */
+                border-top: 2px solid var(--win-white); 
+                border-left: 2px solid var(--win-white);
+                border-right: 2px solid var(--win-black); 
+                border-bottom: 2px solid var(--win-black);
+                box-shadow: 4px 4px 10px rgba(0,0,0,0.5);
+            }
         }
 
         .win-inset {
@@ -50,76 +71,109 @@
         }
         .win-btn:active { border-style: inset; transform: translateY(1px); }
 
-        .window-container { width: 100%; max-width: 500px; display: flex; flex-direction: column; margin-bottom: 20px; }
-        
+        /* HEADER */
         .title-bar {
             background: linear-gradient(90deg, var(--win-blue), #1084d0);
-            padding: 4px 8px; display: flex; justify-content: space-between; align-items: center;
-            color: white; font-weight: bold; font-size: 13px;
+            padding: 8px 10px; display: flex; justify-content: space-between; align-items: center;
+            color: white; font-weight: bold; font-size: 14px;
+            flex-shrink: 0; /* Header tidak boleh mengecil */
         }
 
         /* TABS */
-        .tabs-wrapper { padding: 6px 6px 0 6px; display: flex; gap: 2px; }
+        .tabs-wrapper { 
+            padding: 8px 8px 0 8px; 
+            display: flex; 
+            gap: 2px; 
+            flex-shrink: 0;
+            background: var(--win-gray);
+        }
         .tab-btn {
-            flex: 1; padding: 8px 2px; border: none; background: var(--win-gray);
+            flex: 1; padding: 10px 2px; border: none; background: var(--win-gray);
             border-top: 2px solid var(--win-white); border-left: 2px solid var(--win-white);
             border-right: 2px solid var(--win-black); border-bottom: none;
             cursor: pointer; font-size: 12px;
         }
         .tab-btn.active {
-            font-weight: bold; padding-bottom: 10px; margin-top: -4px; z-index: 10;
+            font-weight: bold; padding-bottom: 12px; margin-top: -4px; z-index: 10;
             border-top: 2px solid var(--win-white); border-left: 2px solid var(--win-white);
             border-right: 2px solid var(--win-dark-gray);
         }
 
-        .content-area { padding: 12px; margin: 0 6px 6px 6px; background: var(--win-gray); border: 2px solid var(--win-white); border-right-color: black; border-bottom-color: black; }
+        /* CONTENT AREA (Expanding) */
+        .content-area { 
+            padding: 15px; 
+            background: var(--win-gray); 
+            border-top: 2px solid var(--win-white); 
+            /* Border samping/bawah dihapus di mobile agar terlihat menyatu */
+            flex-grow: 1; /* KUNCI FULL SCREEN: Isi sisa ruang kosong */
+            display: flex;
+            flex-direction: column;
+        }
 
-        /* COMPACT RADIO PANEL */
+        /* Desktop border fix for content */
+        @media (min-width: 600px) {
+            .content-area {
+                margin: 0 6px 6px 6px;
+                border: 2px solid var(--win-white); 
+                border-right-color: black; 
+                border-bottom-color: black;
+                flex-grow: 0;
+            }
+        }
+
+        /* CONFIG PANEL */
         .compact-options {
             display: flex; align-items: center; gap: 10px; 
-            background: #e0e0e0; padding: 4px 8px; 
-            border: 1px dotted #888; margin-bottom: 10px;
-            font-size: 11px;
+            background: #e0e0e0; padding: 6px 10px; 
+            border: 1px dotted #888; margin-bottom: 15px;
+            font-size: 12px;
         }
         .compact-label { font-weight: bold; margin-right: 5px; }
-        .radio-item { display: flex; align-items: center; gap: 4px; cursor: pointer; }
-        .radio-item input { width: auto; height: auto; margin: 0; cursor: pointer; }
+        .radio-item { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+        .radio-item input { margin: 0; cursor: pointer; }
 
         /* INPUTS */
-        .form-row { display: flex; gap: 10px; margin-bottom: 10px; }
+        .form-row { display: flex; gap: 10px; margin-bottom: 12px; }
         .form-col { flex: 1; display: flex; flex-direction: column; min-width: 0; }
-        .form-col label { margin-bottom: 3px; font-size: 11px; font-weight: 600; }
+        .form-col label { margin-bottom: 4px; font-size: 12px; font-weight: 600; }
         
         input[type="number"], input[type="text"], select { 
-            width: 100%; height: 30px; padding: 0 5px; border: none; background: transparent; 
-            font-size: 14px; font-weight: bold; font-family: monospace; outline: none; 
+            width: 100%; height: 35px; padding: 0 8px; border: none; background: transparent; 
+            font-size: 15px; font-weight: bold; font-family: monospace; outline: none; 
         }
         
         .risk-group { display: flex; align-items: center; background: white; border: 2px inset gray; }
         .risk-group input { flex: 1; }
-        .risk-group select { width: 40px; background: #eee; border-left: 1px solid gray; font-size: 12px; }
+        .risk-group select { width: 45px; background: #eee; border-left: 1px solid gray; font-size: 12px; }
 
         /* LCD SCREEN */
-        .lcd-display { background: var(--lcd-bg); color: var(--lcd-text); padding: 10px; border: 3px inset gray; margin-top: 15px; font-family: monospace; text-shadow: 0 0 2px rgba(0,255,0,0.4); }
-        .lcd-row { display: flex; justify-content: space-between; border-bottom: 1px dashed #333; padding-bottom: 2px; margin-bottom: 4px; font-size: 12px; }
-        .lcd-big { font-size: 20px; font-weight: bold; text-align: right; color: #fff; margin: 8px 0; }
+        .lcd-display { background: var(--lcd-bg); color: var(--lcd-text); padding: 12px; border: 3px inset gray; margin-top: 15px; font-family: monospace; text-shadow: 0 0 2px rgba(0,255,0,0.4); }
+        .lcd-row { display: flex; justify-content: space-between; border-bottom: 1px dashed #333; padding-bottom: 4px; margin-bottom: 6px; font-size: 13px; }
+        .lcd-big { font-size: 22px; font-weight: bold; text-align: right; color: #fff; margin: 10px 0; }
         
-        .tp-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; margin-top: 8px; text-align: center; font-size: 10px; }
-        .tp-box { border: 1px solid #444; padding: 2px; }
-        .tp-val { color: yellow; font-weight: bold; font-size: 11px; word-break: break-all; }
+        .tp-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; margin-top: 10px; text-align: center; font-size: 11px; }
+        .tp-box { border: 1px solid #444; padding: 4px; }
+        .tp-val { color: yellow; font-weight: bold; font-size: 12px; word-break: break-all; }
         
-        .footer { margin-top: 8px; font-size: 10px; display: flex; justify-content: space-between; color: #555; }
+        /* FOOTER (Sticky at bottom) */
+        .footer { 
+            margin-top: auto; /* Push to bottom */
+            padding-top: 15px;
+            font-size: 11px; 
+            display: flex; 
+            justify-content: space-between; 
+            color: #555; 
+        }
     </style>
 </head>
 <body>
 
-<div class="window-container win-box">
+<div class="window-container">
     <div class="title-bar">
-        <!-- TITLE CHANGED -->
         <span>risk_manager.exe</span>
         <div style="display:flex; gap:2px;">
-            <button class="win-btn" style="width:16px; height:16px; font-size:10px;">_</button>
-            <button class="win-btn" style="width:16px; height:16px; font-size:10px;">X</button>
+            <button class="win-btn" style="width:20px; height:20px; font-size:12px;">_</button>
+            <button class="win-btn" style="width:20px; height:20px; font-size:12px;">X</button>
         </div>
     </div>
 
@@ -149,11 +203,11 @@
                 <label class="radio-item"><input type="radio" name="fxPair" value="cross" onchange="updateUI()"> Cross/JPY</label>
                 
                 <div id="cross-input" style="display:none; margin-left:auto; border-left:1px solid #999; padding-left:5px;">
-                    <input type="number" id="crossRate" placeholder="Price (150.0)" style="width:70px; height:20px; font-size:11px; background:white; border:1px solid gray;" oninput="calculate()">
+                    <input type="number" id="crossRate" placeholder="Price" style="width:70px; height:20px; font-size:11px; background:white; border:1px solid gray;" oninput="calculate()">
                 </div>
             </div>
 
-            <!-- Gold Config (NEW) -->
+            <!-- Gold Config -->
             <div id="cfg-gold" class="compact-options" style="display:none;">
                 <span class="compact-label">ACC:</span>
                 <label class="radio-item"><input type="radio" name="goldAcc" value="std" checked onchange="updateUI()"> Standard</label>
@@ -216,7 +270,6 @@
         </div>
 
         <div class="footer">
-            <!-- FOOTER CHANGED -->
             <span>Status: On</span>
             <span>@CendekiaTrader</span>
         </div>
@@ -345,9 +398,6 @@
             units = (lot * 100000).toFixed(0) + " Units";
         }
         else if (currentMode === 'gold') {
-            // Gold Standard: 1 Lot = 100 Oz.
-            // Gold Cent: Typically 1 Cent Lot = 100 Oz (Valued in Cents).
-            // Logic is identical if Balance is in Account Currency.
             lot = riskAmt / (diff * 100);
             margin = (lot * 100 * entry) / lev;
             units = (lot * 100).toFixed(1) + " Oz";

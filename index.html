@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Risk Management Pro v3.6</title>
+    <title>Risk Management Pro v4.0</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -15,6 +15,7 @@
             color: #e2e8f0;
             padding-top: 100px; 
             padding-bottom: 50px;
+            overflow-x: hidden;
         }
 
         .navbar {
@@ -25,7 +26,7 @@
             top: 0;
             left: 0;
             right: 0;
-            z-index: 999;
+            z-index: 50;
             height: 70px;
         }
 
@@ -63,9 +64,29 @@
             font-weight: bold;
             box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.5);
         }
+
+        /* Loading Screen */
+        #loading-screen {
+            position: fixed;
+            inset: 0;
+            background-color: #0f172a;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease-out;
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center px-4">
+
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500 mb-6"></div>
+        <h1 class="text-3xl font-bold text-white tracking-wider mb-2">Risk<span class="text-blue-500">Manager</span></h1>
+        <p class="text-slate-400 text-sm animate-pulse">Initializing Calculator...</p>
+    </div>
 
     <!-- Navbar -->
     <nav class="navbar px-6 flex justify-between items-center shadow-lg">
@@ -110,7 +131,6 @@
         <div class="p-6 space-y-4">
             
             <!-- Forex Options -->
-            <!-- Style display:block initially -->
             <div id="forexOptions" style="display: block;" class="bg-slate-700/30 p-3 rounded-lg border border-slate-600">
                 <div class="flex items-center justify-between mb-2">
                     <span class="text-xs text-slate-400 font-semibold">Forex Pair Type</span>
@@ -125,7 +145,6 @@
                         <span>Cross/JPY</span>
                     </label>
                 </div>
-                <!-- Input Konversi -->
                 <div id="conversionBox" style="display: none;" class="mt-3 pt-2 border-t border-slate-600">
                     <label class="block text-xs font-medium text-yellow-400 mb-1">Conversion Pair Price (USD/XXX)</label>
                     <input type="number" id="conversionRate" placeholder="e.g. 145.50 (USDJPY)" class="input-dark w-full px-3 py-2 rounded text-sm" oninput="calculate()">
@@ -133,7 +152,6 @@
             </div>
 
             <!-- Gold Options -->
-            <!-- Style display:none initially -->
             <div id="goldOptions" style="display: none;" class="bg-slate-700/30 p-3 rounded-lg border border-slate-600">
                 <div class="flex items-center justify-between mb-2">
                     <span class="text-xs text-slate-400 font-semibold">Gold Account Type</span>
@@ -151,7 +169,6 @@
             </div>
 
             <!-- Stock Options -->
-            <!-- Style display:none initially -->
             <div id="stockOptions" style="display: none;" class="bg-slate-700/30 p-3 rounded-lg border border-slate-600">
                 <div class="flex items-center justify-between mb-2">
                     <span class="text-xs text-slate-400 font-semibold">Stock Currency</span>
@@ -257,75 +274,82 @@
         </div>
     </div>
 
+    <!-- SCRIPT UTAMA (DI GLOBAL SCOPE) -->
     <script>
-        // Gunakan Global Scope variable
+        // Variabel Global
         let currentMode = 'forex';
         let currentSymbol = '$';
 
-        // Pastikan script berjalan setelah HTML siap
-        document.addEventListener('DOMContentLoaded', () => {
-             console.log("Risk Calculator Ready");
-             changeMode('forex'); // Init awal
-        });
+        // Event Listener saat Loading Selesai
+        window.onload = function() {
+            setTimeout(() => {
+                const loader = document.getElementById('loading-screen');
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                    // Paksa inisialisasi awal setelah loading hilang
+                    changeMode('forex'); 
+                }, 500);
+            }, 1500); // Tampil selama 1.5 detik
+        };
 
-        // FUNGSI UTAMA GANTI MODE (Direct Style Manipulation)
+        // --- FUNGSI GLOBAL (Bisa dipanggil onclick) ---
+
         function changeMode(mode) {
             currentMode = mode;
-            console.log("Switching to:", mode);
+            console.log("Switching Mode to: " + mode);
 
-            // 1. Reset Buttons Active State
-            const btns = ['forex', 'gold', 'crypto', 'stock'];
-            btns.forEach(b => {
+            // 1. Tombol
+            const buttons = ['forex', 'gold', 'crypto', 'stock'];
+            buttons.forEach(b => {
                 const btn = document.getElementById('btn-' + b);
                 if(btn) btn.classList.remove('active');
             });
             const activeBtn = document.getElementById('btn-' + mode);
             if(activeBtn) activeBtn.classList.add('active');
 
-            // 2. Hide ALL Options (FORCE DISPLAY NONE)
+            // 2. Sembunyikan semua opsi
             const opts = ['forexOptions', 'goldOptions', 'stockOptions'];
             opts.forEach(o => {
                 const el = document.getElementById(o);
-                if(el) el.style.display = 'none'; // Pakai style.display, jangan class
+                if(el) el.style.display = 'none';
             });
 
-            // 3. Reset Layout Standard
-            document.getElementById('leverageContainer').style.display = 'block';
-            document.getElementById('balanceContainer').className = "w-2/3 transition-all duration-300";
+            // 3. Reset Layout
+            const levContainer = document.getElementById('leverageContainer');
+            if(levContainer) levContainer.style.display = 'block';
+            
+            const balContainer = document.getElementById('balanceContainer');
+            if(balContainer) balContainer.className = "w-2/3 transition-all duration-300";
+            
             document.getElementById('lotLabel').innerText = "Safe Lot Size";
             document.getElementById('contractInfo').innerHTML = "";
 
-            // 4. Show Specific Option & Logic
+            // 4. Tampilkan opsi sesuai mode
             if (mode === 'forex') {
-                const opt = document.getElementById('forexOptions');
-                if(opt) opt.style.display = 'block'; // Force Show
-                
+                document.getElementById('forexOptions').style.display = 'block';
                 document.getElementById('entryPrice').placeholder = "1.0850";
                 document.getElementById('stopLoss').placeholder = "1.0820";
                 setSymbol('$');
             } 
             else if (mode === 'gold') {
-                const opt = document.getElementById('goldOptions');
-                if(opt) opt.style.display = 'block'; // Force Show
-                
+                document.getElementById('goldOptions').style.display = 'block';
                 document.getElementById('entryPrice').placeholder = "2025.50";
                 document.getElementById('stopLoss').placeholder = "2020.00";
                 updateGoldCurrency();
             } 
             else if (mode === 'crypto') {
-                // Crypto has no options div, just changes layout
                 document.getElementById('entryPrice').placeholder = "65000";
                 document.getElementById('stopLoss').placeholder = "64500";
                 document.getElementById('lotLabel').innerText = "Unit Size";
                 setSymbol('$');
             } 
             else if (mode === 'stock') {
-                const opt = document.getElementById('stockOptions');
-                if(opt) opt.style.display = 'block'; // Force Show
-
-                // Layout Change
-                document.getElementById('leverageContainer').style.display = 'none';
-                document.getElementById('balanceContainer').className = "w-full transition-all duration-300";
+                document.getElementById('stockOptions').style.display = 'block';
+                // Sembunyikan Leverage
+                if(levContainer) levContainer.style.display = 'none';
+                if(balContainer) balContainer.className = "w-full transition-all duration-300";
+                
                 document.getElementById('lotLabel').innerText = "Shares / Quantity";
                 updateStockCurrency();
             }
@@ -342,7 +366,6 @@
 
         function updateStockCurrency() {
             if (currentMode !== 'stock') return;
-            // Safe selector
             const radio = document.querySelector('input[name="stockCurrency"]:checked');
             const type = radio ? radio.value : 'idr';
             
@@ -383,18 +406,4 @@
             if (currentSymbol === 'Rp') {
                 return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(amount);
             } else if (currentSymbol === 'USC') {
-                return amount.toLocaleString('en-US', {maximumFractionDigits: 0}) + ' USC';
-            } else {
-                return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
-            }
-        }
-
-        function calculate() {
-            // Check Forex Cross visibility logic
-            const forexCrossCheck = document.querySelector('input[name="pairType"][value="cross"]');
-            const conversionBox = document.getElementById('conversionBox');
-            
-            if(currentMode === 'forex' && forexCrossCheck && forexCrossCheck.checked) {
-                if(conversionBox) conversionBox.style.display = 'block';
-            } else {
-                if(conversionBox) conversio
+                return amount.toLocaleString('en-US', {

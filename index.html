@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Risk Manager</title>
+    <title>Risk Manager 98</title>
     <style>
         /* --- 90s SYSTEM THEME --- */
         :root {
@@ -74,7 +74,7 @@
 
         .content-area { padding: 12px; margin: 0 6px 6px 6px; background: var(--win-gray); border: 2px solid var(--win-white); border-right-color: black; border-bottom-color: black; }
 
-        /* COMPACT RADIO PANEL (PERBAIKAN UI) */
+        /* COMPACT RADIO PANEL */
         .compact-options {
             display: flex; align-items: center; gap: 10px; 
             background: #e0e0e0; padding: 4px 8px; 
@@ -87,7 +87,7 @@
 
         /* INPUTS */
         .form-row { display: flex; gap: 10px; margin-bottom: 10px; }
-        .form-col { flex: 1; display: flex; flex-direction: column; min-width: 0; } /* min-width 0 prevents overflow */
+        .form-col { flex: 1; display: flex; flex-direction: column; min-width: 0; }
         .form-col label { margin-bottom: 3px; font-size: 11px; font-weight: 600; }
         
         input[type="number"], input[type="text"], select { 
@@ -106,7 +106,7 @@
         
         .tp-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; margin-top: 8px; text-align: center; font-size: 10px; }
         .tp-box { border: 1px solid #444; padding: 2px; }
-        .tp-val { color: yellow; font-weight: bold; font-size: 11px; word-break: break-all; } /* Break all handles long decimals */
+        .tp-val { color: yellow; font-weight: bold; font-size: 11px; word-break: break-all; }
         
         .footer { margin-top: 8px; font-size: 10px; display: flex; justify-content: space-between; color: #555; }
     </style>
@@ -115,7 +115,8 @@
 
 <div class="window-container win-box">
     <div class="title-bar">
-        <span>Risk_Manager.exe</span>
+        <!-- TITLE CHANGED -->
+        <span>risk_manager.exe</span>
         <div style="display:flex; gap:2px;">
             <button class="win-btn" style="width:16px; height:16px; font-size:10px;">_</button>
             <button class="win-btn" style="width:16px; height:16px; font-size:10px;">X</button>
@@ -132,7 +133,7 @@
 
     <div class="content-area">
         
-        <!-- COMPACT CONFIG AREA (UI FIX) -->
+        <!-- CONFIG AREA -->
         <div id="config-area" style="display:none;">
             <!-- Stock Config -->
             <div id="cfg-stock" class="compact-options" style="display:none;">
@@ -145,11 +146,18 @@
             <div id="cfg-forex" class="compact-options" style="display:none;">
                 <span class="compact-label">PAIR:</span>
                 <label class="radio-item"><input type="radio" name="fxPair" value="std" checked onchange="updateUI()"> Standard</label>
-                <label class="radio-item"><input type="radio" name="fxPair" value="cross" onchange="updateUI()"> Cross</label>
+                <label class="radio-item"><input type="radio" name="fxPair" value="cross" onchange="updateUI()"> Cross/JPY</label>
                 
                 <div id="cross-input" style="display:none; margin-left:auto; border-left:1px solid #999; padding-left:5px;">
                     <input type="number" id="crossRate" placeholder="Price (150.0)" style="width:70px; height:20px; font-size:11px; background:white; border:1px solid gray;" oninput="calculate()">
                 </div>
+            </div>
+
+            <!-- Gold Config (NEW) -->
+            <div id="cfg-gold" class="compact-options" style="display:none;">
+                <span class="compact-label">ACC:</span>
+                <label class="radio-item"><input type="radio" name="goldAcc" value="std" checked onchange="updateUI()"> Standard</label>
+                <label class="radio-item"><input type="radio" name="goldAcc" value="cent" onchange="updateUI()"> Cent</label>
             </div>
         </div>
 
@@ -181,7 +189,6 @@
             </div>
         </div>
 
-        <!-- PERHATIKAN: Step="any" penting untuk desimal kecil -->
         <div class="form-row">
             <div class="form-col">
                 <label>Entry Price:</label>
@@ -208,7 +215,11 @@
             </div>
         </div>
 
-        <div class="footer"><span>Status: Precision Fix Applied</span><span>GitHub Ready</span></div>
+        <div class="footer">
+            <!-- FOOTER CHANGED -->
+            <span>Status: On</span>
+            <span>@CendekiaTrader</span>
+        </div>
     </div>
 </div>
 
@@ -216,11 +227,9 @@
     // GLOBAL SCOPE
     var currentMode = 'forex';
 
-    // Helper: Hitung jumlah desimal dari input user
-    // Contoh: User input 0.000045 -> return 6
     function getPrecision(numStr) {
         if (!numStr) return 2;
-        if (numStr.indexOf('.') === -1) return 0; // Integer
+        if (numStr.indexOf('.') === -1) return 0; 
         return numStr.split('.')[1].length;
     }
 
@@ -228,19 +237,19 @@
     window.setMode = function(mode) {
         currentMode = mode;
         
-        // Update Tabs
         document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
         document.getElementById('tab-' + mode).classList.add('active');
 
-        // Logic UI
         var configArea = document.getElementById('config-area');
         var cfgForex = document.getElementById('cfg-forex');
         var cfgStock = document.getElementById('cfg-stock');
+        var cfgGold = document.getElementById('cfg-gold');
         var colLev = document.getElementById('col-leverage');
 
         configArea.style.display = 'none';
         cfgForex.style.display = 'none';
         cfgStock.style.display = 'none';
+        cfgGold.style.display = 'none';
         colLev.style.display = 'flex';
 
         if (mode === 'forex') {
@@ -250,6 +259,9 @@
             configArea.style.display = 'block';
             cfgStock.style.display = 'flex';
             colLev.style.display = 'none';
+        } else if (mode === 'gold') {
+            configArea.style.display = 'block';
+            cfgGold.style.display = 'flex';
         }
 
         updateUI();
@@ -270,12 +282,12 @@
             document.getElementById('cross-input').style.display = isCross ? 'block' : 'none';
         } 
         else if (currentMode === 'gold') {
-            lblBal.innerText = "Balance ($):";
+            var gAcc = document.querySelector('input[name="goldAcc"]:checked').value;
+            lblBal.innerText = (gAcc === 'cent') ? "Balance (USC):" : "Balance ($):";
             entry.placeholder = "2025.50"; sl.placeholder = "2020.00";
         }
         else if (currentMode === 'crypto') {
             lblBal.innerText = "Balance ($):";
-            // Placeholder contoh desimal kecil
             entry.placeholder = "0.00150"; sl.placeholder = "0.00140";
         }
         else if (currentMode === 'stock') {
@@ -297,14 +309,16 @@
         var riskVal = parseFloat(document.getElementById('riskVal').value) || 0;
         var riskType = document.getElementById('riskType').value;
         
-        // Ambil nilai string entry untuk hitung presisi
         var entryStr = document.getElementById('entry').value;
         var entry = parseFloat(entryStr) || 0;
         var sl = parseFloat(document.getElementById('sl').value) || 0;
 
+        // Symbol Determination
         var sym = '$';
         if (currentMode === 'stock') {
             sym = document.querySelector('input[name="stockCurr"]:checked').value === 'IDR' ? 'Rp ' : '$';
+        } else if (currentMode === 'gold') {
+            sym = document.querySelector('input[name="goldAcc"]:checked').value === 'cent' ? 'USC ' : '$';
         }
 
         var riskAmt = (riskType === '%') ? (bal * (riskVal / 100)) : riskVal;
@@ -331,6 +345,9 @@
             units = (lot * 100000).toFixed(0) + " Units";
         }
         else if (currentMode === 'gold') {
+            // Gold Standard: 1 Lot = 100 Oz.
+            // Gold Cent: Typically 1 Cent Lot = 100 Oz (Valued in Cents).
+            // Logic is identical if Balance is in Account Currency.
             lot = riskAmt / (diff * 100);
             margin = (lot * 100 * entry) / lev;
             units = (lot * 100).toFixed(1) + " Oz";
@@ -357,7 +374,6 @@
         // --- DISPLAY LOGIC ---
         var lotTxt = lot.toFixed(2) + " LOT";
         if (currentMode === 'crypto') {
-            // Jika crypto, tampilkan lot/koin sesuai presisi harga, minimal 4 desimal
             var coinPrecision = Math.max(4, getPrecision(entryStr));
             lotTxt = lot.toFixed(coinPrecision) + " COIN";
         }
@@ -367,18 +383,12 @@
         document.getElementById('lcd-margin').innerText = fmt(margin, sym);
         document.getElementById('lcd-units').innerText = units;
 
-        // --- TP CALCULATION (DYNAMIC DECIMAL) ---
+        // --- TP CALCULATION ---
         var dir = (sl < entry) ? 1 : -1;
         
-        // Logika Pintar untuk Desimal:
-        // Ambil jumlah desimal dari input 'Entry Price' user.
-        // Jika user input 0.00001 (5 desimal), maka TP juga harus 5 desimal.
-        // Minimal 2 desimal (untuk uang fiat), kecuali IDR stock (0).
         var decimals = getPrecision(entryStr);
-        if (decimals < 2) decimals = 2; // Default minimal 2
-        if (currentMode === 'stock' && sym === 'Rp ') decimals = 0; // Saham Indo gak pake koma
-        
-        // Paksa presisi tinggi untuk crypto jika user memasukkan angka desimal
+        if (decimals < 2) decimals = 2; 
+        if (currentMode === 'stock' && sym === 'Rp ') decimals = 0;
         if (currentMode === 'crypto' && decimals < 4) decimals = 4; 
 
         var tp1Val = entry + (diff * 1 * dir);

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Risk Manager 98 Pro</title>
+    <title>Risk Manager</title>
     <style>
         /* --- 90s SYSTEM THEME --- */
         :root {
@@ -28,7 +28,7 @@
             color: black; font-size: 14px;
         }
 
-        /* UTILS */
+        /* WINDOW BOX STYLES */
         .win-box {
             background-color: var(--win-gray);
             border-top: 2px solid var(--win-white); border-left: 2px solid var(--win-white);
@@ -48,64 +48,77 @@
             border-right: 2px solid var(--win-black); border-bottom: 2px solid var(--win-black);
             cursor: pointer; font-weight: bold; display: flex; justify-content: center; align-items: center;
         }
-        .win-btn:active { border-style: inset; }
+        .win-btn:active { border-style: inset; transform: translateY(1px); }
 
-        .window-container { width: 100%; max-width: 600px; display: flex; flex-direction: column; margin-bottom: 20px; }
+        .window-container { width: 100%; max-width: 500px; display: flex; flex-direction: column; margin-bottom: 20px; }
         
         .title-bar {
             background: linear-gradient(90deg, var(--win-blue), #1084d0);
-            padding: 6px 8px; display: flex; justify-content: space-between; align-items: center;
-            color: white; font-weight: bold;
+            padding: 4px 8px; display: flex; justify-content: space-between; align-items: center;
+            color: white; font-weight: bold; font-size: 13px;
         }
 
-        /* TABS AS BUTTONS */
-        .tabs-wrapper { padding: 8px 8px 0 8px; display: flex; gap: 4px; overflow-x: auto; }
+        /* TABS */
+        .tabs-wrapper { padding: 6px 6px 0 6px; display: flex; gap: 2px; }
         .tab-btn {
-            flex: 1; padding: 10px 5px; border: none; background: var(--win-gray);
+            flex: 1; padding: 8px 2px; border: none; background: var(--win-gray);
             border-top: 2px solid var(--win-white); border-left: 2px solid var(--win-white);
             border-right: 2px solid var(--win-black); border-bottom: none;
-            cursor: pointer; position: relative; font-weight: normal; font-size: 13px;
+            cursor: pointer; font-size: 12px;
         }
         .tab-btn.active {
-            font-weight: bold; padding-bottom: 12px; margin-top: -4px; z-index: 10;
+            font-weight: bold; padding-bottom: 10px; margin-top: -4px; z-index: 10;
             border-top: 2px solid var(--win-white); border-left: 2px solid var(--win-white);
             border-right: 2px solid var(--win-dark-gray);
         }
 
-        .content-area { padding: 15px; margin: 0 8px 8px 8px; background: var(--win-gray); border: 2px solid var(--win-white); border-right-color: black; border-bottom-color: black; }
+        .content-area { padding: 12px; margin: 0 6px 6px 6px; background: var(--win-gray); border: 2px solid var(--win-white); border-right-color: black; border-bottom-color: black; }
+
+        /* COMPACT RADIO PANEL (PERBAIKAN UI) */
+        .compact-options {
+            display: flex; align-items: center; gap: 10px; 
+            background: #e0e0e0; padding: 4px 8px; 
+            border: 1px dotted #888; margin-bottom: 10px;
+            font-size: 11px;
+        }
+        .compact-label { font-weight: bold; margin-right: 5px; }
+        .radio-item { display: flex; align-items: center; gap: 4px; cursor: pointer; }
+        .radio-item input { width: auto; height: auto; margin: 0; cursor: pointer; }
 
         /* INPUTS */
-        .form-row { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 12px; }
-        .form-col { flex: 1; min-width: 140px; display: flex; flex-direction: column; }
-        .form-col label { margin-bottom: 5px; font-size: 13px; font-weight: 600; }
-        input, select { width: 100%; height: 35px; padding: 0 8px; border: none; background: transparent; font-size: 16px; font-weight: bold; font-family: monospace; outline: none; }
+        .form-row { display: flex; gap: 10px; margin-bottom: 10px; }
+        .form-col { flex: 1; display: flex; flex-direction: column; min-width: 0; } /* min-width 0 prevents overflow */
+        .form-col label { margin-bottom: 3px; font-size: 11px; font-weight: 600; }
+        
+        input[type="number"], input[type="text"], select { 
+            width: 100%; height: 30px; padding: 0 5px; border: none; background: transparent; 
+            font-size: 14px; font-weight: bold; font-family: monospace; outline: none; 
+        }
         
         .risk-group { display: flex; align-items: center; background: white; border: 2px inset gray; }
-        .risk-group input { flex: 1; border: none; }
-        .risk-group select { width: 50px; background: #eee; border-left: 1px solid gray; }
+        .risk-group input { flex: 1; }
+        .risk-group select { width: 40px; background: #eee; border-left: 1px solid gray; font-size: 12px; }
 
-        .radio-panel { background: #ddd; padding: 8px; border: 1px dotted #888; margin-bottom: 15px; display: flex; gap: 15px; align-items: center; }
-        
         /* LCD SCREEN */
-        .lcd-display { background: var(--lcd-bg); color: var(--lcd-text); padding: 15px; border: 4px inset gray; margin-top: 20px; font-family: monospace; text-shadow: 0 0 2px rgba(0,255,0,0.4); }
-        .lcd-row { display: flex; justify-content: space-between; border-bottom: 1px dashed #333; padding-bottom: 4px; margin-bottom: 5px; }
-        .lcd-big { font-size: 24px; font-weight: bold; text-align: right; color: #fff; margin: 10px 0; }
+        .lcd-display { background: var(--lcd-bg); color: var(--lcd-text); padding: 10px; border: 3px inset gray; margin-top: 15px; font-family: monospace; text-shadow: 0 0 2px rgba(0,255,0,0.4); }
+        .lcd-row { display: flex; justify-content: space-between; border-bottom: 1px dashed #333; padding-bottom: 2px; margin-bottom: 4px; font-size: 12px; }
+        .lcd-big { font-size: 20px; font-weight: bold; text-align: right; color: #fff; margin: 8px 0; }
         
-        .tp-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; margin-top: 10px; text-align: center; font-size: 11px; }
-        .tp-box { border: 1px solid #444; padding: 4px; }
-        .tp-val { color: yellow; font-weight: bold; font-size: 12px; }
+        .tp-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; margin-top: 8px; text-align: center; font-size: 10px; }
+        .tp-box { border: 1px solid #444; padding: 2px; }
+        .tp-val { color: yellow; font-weight: bold; font-size: 11px; word-break: break-all; } /* Break all handles long decimals */
         
-        .footer { margin-top: 10px; padding: 4px; border: 1px inset white; font-size: 11px; display: flex; justify-content: space-between; }
+        .footer { margin-top: 8px; font-size: 10px; display: flex; justify-content: space-between; color: #555; }
     </style>
 </head>
 <body>
 
 <div class="window-container win-box">
     <div class="title-bar">
-        <span>Risk_Manager_vFinal.exe</span>
+        <span>Risk_Manager.exe</span>
         <div style="display:flex; gap:2px;">
-            <button class="win-btn" style="width:20px;">_</button>
-            <button class="win-btn" style="width:20px;">X</button>
+            <button class="win-btn" style="width:16px; height:16px; font-size:10px;">_</button>
+            <button class="win-btn" style="width:16px; height:16px; font-size:10px;">X</button>
         </div>
     </div>
 
@@ -119,19 +132,23 @@
 
     <div class="content-area">
         
-        <!-- CONFIG AREA -->
+        <!-- COMPACT CONFIG AREA (UI FIX) -->
         <div id="config-area" style="display:none;">
-            <div id="cfg-stock" class="radio-panel" style="display:none;">
-                <b>Curr:</b>
-                <label><input type="radio" name="stockCurr" value="IDR" checked onchange="updateUI()"> IDR</label>
-                <label><input type="radio" name="stockCurr" value="USD" onchange="updateUI()"> USD</label>
+            <!-- Stock Config -->
+            <div id="cfg-stock" class="compact-options" style="display:none;">
+                <span class="compact-label">CURR:</span>
+                <label class="radio-item"><input type="radio" name="stockCurr" value="IDR" checked onchange="updateUI()"> IDR</label>
+                <label class="radio-item"><input type="radio" name="stockCurr" value="USD" onchange="updateUI()"> USD</label>
             </div>
-            <div id="cfg-forex" class="radio-panel" style="display:none;">
-                <b>Pair:</b>
-                <label><input type="radio" name="fxPair" value="std" checked onchange="updateUI()"> Std</label>
-                <label><input type="radio" name="fxPair" value="cross" onchange="updateUI()"> Cross/JPY</label>
-                <div id="cross-input" style="display:none; margin-left:10px;">
-                    <input type="number" id="crossRate" placeholder="Price (e.g 150)" style="width:80px; background:white; border:1px solid gray;" oninput="calculate()">
+            
+            <!-- Forex Config -->
+            <div id="cfg-forex" class="compact-options" style="display:none;">
+                <span class="compact-label">PAIR:</span>
+                <label class="radio-item"><input type="radio" name="fxPair" value="std" checked onchange="updateUI()"> Standard</label>
+                <label class="radio-item"><input type="radio" name="fxPair" value="cross" onchange="updateUI()"> Cross</label>
+                
+                <div id="cross-input" style="display:none; margin-left:auto; border-left:1px solid #999; padding-left:5px;">
+                    <input type="number" id="crossRate" placeholder="Price (150.0)" style="width:70px; height:20px; font-size:11px; background:white; border:1px solid gray;" oninput="calculate()">
                 </div>
             </div>
         </div>
@@ -164,6 +181,7 @@
             </div>
         </div>
 
+        <!-- PERHATIKAN: Step="any" penting untuk desimal kecil -->
         <div class="form-row">
             <div class="form-col">
                 <label>Entry Price:</label>
@@ -182,38 +200,44 @@
             <div class="lcd-row"><span>MARGIN</span><span id="lcd-margin">0.00</span></div>
             <div class="lcd-row" style="border:none"><span>VOLUME</span><span id="lcd-units">-</span></div>
             
+            <div style="border-top:1px dashed #444; margin-top:5px; padding-top:2px; font-size:10px; text-align:center; color:#777;">TARGET PROFIT</div>
             <div class="tp-grid">
-                <div class="tp-box"><div style="color:#888">1:1</div><div class="tp-val" id="tp1">0.00</div></div>
-                <div class="tp-box"><div style="color:#888">1:2</div><div class="tp-val" id="tp2">0.00</div></div>
-                <div class="tp-box"><div style="color:#888">1:3</div><div class="tp-val" id="tp3">0.00</div></div>
+                <div class="tp-box"><div style="color:#888">1:1</div><div class="tp-val" id="tp1">0</div></div>
+                <div class="tp-box"><div style="color:#888">1:2</div><div class="tp-val" id="tp2">0</div></div>
+                <div class="tp-box"><div style="color:#888">1:3</div><div class="tp-val" id="tp3">0</div></div>
             </div>
         </div>
 
-        <div class="footer"><span>Status: Ready</span><span>GitHub Edition</span></div>
+        <div class="footer"><span>Status: Precision Fix Applied</span><span>GitHub Ready</span></div>
     </div>
 </div>
 
-<!-- SCRIPT DILETAKKAN LANGSUNG DISINI AGAR GLOBAL SCOPE AMAN -->
 <script>
-    // 1. Definisikan Variabel Global
+    // GLOBAL SCOPE
     var currentMode = 'forex';
 
-    // 2. Fungsi Set Mode (Dipanggil oleh tombol)
-    function setMode(mode) {
-        currentMode = mode;
-        console.log("Mode changed to:", mode);
+    // Helper: Hitung jumlah desimal dari input user
+    // Contoh: User input 0.000045 -> return 6
+    function getPrecision(numStr) {
+        if (!numStr) return 2;
+        if (numStr.indexOf('.') === -1) return 0; // Integer
+        return numStr.split('.')[1].length;
+    }
 
-        // Update Tombol Tab
+    // Fungsi Set Mode
+    window.setMode = function(mode) {
+        currentMode = mode;
+        
+        // Update Tabs
         document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
         document.getElementById('tab-' + mode).classList.add('active');
 
-        // Logic Tampilan Config
+        // Logic UI
         var configArea = document.getElementById('config-area');
         var cfgForex = document.getElementById('cfg-forex');
         var cfgStock = document.getElementById('cfg-stock');
         var colLev = document.getElementById('col-leverage');
 
-        // Reset
         configArea.style.display = 'none';
         cfgForex.style.display = 'none';
         cfgStock.style.display = 'none';
@@ -231,8 +255,8 @@
         updateUI();
     }
 
-    // 3. Update UI Label & Placeholder
-    function updateUI() {
+    // Update Label & Placeholder
+    window.updateUI = function() {
         var lblBal = document.getElementById('lbl-balance');
         var entry = document.getElementById('entry');
         var sl = document.getElementById('sl');
@@ -251,7 +275,8 @@
         }
         else if (currentMode === 'crypto') {
             lblBal.innerText = "Balance ($):";
-            entry.placeholder = "65000"; sl.placeholder = "64000";
+            // Placeholder contoh desimal kecil
+            entry.placeholder = "0.00150"; sl.placeholder = "0.00140";
         }
         else if (currentMode === 'stock') {
             var curr = document.querySelector('input[name="stockCurr"]:checked').value;
@@ -261,18 +286,20 @@
         calculate();
     }
 
-    // 4. Hitung (Format Helper)
     function fmt(num, sym) {
         return sym + num.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
     }
 
-    // 5. Kalkulasi Utama
-    function calculate() {
+    // CALCULATE LOGIC
+    window.calculate = function() {
         var bal = parseFloat(document.getElementById('balance').value) || 0;
         var lev = parseFloat(document.getElementById('leverage').value) || 100;
         var riskVal = parseFloat(document.getElementById('riskVal').value) || 0;
         var riskType = document.getElementById('riskType').value;
-        var entry = parseFloat(document.getElementById('entry').value) || 0;
+        
+        // Ambil nilai string entry untuk hitung presisi
+        var entryStr = document.getElementById('entry').value;
+        var entry = parseFloat(entryStr) || 0;
         var sl = parseFloat(document.getElementById('sl').value) || 0;
 
         var sym = '$';
@@ -280,7 +307,6 @@
             sym = document.querySelector('input[name="stockCurr"]:checked').value === 'IDR' ? 'Rp ' : '$';
         }
 
-        // Max Loss
         var riskAmt = (riskType === '%') ? (bal * (riskVal / 100)) : riskVal;
         document.getElementById('maxLoss').value = fmt(riskAmt, sym);
 
@@ -291,6 +317,7 @@
         var margin = 0;
         var units = "";
 
+        // --- ASSET LOGIC ---
         if (currentMode === 'forex') {
             var contract = 100000;
             var fxType = document.querySelector('input[name="fxPair"]:checked').value;
@@ -309,7 +336,7 @@
             units = (lot * 100).toFixed(1) + " Oz";
         }
         else if (currentMode === 'crypto') {
-            lot = riskAmt / diff; // Coins
+            lot = riskAmt / diff; 
             margin = (lot * entry) / lev;
             units = "Lev 1:" + lev;
         }
@@ -317,7 +344,7 @@
             var shares = Math.floor(riskAmt / diff);
             var isIDR = document.querySelector('input[name="stockCurr"]:checked').value === 'IDR';
             if (isIDR) {
-                lot = shares / 100; // Lot Indo
+                lot = shares / 100; 
                 margin = shares * entry;
                 units = shares + " Lembar";
             } else {
@@ -327,28 +354,46 @@
             }
         }
 
-        // Output Display
+        // --- DISPLAY LOGIC ---
         var lotTxt = lot.toFixed(2) + " LOT";
-        if (currentMode === 'crypto') lotTxt = lot.toFixed(4) + " COIN";
+        if (currentMode === 'crypto') {
+            // Jika crypto, tampilkan lot/koin sesuai presisi harga, minimal 4 desimal
+            var coinPrecision = Math.max(4, getPrecision(entryStr));
+            lotTxt = lot.toFixed(coinPrecision) + " COIN";
+        }
         if (currentMode === 'stock' && sym === '$') lotTxt = lot + " SHARE";
         
         document.getElementById('lcd-lot').innerText = lotTxt;
         document.getElementById('lcd-margin').innerText = fmt(margin, sym);
         document.getElementById('lcd-units').innerText = units;
 
-        // TPs
+        // --- TP CALCULATION (DYNAMIC DECIMAL) ---
         var dir = (sl < entry) ? 1 : -1;
-        var d = (currentMode === 'forex' && entry < 50) ? 4 : 2;
-        if (currentMode === 'stock' && sym === 'Rp ') d = 0;
+        
+        // Logika Pintar untuk Desimal:
+        // Ambil jumlah desimal dari input 'Entry Price' user.
+        // Jika user input 0.00001 (5 desimal), maka TP juga harus 5 desimal.
+        // Minimal 2 desimal (untuk uang fiat), kecuali IDR stock (0).
+        var decimals = getPrecision(entryStr);
+        if (decimals < 2) decimals = 2; // Default minimal 2
+        if (currentMode === 'stock' && sym === 'Rp ') decimals = 0; // Saham Indo gak pake koma
+        
+        // Paksa presisi tinggi untuk crypto jika user memasukkan angka desimal
+        if (currentMode === 'crypto' && decimals < 4) decimals = 4; 
 
-        document.getElementById('tp1').innerText = (entry + (diff * 1 * dir)).toFixed(d);
-        document.getElementById('tp2').innerText = (entry + (diff * 2 * dir)).toFixed(d);
-        document.getElementById('tp3').innerText = (entry + (diff * 3 * dir)).toFixed(d);
+        var tp1Val = entry + (diff * 1 * dir);
+        var tp2Val = entry + (diff * 2 * dir);
+        var tp3Val = entry + (diff * 3 * dir);
+
+        document.getElementById('tp1').innerText = tp1Val.toFixed(decimals);
+        document.getElementById('tp2').innerText = tp2Val.toFixed(decimals);
+        document.getElementById('tp3').innerText = tp3Val.toFixed(decimals);
     }
 
-    // 6. Jalankan Pertama Kali
-    setMode('forex');
-
+    // Init
+    document.addEventListener('DOMContentLoaded', function() {
+        setMode('forex');
+    });
 </script>
 </body>
 </html>

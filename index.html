@@ -80,16 +80,21 @@
             padding: 8px 8px 0 8px; display: flex; gap: 2px; flex-shrink: 0; background: var(--win-gray);
         }
         .tab-btn {
-            flex: 1; padding: 10px 2px; border: none; background: var(--win-gray);
-            border-top: 2px solid var(--win-white); border-left: 2px solid var(--win-white);
-            border-right: 2px solid var(--win-black); border-bottom: none;
-            cursor: pointer; font-size: 12px;
-        }
+    position: relative; flex: 1; padding: 10px 2px; border: none; background: var(--win-gray);
+    border-top: 2px solid var(--win-white); border-left: 2px solid var(--win-white);
+    border-right: 2px solid var(--win-black); border-bottom: none; cursor: pointer; font-size: 12px;
+}
+
         .tab-btn.active {
             font-weight: bold; padding-bottom: 12px; margin-top: -4px; z-index: 10;
             border-top: 2px solid var(--win-white); border-left: 2px solid var(--win-white);
             border-right: 2px solid var(--win-dark-gray);
         }
+
+        .tabs-wrapper {
+    position: relative;
+    z-index: 5;
+}
 
         /* CONTENT AREA */
         .content-area { 

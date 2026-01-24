@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Risk Management</title>
+    <title>Risk Manager 98</title>
     <style>
         /* --- 90s SYSTEM THEME --- */
         :root {
@@ -19,31 +19,40 @@
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
+        /* BASE STYLE */
         body {
             background-color: var(--desktop-teal);
             font-family: 'Segoe UI', Tahoma, sans-serif;
-            margin: 0; padding: 0; 
+            margin: 0; 
+            padding: 0; 
             min-height: 100vh;
-            display: flex; justify-content: center; align-items: center; 
-            color: black; font-size: 14px;
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            color: black; 
+            font-size: 14px;
         }
 
         /* WINDOW CONTAINER */
         .window-container {
             background-color: var(--win-gray);
-            width: 100%; max-width: 480px; 
-            display: flex; flex-direction: column;
-            border-top: 2px solid var(--win-white); border-left: 2px solid var(--win-white);
-            border-right: 2px solid var(--win-black); border-bottom: 2px solid var(--win-black);
+            width: 100%;
+            max-width: 480px; 
+            display: flex; 
+            flex-direction: column;
+            border-top: 2px solid var(--win-white); 
+            border-left: 2px solid var(--win-white);
+            border-right: 2px solid var(--win-black); 
+            border-bottom: 2px solid var(--win-black);
             box-shadow: 5px 5px 15px rgba(0,0,0,0.5); 
         }
 
-        /* MOBILE OVERRIDE */
         @media (max-width: 600px) {
             body { background-color: var(--win-gray); align-items: flex-start; }
             .window-container { max-width: 100%; min-height: 100vh; border: none; box-shadow: none; }
         }
 
+        /* UTILS */
         .win-inset {
             background-color: white;
             border-top: 2px solid var(--win-dark-gray); border-left: 2px solid var(--win-dark-gray);
@@ -58,6 +67,7 @@
         }
         .win-btn:active { border-style: inset; transform: translateY(1px); }
 
+        /* HEADER */
         .title-bar {
             background: linear-gradient(90deg, var(--win-blue), #1084d0);
             padding: 6px 10px; display: flex; justify-content: space-between; align-items: center;
@@ -73,7 +83,7 @@
             border-top: 2px solid var(--win-white); border-left: 2px solid var(--win-white);
             border-right: 2px solid var(--win-black); border-bottom: none;
             cursor: pointer; font-size: 12px;
-            /* Fix for Mobile Touch */
+            /* Penting untuk mobile */
             touch-action: manipulation;
         }
         .tab-btn.active {
@@ -82,14 +92,16 @@
             border-right: 2px solid var(--win-dark-gray);
         }
 
+        /* CONTENT AREA */
         .content-area { 
             padding: 15px; background: var(--win-gray); 
             border: 2px solid var(--win-white); border-right-color: black; border-bottom-color: black;
             margin: 0 6px 6px 6px; flex-grow: 1; display: flex; flex-direction: column;
         }
+
         @media (max-width: 600px) { .content-area { border: none; margin: 0; padding: 15px; } }
 
-        /* INPUTS */
+        /* CONFIG PANEL */
         .compact-options {
             display: flex; align-items: center; gap: 10px; 
             background: #e0e0e0; padding: 6px 10px; 
@@ -97,8 +109,9 @@
         }
         .compact-label { font-weight: bold; margin-right: 5px; }
         .radio-item { display: flex; align-items: center; gap: 6px; cursor: pointer; }
-        .radio-item input { margin: 0; transform: scale(1.2); }
+        .radio-item input { margin: 0; cursor: pointer; transform: scale(1.2); }
 
+        /* INPUTS */
         .form-row { display: flex; gap: 10px; margin-bottom: 12px; }
         .form-col { flex: 1; display: flex; flex-direction: column; min-width: 0; }
         .form-col label { margin-bottom: 4px; font-size: 12px; font-weight: 600; }
@@ -107,11 +120,12 @@
             width: 100%; height: 35px; padding: 0 8px; border: none; background: transparent; 
             font-size: 15px; font-weight: bold; font-family: monospace; outline: none; 
         }
+        
         .risk-group { display: flex; align-items: center; background: white; border: 2px inset gray; }
         .risk-group input { flex: 1; }
         .risk-group select { width: 45px; background: #eee; border-left: 1px solid gray; font-size: 12px; }
 
-        /* LCD DISPLAY */
+        /* LCD SCREEN */
         .lcd-display { 
             background: var(--lcd-bg); color: var(--lcd-text); 
             padding: 12px; border: 3px inset gray; margin-top: 15px; 
@@ -120,29 +134,24 @@
         .lcd-row { display: flex; justify-content: space-between; border-bottom: 1px dashed #333; padding-bottom: 4px; margin-bottom: 6px; font-size: 13px; }
         .lcd-big { font-size: 22px; font-weight: bold; text-align: right; color: #fff; margin: 10px 0; }
         
-        /* LAYOUT TP FIX: 3 Column Grid */
+        /* TP GRID LAYOUT (V9 Style) */
         .tp-grid { 
             display: grid; 
             grid-template-columns: 1fr 1fr 1fr; /* 3 Kolom Sejajar */
-            gap: 8px; 
+            gap: 6px; 
             margin-top: 10px; 
             text-align: center; 
             font-size: 11px; 
         }
-        
-        .tp-box { 
-            border: 1px solid #444; 
-            padding: 6px; 
-            display: flex; flex-direction: column; gap: 2px; 
-        }
+        .tp-box { border: 1px solid #444; padding: 6px; display: flex; flex-direction: column; gap: 2px; }
         
         /* Custom TP Full Width */
         .tp-box-wide {
-            grid-column: 1 / -1; /* Membentang dari awal sampai akhir grid */
+            grid-column: 1 / -1; 
             border-color: #666;
             margin-top: 4px;
             display: flex;
-            flex-direction: row; /* Layout horizontal untuk Custom TP */
+            flex-direction: row; /* Horizontal layout */
             align-items: center;
             justify-content: space-between;
             gap: 10px;
@@ -154,13 +163,19 @@
         .tp-money { color: #00ff00; font-size: 11px; font-weight: bold; margin-top: 2px; }
 
         .custom-tp-input {
-            width: 100px; /* Lebar input custom */
-            background: #222; border: 1px solid #555; color: yellow;
-            font-family: monospace; font-size: 12px; text-align: center; height: 25px;
-            flex: 1;
+            width: 100px; /* Lebar fixed agar rapi */
+            background: #222;
+            border: 1px solid #555;
+            color: yellow;
+            font-family: monospace;
+            font-size: 12px;
+            text-align: center;
+            height: 25px;
+            flex: 1; /* Isi sisa ruang */
         }
         .custom-tp-input:focus { outline: 1px solid #00ff00; background: #000; }
-
+        
+        /* FOOTER */
         .footer { 
             margin-top: auto; padding-top: 15px; font-size: 11px; 
             display: flex; justify-content: space-between; color: #555; 
@@ -171,14 +186,14 @@
 
 <div class="window-container">
     <div class="title-bar">
-        <span>risk_management.exe</span>
+        <span>risk_manager.exe</span>
         <div style="display:flex; gap:2px;">
             <button class="win-btn" style="width:20px; height:20px; font-size:12px;">_</button>
             <button class="win-btn" style="width:20px; height:20px; font-size:12px;">X</button>
         </div>
     </div>
 
-    <!-- TABS: Removed onclick, added id -->
+    <!-- TABS (ID ditambahkan untuk binding JS) -->
     <div class="tabs-wrapper">
         <button class="tab-btn active" id="tab-forex">FOREX</button>
         <button class="tab-btn" id="tab-gold">GOLD</button>
@@ -247,6 +262,7 @@
             </div>
         </div>
 
+        <!-- LCD OUTPUT -->
         <div class="lcd-display">
             <div class="lcd-row"><span>MODE</span><span id="lcd-mode" style="color:cyan">FOREX</span></div>
             <div class="lcd-big" id="lcd-lot">0.00 LOT</div>
@@ -256,85 +272,90 @@
             <div style="border-top:1px dashed #444; margin-top:5px; padding-top:2px; font-size:10px; text-align:center; color:#777;">TARGET PROFIT & ESTIMATED VALUE</div>
             
             <div class="tp-grid">
-                <!-- TP 1-3 Sejajar -->
+                <!-- TP 1 -->
                 <div class="tp-box">
                     <div class="tp-label">TP 1 (1:1)</div>
                     <div class="tp-price" id="tp1">0.00</div>
                     <div class="tp-money" id="money1">$0.00</div>
                 </div>
+                <!-- TP 2 -->
                 <div class="tp-box">
                     <div class="tp-label">TP 2 (1:2)</div>
                     <div class="tp-price" id="tp2">0.00</div>
                     <div class="tp-money" id="money2">$0.00</div>
                 </div>
+                <!-- TP 3 -->
                 <div class="tp-box">
                     <div class="tp-label">TP 3 (1:3)</div>
                     <div class="tp-price" id="tp3">0.00</div>
                     <div class="tp-money" id="money3">$0.00</div>
                 </div>
-                
-                <!-- Custom TP Full Width di Bawah -->
+                <!-- TP CUSTOM (FULL WIDTH) -->
                 <div class="tp-box tp-box-wide">
                     <div class="tp-label" style="color:cyan; white-space:nowrap;">CUSTOM TP:</div>
-                    <input type="number" id="customTp" class="custom-tp-input" placeholder="Price" oninput="calculate()">
-                    <div class="tp-money" id="moneyCustom" style="font-size:13px; min-width:60px; text-align:right;">-</div>
+                    <input type="number" id="customTp" class="custom-tp-input" placeholder="Input Price" oninput="calculate()">
+                    <div class="tp-money" id="moneyCustom" style="font-size:13px; text-align:right; min-width:60px;">-</div>
                 </div>
             </div>
         </div>
 
         <div class="footer">
-            <span>Status: Touch Fixed</span>
+            <span>Status: Ready</span>
             <span>@CendekiaTrader</span>
         </div>
     </div>
 </div>
 
 <script>
+    // --- JAVASCRIPT FIXED FOR GITHUB PAGES ---
+    
     // 1. Variabel Global
     var currentMode = 'forex';
 
-    // 2. Event Listener (Solusi Menu Macet)
-    // Menunggu halaman siap 100%
+    // 2. Init & Event Listeners (PENTING AGAR MENU BISA DIKLIK DI HP)
     document.addEventListener('DOMContentLoaded', function() {
-        // Daftarkan semua tombol mode
-        attachModeEvent('tab-forex', 'forex');
-        attachModeEvent('tab-gold', 'gold');
-        attachModeEvent('tab-crypto', 'crypto');
-        attachModeEvent('tab-stock', 'stock');
+        // Setup Tab Buttons dengan event Listener yang kuat
+        setupTab('tab-forex', 'forex');
+        setupTab('tab-gold', 'gold');
+        setupTab('tab-crypto', 'crypto');
+        setupTab('tab-stock', 'stock');
 
-        // Jalankan default
+        // Jalankan Default
         setMode('forex');
     });
 
-    // Fungsi Pembantu Event
-    function attachModeEvent(id, modeName) {
+    function setupTab(id, mode) {
         var btn = document.getElementById(id);
-        if (btn) {
-            // Gunakan click standard (aman)
-            btn.addEventListener('click', function() { setMode(modeName); });
-            // Tambahkan touchstart untuk respon instan di HP (opsional tapi bagus)
-            btn.addEventListener('touchstart', function() { setMode(modeName); }, {passive: true});
+        if(btn) {
+            // Gunakan click standard
+            btn.addEventListener('click', function() { setMode(mode); });
+            // Gunakan touchstart untuk responsivitas instan di mobile (Fix macet)
+            btn.addEventListener('touchstart', function(e) { 
+                e.preventDefault(); // Mencegah double tap zoom
+                setMode(mode); 
+            }, {passive: false});
         }
     }
 
-    // 3. Logic Set Mode
+    // 3. Fungsi Set Mode
     window.setMode = function(mode) {
         currentMode = mode;
         
-        // Update Tab Class
-        document.querySelectorAll('.tab-btn').forEach(function(btn) {
-            btn.classList.remove('active');
+        // Update Tab Active State
+        document.querySelectorAll('.tab-btn').forEach(function(b) {
+            b.classList.remove('active');
         });
         var activeBtn = document.getElementById('tab-' + mode);
         if(activeBtn) activeBtn.classList.add('active');
 
-        // Toggle Config
+        // Logic UI Display
         var configArea = document.getElementById('config-area');
         var cfgForex = document.getElementById('cfg-forex');
         var cfgStock = document.getElementById('cfg-stock');
         var cfgGold = document.getElementById('cfg-gold');
         var colLev = document.getElementById('col-leverage');
 
+        // Reset semua ke none dulu
         if(configArea) configArea.style.display = 'none';
         if(cfgForex) cfgForex.style.display = 'none';
         if(cfgStock) cfgStock.style.display = 'none';
@@ -356,7 +377,7 @@
         updateUI();
     };
 
-    // 4. Update UI
+    // 4. Update Label
     window.updateUI = function() {
         var lblBal = document.getElementById('lbl-balance');
         var entry = document.getElementById('entry');
@@ -398,7 +419,7 @@
         return sym + num.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
     }
 
-    // 6. Kalkulasi Utama
+    // 6. Kalkulasi
     window.calculate = function() {
         var bal = parseFloat(document.getElementById('balance').value) || 0;
         var lev = parseFloat(document.getElementById('leverage').value) || 100;
@@ -429,7 +450,7 @@
         var margin = 0;
         var units = "";
 
-        // Hitung Lot
+        // Asset Logic
         if (currentMode === 'forex') {
             var contract = 100000;
             var fxType = document.querySelector('input[name="fxPair"]:checked').value;
@@ -440,14 +461,4 @@
                 lot = (riskAmt * cRate) / (diff * contract);
             }
             margin = (lot * contract * entry) / lev;
-            units = (lot * 100000).toFixed(0) + " Units";
-        }
-        else if (currentMode === 'gold') {
-            lot = riskAmt / (diff * 100);
-            margin = (lot * 100 * entry) / lev;
-            units = (lot * 100).toFixed(1) + " Oz";
-        }
-        else if (currentMode === 'crypto') {
-            lot = riskAmt / diff; 
-            margin = (lot * entry) / lev;
-      
+  

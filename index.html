@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Risk Manager</title>
+    <title>Risk Management</title>
     <style>
         /* --- 90s SYSTEM THEME --- */
         :root {
@@ -15,51 +15,42 @@
             --desktop-teal: #008080;
             --lcd-bg: #1a1a1a;
             --lcd-text: #00ff00;
+            --lcd-profit: #00ff00;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-        /* BASE STYLE (DESKTOP FIRST APPROACH) */
+        /* BASE STYLE */
         body {
-            background-color: var(--desktop-teal); /* Latar Teal untuk Desktop */
+            background-color: var(--desktop-teal);
             font-family: 'Segoe UI', Tahoma, sans-serif;
             margin: 0; 
             padding: 0; 
             min-height: 100vh;
             display: flex; 
             justify-content: center; 
-            align-items: center; /* Tengah secara vertikal & horizontal */
+            align-items: center; 
             color: black; 
             font-size: 14px;
         }
 
-        /* WINDOW CONTAINER (KOTAK APLIKASI) */
+        /* WINDOW CONTAINER */
         .window-container {
             background-color: var(--win-gray);
             width: 100%;
-            max-width: 480px; /* Batasi lebar di desktop agar tidak raksasa */
+            max-width: 480px; 
             display: flex; 
             flex-direction: column;
-            /* Efek 3D Window Klasik */
             border-top: 2px solid var(--win-white); 
             border-left: 2px solid var(--win-white);
             border-right: 2px solid var(--win-black); 
             border-bottom: 2px solid var(--win-black);
-            box-shadow: 5px 5px 15px rgba(0,0,0,0.5); /* Bayangan biar pop-up */
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.5); 
         }
 
-        /* --- MOBILE OVERRIDE (AGAR FULL SCREEN DI HP) --- */
         @media (max-width: 600px) {
-            body {
-                background-color: var(--win-gray); /* Background abu-abu di HP */
-                align-items: flex-start; /* Mulai dari atas */
-            }
-            .window-container {
-                max-width: 100%; /* Full lebar */
-                min-height: 100vh; /* Full tinggi */
-                border: none; /* Hilangkan border window */
-                box-shadow: none; /* Hilangkan bayangan */
-            }
+            body { background-color: var(--win-gray); align-items: flex-start; }
+            .window-container { max-width: 100%; min-height: 100vh; border: none; box-shadow: none; }
         }
 
         /* UTILS */
@@ -81,17 +72,12 @@
         .title-bar {
             background: linear-gradient(90deg, var(--win-blue), #1084d0);
             padding: 6px 10px; display: flex; justify-content: space-between; align-items: center;
-            color: white; font-weight: bold; font-size: 14px;
-            flex-shrink: 0;
+            color: white; font-weight: bold; font-size: 14px; flex-shrink: 0;
         }
 
         /* TABS */
         .tabs-wrapper { 
-            padding: 8px 8px 0 8px; 
-            display: flex; 
-            gap: 2px; 
-            flex-shrink: 0;
-            background: var(--win-gray);
+            padding: 8px 8px 0 8px; display: flex; gap: 2px; flex-shrink: 0; background: var(--win-gray);
         }
         .tab-btn {
             flex: 1; padding: 10px 2px; border: none; background: var(--win-gray);
@@ -107,35 +93,18 @@
 
         /* CONTENT AREA */
         .content-area { 
-            padding: 15px; 
-            background: var(--win-gray); 
-            
-            /* Border 3D untuk konten */
-            border: 2px solid var(--win-white); 
-            border-right-color: black; 
-            border-bottom-color: black;
-            margin: 0 6px 6px 6px;
-
-            flex-grow: 1; /* Isi ruang kosong */
-            display: flex;
-            flex-direction: column;
+            padding: 15px; background: var(--win-gray); 
+            border: 2px solid var(--win-white); border-right-color: black; border-bottom-color: black;
+            margin: 0 6px 6px 6px; flex-grow: 1; display: flex; flex-direction: column;
         }
 
-        /* Mobile adjustment for content border */
-        @media (max-width: 600px) {
-            .content-area {
-                border: none; /* Hilangkan border dalam di HP agar clean */
-                margin: 0;
-                padding: 15px;
-            }
-        }
+        @media (max-width: 600px) { .content-area { border: none; margin: 0; padding: 15px; } }
 
         /* CONFIG PANEL */
         .compact-options {
             display: flex; align-items: center; gap: 10px; 
             background: #e0e0e0; padding: 6px 10px; 
-            border: 1px dotted #888; margin-bottom: 15px;
-            font-size: 12px;
+            border: 1px dotted #888; margin-bottom: 15px; font-size: 12px;
         }
         .compact-label { font-weight: bold; margin-right: 5px; }
         .radio-item { display: flex; align-items: center; gap: 6px; cursor: pointer; }
@@ -156,22 +125,54 @@
         .risk-group select { width: 45px; background: #eee; border-left: 1px solid gray; font-size: 12px; }
 
         /* LCD SCREEN */
-        .lcd-display { background: var(--lcd-bg); color: var(--lcd-text); padding: 12px; border: 3px inset gray; margin-top: 15px; font-family: monospace; text-shadow: 0 0 2px rgba(0,255,0,0.4); }
+        .lcd-display { 
+            background: var(--lcd-bg); color: var(--lcd-text); 
+            padding: 12px; border: 3px inset gray; margin-top: 15px; 
+            font-family: monospace; text-shadow: 0 0 2px rgba(0,255,0,0.4); 
+        }
         .lcd-row { display: flex; justify-content: space-between; border-bottom: 1px dashed #333; padding-bottom: 4px; margin-bottom: 6px; font-size: 13px; }
         .lcd-big { font-size: 22px; font-weight: bold; text-align: right; color: #fff; margin: 10px 0; }
         
-        .tp-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; margin-top: 10px; text-align: center; font-size: 11px; }
-        .tp-box { border: 1px solid #444; padding: 4px; }
-        .tp-val { color: yellow; font-weight: bold; font-size: 12px; word-break: break-all; }
+        /* UPDATED TP GRID: 3 Columns, Custom Full Width */
+        .tp-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr 1fr; /* 3 Kolom Sejajar untuk TP 1-3 */
+            gap: 6px; 
+            margin-top: 10px; 
+            text-align: center; 
+            font-size: 11px; 
+        }
+        .tp-box { border: 1px solid #444; padding: 6px; display: flex; flex-direction: column; gap: 2px; }
+        
+        /* Class khusus untuk Custom TP agar lebar penuh */
+        .tp-box-wide {
+            grid-column: 1 / -1; /* Span dari awal sampai akhir kolom */
+            border-color: #666;
+        }
+
+        .tp-label { color: #888; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; }
+        .tp-price { color: yellow; font-weight: bold; font-size: 13px; word-break: break-all; }
+        .tp-money { color: #00ff00; font-size: 11px; font-weight: bold; margin-top: 2px; }
+
+        /* Custom TP Input inside LCD */
+        .custom-tp-input {
+            width: 100%;
+            background: #222;
+            border: 1px solid #555;
+            color: yellow;
+            font-family: monospace;
+            font-size: 12px;
+            text-align: center;
+            margin-bottom: 2px;
+            height: 25px; /* Sedikit lebih tinggi agar enak dipencet */
+        }
+        .custom-tp-input:focus { outline: 1px solid #00ff00; background: #000; }
+        .custom-tp-input::placeholder { color: #555; }
         
         /* FOOTER */
         .footer { 
-            margin-top: auto; 
-            padding-top: 15px;
-            font-size: 11px; 
-            display: flex; 
-            justify-content: space-between; 
-            color: #555; 
+            margin-top: auto; padding-top: 15px; font-size: 11px; 
+            display: flex; justify-content: space-between; color: #555; 
         }
     </style>
 </head>
@@ -179,14 +180,13 @@
 
 <div class="window-container">
     <div class="title-bar">
-        <span>risk_manager.exe</span>
+        <span>risk_management.exe</span>
         <div style="display:flex; gap:2px;">
             <button class="win-btn" style="width:20px; height:20px; font-size:12px;">_</button>
             <button class="win-btn" style="width:20px; height:20px; font-size:12px;">X</button>
         </div>
     </div>
 
-    <!-- TABS -->
     <div class="tabs-wrapper">
         <button class="tab-btn active" onclick="setMode('forex')" id="tab-forex">FOREX</button>
         <button class="tab-btn" onclick="setMode('gold')" id="tab-gold">GOLD</button>
@@ -196,27 +196,20 @@
 
     <div class="content-area">
         
-        <!-- CONFIG AREA -->
         <div id="config-area" style="display:none;">
-            <!-- Stock Config -->
             <div id="cfg-stock" class="compact-options" style="display:none;">
                 <span class="compact-label">CURR:</span>
                 <label class="radio-item"><input type="radio" name="stockCurr" value="IDR" checked onchange="updateUI()"> IDR</label>
                 <label class="radio-item"><input type="radio" name="stockCurr" value="USD" onchange="updateUI()"> USD</label>
             </div>
-            
-            <!-- Forex Config -->
             <div id="cfg-forex" class="compact-options" style="display:none;">
                 <span class="compact-label">PAIR:</span>
-                <label class="radio-item"><input type="radio" name="fxPair" value="std" checked onchange="updateUI()"> Direct</label>
-                <label class="radio-item"><input type="radio" name="fxPair" value="cross" onchange="updateUI()"> Indirect/Cross</label>
-                
+                <label class="radio-item"><input type="radio" name="fxPair" value="std" checked onchange="updateUI()"> Standard</label>
+                <label class="radio-item"><input type="radio" name="fxPair" value="cross" onchange="updateUI()"> Cross/JPY</label>
                 <div id="cross-input" style="display:none; margin-left:auto; border-left:1px solid #999; padding-left:5px;">
                     <input type="number" id="crossRate" placeholder="Price" style="width:70px; height:20px; font-size:11px; background:white; border:1px solid gray;" oninput="calculate()">
                 </div>
             </div>
-
-            <!-- Gold Config -->
             <div id="cfg-gold" class="compact-options" style="display:none;">
                 <span class="compact-label">ACC:</span>
                 <label class="radio-item"><input type="radio" name="goldAcc" value="std" checked onchange="updateUI()"> Standard</label>
@@ -224,7 +217,6 @@
             </div>
         </div>
 
-        <!-- INPUTS -->
         <div class="form-row">
             <div class="form-col">
                 <label id="lbl-balance">Balance ($):</label>
@@ -247,7 +239,7 @@
             <div class="form-col">
                 <label>Max Loss:</label>
                 <div class="win-inset" style="background:#ddd;">
-                    <input type="text" id="maxLoss" readonly style="color:red;" placeholder="0.00">
+                    <input type="text" id="maxLoss" readonly style="color:red;" placeholder="0">
                 </div>
             </div>
         </div>
@@ -255,11 +247,11 @@
         <div class="form-row">
             <div class="form-col">
                 <label>Entry Price:</label>
-                <div class="win-inset"><input type="number" id="entry" placeholder="0.00" step="any" oninput="calculate()"></div>
+                <div class="win-inset"><input type="number" id="entry" placeholder="0" step="any" oninput="calculate()"></div>
             </div>
             <div class="form-col">
                 <label>Stop Loss:</label>
-                <div class="win-inset"><input type="number" id="sl" placeholder="0.00" step="any" oninput="calculate()"></div>
+                <div class="win-inset"><input type="number" id="sl" placeholder="0" step="any" oninput="calculate()"></div>
             </div>
         </div>
 
@@ -270,23 +262,45 @@
             <div class="lcd-row"><span>MARGIN</span><span id="lcd-margin">0.00</span></div>
             <div class="lcd-row" style="border:none"><span>VOLUME</span><span id="lcd-units">-</span></div>
             
-            <div style="border-top:1px dashed #444; margin-top:5px; padding-top:2px; font-size:10px; text-align:center; color:#777;">TARGET PROFIT</div>
+            <div style="border-top:1px dashed #444; margin-top:5px; padding-top:2px; font-size:10px; text-align:center; color:#777;">TARGET PROFIT & ESTIMATED VALUE</div>
+            
             <div class="tp-grid">
-                <div class="tp-box"><div style="color:#888">1:1</div><div class="tp-val" id="tp1">0</div></div>
-                <div class="tp-box"><div style="color:#888">1:2</div><div class="tp-val" id="tp2">0</div></div>
-                <div class="tp-box"><div style="color:#888">1:3</div><div class="tp-val" id="tp3">0</div></div>
+                <!-- TP 1 -->
+                <div class="tp-box">
+                    <div class="tp-label">TP 1 (1:1)</div>
+                    <div class="tp-price" id="tp1">0.00</div>
+                    <div class="tp-money" id="money1">$0.00</div>
+                </div>
+                <!-- TP 2 -->
+                <div class="tp-box">
+                    <div class="tp-label">TP 2 (1:2)</div>
+                    <div class="tp-price" id="tp2">0.00</div>
+                    <div class="tp-money" id="money2">$0.00</div>
+                </div>
+                <!-- TP 3 -->
+                <div class="tp-box">
+                    <div class="tp-label">TP 3 (1:3)</div>
+                    <div class="tp-price" id="tp3">0.00</div>
+                    <div class="tp-money" id="money3">$0.00</div>
+                </div>
+                <!-- TP CUSTOM (FULL WIDTH) -->
+                <div class="tp-box tp-box-wide">
+                    <div class="tp-label" style="color:cyan;">CUSTOM TP</div>
+                    <!-- Input Manual -->
+                    <input type="number" id="customTp" class="custom-tp-input" placeholder="Input Target Price" oninput="calculate()">
+                    <div class="tp-money" id="moneyCustom" style="font-size:13px;">-</div>
+                </div>
             </div>
         </div>
 
         <div class="footer">
-            <span>Status: On</span>
+            <span>Status: ON</span>
             <span>@CendekiaTrader</span>
         </div>
     </div>
 </div>
 
 <script>
-    // GLOBAL SCOPE
     var currentMode = 'forex';
 
     function getPrecision(numStr) {
@@ -295,10 +309,12 @@
         return numStr.split('.')[1].length;
     }
 
-    // Fungsi Set Mode
+    function fmt(num, sym) {
+        return sym + num.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    }
+
     window.setMode = function(mode) {
         currentMode = mode;
-        
         document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
         document.getElementById('tab-' + mode).classList.add('active');
 
@@ -329,7 +345,6 @@
         updateUI();
     }
 
-    // Update Label & Placeholder
     window.updateUI = function() {
         var lblBal = document.getElementById('lbl-balance');
         var entry = document.getElementById('entry');
@@ -360,11 +375,6 @@
         calculate();
     }
 
-    function fmt(num, sym) {
-        return sym + num.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-    }
-
-    // CALCULATE LOGIC
     window.calculate = function() {
         var bal = parseFloat(document.getElementById('balance').value) || 0;
         var lev = parseFloat(document.getElementById('leverage').value) || 100;
@@ -374,6 +384,7 @@
         var entryStr = document.getElementById('entry').value;
         var entry = parseFloat(entryStr) || 0;
         var sl = parseFloat(document.getElementById('sl').value) || 0;
+        var customTp = parseFloat(document.getElementById('customTp').value) || 0;
 
         // Symbol Determination
         var sym = '$';
@@ -383,6 +394,7 @@
             sym = document.querySelector('input[name="goldAcc"]:checked').value === 'cent' ? 'USC ' : '$';
         }
 
+        // Max Loss
         var riskAmt = (riskType === '%') ? (bal * (riskVal / 100)) : riskVal;
         document.getElementById('maxLoss').value = fmt(riskAmt, sym);
 
@@ -440,31 +452,4 @@
         
         document.getElementById('lcd-lot').innerText = lotTxt;
         document.getElementById('lcd-margin').innerText = fmt(margin, sym);
-        document.getElementById('lcd-units').innerText = units;
-
-        // --- TP CALCULATION ---
-        var dir = (sl < entry) ? 1 : -1;
-        
-        var decimals = getPrecision(entryStr);
-        if (decimals < 2) decimals = 2; 
-        if (currentMode === 'stock' && sym === 'Rp ') decimals = 0;
-        if (currentMode === 'crypto' && decimals < 4) decimals = 4; 
-
-        var tp1Val = entry + (diff * 1 * dir);
-        var tp2Val = entry + (diff * 2 * dir);
-        var tp3Val = entry + (diff * 3 * dir);
-
-        document.getElementById('tp1').innerText = tp1Val.toFixed(decimals);
-        document.getElementById('tp2').innerText = tp2Val.toFixed(decimals);
-        document.getElementById('tp3').innerText = tp3Val.toFixed(decimals);
-    }
-
-    // Init
-    document.addEventListener('DOMContentLoaded', function() {
-        setMode('forex');
-    });
-</script>
-</body>
-</html>
-
-
+        document.getElementById

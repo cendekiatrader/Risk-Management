@@ -630,11 +630,10 @@ window.handleSLInput = function(){
     calculate();
 }
 
-function fmt(num,sym){
-    return sym + num.toLocaleString('en-US',{
-        minimumFractionDigits:2,
-        maximumFractionDigits:2
-    });
+function fmt(num, sym){
+
+    return sym + Number(num).toFixed(2);
+
 }
 
 window.calculate = function(){

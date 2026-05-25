@@ -183,10 +183,36 @@ select{
     font-size:12px;
 }
 
-.customtp{
-    margin-top:10px;
-    border:1px solid #444;
-    padding:10px;
+.tp-box-wide{
+    grid-column:1 / -1;
+    border:1px solid #666;
+    margin-top:4px;
+
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content:space-between;
+
+    gap:10px;
+    padding:8px;
+}
+
+.custom-tp-input{
+    width:100px;
+    background:#222;
+    border:1px solid #555;
+    color:yellow;
+
+    font-family:monospace;
+    font-size:12px;
+    text-align:center;
+    height:25px;
+    flex:1;
+}
+
+.custom-tp-input:focus{
+    outline:1px solid #00ff00;
+    background:#000;
 }
 
 .footer{
@@ -210,6 +236,7 @@ risk_manager.exe
 
 <div class="content">
 
+<!-- BALANCE -->
 <div class="row">
 
 <div class="col">
@@ -230,6 +257,7 @@ risk_manager.exe
 
 </div>
 
+<!-- RISK -->
 <div class="row">
 
 <div class="col">
@@ -257,6 +285,7 @@ risk_manager.exe
 </div>
 </div>
 
+<!-- ENTRY -->
 <div class="row">
 
 <div class="col">
@@ -277,6 +306,7 @@ risk_manager.exe
 
 </div>
 
+<!-- RR -->
 <div class="row">
 
 <div class="col">
@@ -297,6 +327,7 @@ risk_manager.exe
 
 </div>
 
+<!-- BUY SELL -->
 <div class="row">
 
 <div class="col">
@@ -313,6 +344,7 @@ SHORT / SELL
 
 </div>
 
+<!-- LCD -->
 <div class="lcd">
 
 <div class="lcd-row">
@@ -338,50 +370,63 @@ SHORT / SELL
 TARGET PROFIT
 </div>
 
+<!-- TP GRID -->
 <div class="tp-grid">
 
+<!-- TP1 -->
 <div class="tp-box">
-<div class="tp-label" id="tp1label">TP 1 (1:1)</div>
+<div class="tp-label">TP 1 (1:1)</div>
 <div class="tp-price" id="tp1">0.00</div>
 <div class="tp-money" id="money1">0.00</div>
 </div>
 
+<!-- TP2 -->
 <div class="tp-box">
-<div class="tp-label" id="tp2label">TP 2 (1:2)</div>
+<div class="tp-label">TP 2 (1:2)</div>
 <div class="tp-price" id="tp2">0.00</div>
 <div class="tp-money" id="money2">0.00</div>
 </div>
 
+<!-- TP3 -->
 <div class="tp-box">
-<div class="tp-label" id="tp3label">TP 3 (1:3)</div>
+<div class="tp-label">TP 3 (1:3)</div>
 <div class="tp-price" id="tp3">0.00</div>
 <div class="tp-money" id="money3">0.00</div>
 </div>
 
+<!-- TP RR -->
+<div class="tp-box" style="grid-column:1 / -1; border-color:#777;">
+
+<div class="tp-label" style="color:cyan;">
+TP SESUAI RR (<span id="rrLabel">1:0</span>)
 </div>
 
-<div class="customtp">
+<div class="tp-price" id="tpRR">0.00</div>
 
-<div style="font-size:11px; color:cyan; margin-bottom:6px;">
-CUSTOM TP
-</div>
-
-<div class="row" style="margin:0;">
-
-<div class="col">
-
-<div class="box">
-<input type="text" id="customTp" placeholder="1.3000">
-</div>
+<div class="tp-money" id="moneyRR">0.00</div>
 
 </div>
 
-<div class="col">
+<!-- CUSTOM TP -->
+<div class="tp-box tp-box-wide">
 
-<div class="box">
-<input type="text" id="customProfit" readonly>
+<div class="tp-label" style="color:cyan; white-space:nowrap;">
+CUSTOM TP:
 </div>
 
+<input
+type="text"
+id="customTp"
+class="custom-tp-input"
+placeholder="Price"
+>
+
+<div
+class="tp-money"
+id="moneyCustom"
+style="font-size:13px; min-width:60px; text-align:right;"
+>
+-
 </div>
 
 </div>
@@ -407,9 +452,11 @@ const balance = document.getElementById('balance');
 const leverage = document.getElementById('leverage');
 const riskVal = document.getElementById('riskVal');
 const riskType = document.getElementById('riskType');
+
 const entry = document.getElementById('entry');
 const sl = document.getElementById('sl');
 const rr = document.getElementById('rr');
+
 const customTp = document.getElementById('customTp');
 
 function cleanNumber(v){
@@ -433,8 +480,11 @@ function setDirection(dir){
     document.getElementById('btnSell').classList.remove('active');
 
     if(dir === 1){
+
         document.getElementById('btnBuy').classList.add('active');
+
     }else{
+
         document.getElementById('btnSell').classList.add('active');
     }
 
@@ -471,6 +521,7 @@ function calculate(){
 
     let bal = cleanNumber(balance.value);
     let lev = cleanNumber(leverage.value) || 100;
+
     let risk = cleanNumber(riskVal.value);
 
     let ent = cleanNumber(entry.value);
@@ -478,7 +529,8 @@ function calculate(){
 
     let rrVal = cleanNumber(rr.value);
 
-    let riskAmt = riskType.value === '%'
+    let riskAmt =
+        riskType.value === '%'
         ? bal * (risk / 100)
         : risk;
 
@@ -490,21 +542,24 @@ function calculate(){
 
     if(!ent) return;
 
-    // AUTO RR -> SL
+    // RR -> SL
     if(lastEdited === 'rr' && rrVal > 0){
 
         let riskDistance = ent / lev;
 
         if(tradeDir === 1){
+
             stop = ent - (riskDistance / rrVal);
+
         }else{
+
             stop = ent + (riskDistance / rrVal);
         }
 
         sl.value = stop.toFixed(4);
     }
 
-    // AUTO SL -> RR
+    // SL -> RR
     if(lastEdited === 'sl' && stop){
 
         let liqDistance = ent / lev;
@@ -518,13 +573,15 @@ function calculate(){
             rr.value = rrVal.toFixed(2);
         }
 
-        // AUTO SWITCH BUY SELL
+        // AUTO SWITCH
         if(stop < ent){
+
             tradeDir = 1;
             setDirection(1);
         }
 
         if(stop > ent){
+
             tradeDir = -1;
             setDirection(-1);
         }
@@ -545,9 +602,13 @@ function calculate(){
     document.getElementById('margin').innerText =
         fmt((lot * ent) / lev);
 
-    // TP BERDASARKAN RR
+    // TP 1
     let tp1 = ent + (diff * 1 * tradeDir);
+
+    // TP 2
     let tp2 = ent + (diff * 2 * tradeDir);
+
+    // TP 3
     let tp3 = ent + (diff * 3 * tradeDir);
 
     document.getElementById('tp1').innerText =
@@ -568,15 +629,21 @@ function calculate(){
     document.getElementById('money3').innerText =
         '+' + fmt(riskAmt * 3);
 
-    // TP LABEL IKUT RR
-    document.getElementById('tp1label').innerText =
-        'TP 1 (1:1)';
+    // TP RR
+    if(rrVal > 0){
 
-    document.getElementById('tp2label').innerText =
-        'TP 2 (1:2)';
+        let tpRR =
+            ent + (diff * rrVal * tradeDir);
 
-    document.getElementById('tp3label').innerText =
-        'TP 3 (1:3)';
+        document.getElementById('tpRR').innerText =
+            tpRR.toFixed(4);
+
+        document.getElementById('moneyRR').innerText =
+            '+' + fmt(riskAmt * rrVal);
+
+        document.getElementById('rrLabel').innerText =
+            '1:' + rrVal;
+    }
 
     // CUSTOM TP
     let ctp = cleanNumber(customTp.value);
@@ -585,16 +652,21 @@ function calculate(){
 
         let cDiff = Math.abs(ctp - ent);
 
-        let customProfit = (cDiff / diff) * riskAmt;
+        let customProfit =
+            (cDiff / diff) * riskAmt;
 
-        let win =
+        let isWin =
             (tradeDir === 1 && ctp > ent)
             ||
             (tradeDir === -1 && ctp < ent);
 
-        document.getElementById('customProfit').value =
-            (win ? '+' : '-') +
+        document.getElementById('moneyCustom').innerText =
+            (isWin ? '+' : '-') +
             fmt(customProfit);
+
+    }else{
+
+        document.getElementById('moneyCustom').innerText = '-';
     }
 }
 

@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Risk Manager</title>
+
+<style>
+:root{
+    --win-gray:#c0c0c0;
+    --win-dark-gray:#808080;
+    --win-white:#ffffff;
+    --win-black:#000000;
+    --win-blue:#000080;
+    --desktop-teal:#008080;
+    --lcd-bg:#1a1a1a;
+    --lcd-text:#00ff00;
+}
+
+*{
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
+}
+
+body{
+    background-color:var(--desktop-teal);
+    font-family:'Segoe UI',Tahoma,sans-serif;
+    margin:0;
+    padding:0;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:black;
+    font-size:14px;
+}
+
+.window-container{
+    background-color:var(--win-gray);
+    width:100%;
+    max-width:480px;
+    display:flex;
+    flex-direction:column;
+
+    border-top:2px solid var(--win-white);
+    border-left:2px solid var(--win-white);
+    border-right:2px solid var(--win-black);
+    border-bottom:2px solid var(--win-black);
+
+    box-shadow:5px 5px 15px rgba(0,0,0,0.5);
+}
+
+@media (max-width:600px){
+    body{
+        background-color:var(--win-gray);
+        align-items:flex-start;
+    }
+
+    .window-container{
+        max-width:100%;
+        min-height:100vh;
+        border:none;
+        box-shadow:none;
+    }
+}
+
+.win-inset{
+    background-color:white;
+
+    border-top:2px solid var(--win-dark-gray);
+    border-left:2px solid var(--win-dark-gray);
+    border-right:2px solid var(--win-white);
+    border-bottom:2px solid var(--win-white);
+}
+
+.win-btn{
+    background-color:var(--win-gray);
+
+    border-top:2px solid var(--win-white);
+    border-left:2px solid var(--win-white);
+    border-right:2px solid var(--win-black);
+    border-bottom:2px solid var(--win-black);
+
+    cursor:pointer;
+    font-weight:bold;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.win-btn:active{
+    border-style:inset;
+    transform:translateY(1px);
+}
+
+.title-bar{
+    background:linear-gradient(90deg,var(--win-blue),#1084d0);
+    padding:6px 10px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    color:white;
+    font-weight:bold;
+    font-size:14px;
+    flex-shrink:0;
+}
+
+.tabs-wrapper{
+    padding:8px 8px 0 8px;
+    display:flex;
+    gap:2px;
+    flex-shrink:0;
+    background:var(--win-gray);
+}
+
+.tab-btn{
+    flex:1;
+    padding:12px 2px;
+    border:none;
+    background:var(--win-gray);
+
+    border-top:2px solid var(--win-white);
+    border-left:2px solid var(--win-white);
+    border-right:2px solid var(--win-black);
+    border-bottom:none;
+
+    cursor:pointer;
+    font-size:12px;
+    touch-action:manipulation;
+}
+
+.tab-btn.active{
+    font-weight:bold;
+    padding-bottom:14px;
+    margin-top:-4px;
+    z-index:10;
+
+    border-top:2px solid var(--win-white);
+    border-left:2px solid var(--win-white);
+    border-right:2px solid var(--win-dark-gray);
+}
+
+.content-area{
+    padding:15px;
+    background:var(--win-gray);
+
+    border:2px solid var(--win-white);
+    border-right-color:black;
+    border-bottom-color:black;
+
+    margin:0 6px 6px 6px;
+
+    flex-grow:1;
+    display:flex;
+    flex-direction:column;
+}
+
+@media (max-width:600px){
+    .content-area{
+        border:none;
+        margin:0;
+        padding:15px;
+    }
+}
+
+.compact-options{
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    background:#e0e0e0;
+    padding:6px 10px;
+
+    border:1px dotted #888;
+    margin-bottom:15px;
+    font-size:12px;
+}
+
+.compact-label{
+    font-weight:bold;
+    margin-right:5px;
+}
+
+.radio-item{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    cursor:pointer;
+}
+
+.radio-item input{
+    margin:0;
+    transform:scale(1.2);
+    cursor:pointer;
+}
+
+.form-row{
+    display:flex;
+    gap:10px;
+    margin-bottom:12px;
+}
+
+.form-col{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    min-width:0;
+}
+
+.form-col label{
+    margin-bottom:4px;
+    font-size:12px;
+    font-weight:600;
+}
+
+input[type="number"],
+input[type="text"],
+select{
+    width:100%;
+    height:35px;
+    padding:0 8px;
+    border:none;
+    background:transparent;
+    font-size:15px;
+    font-weight:bold;
+    font-family:monospace;
+    outline:none;
+}
+
+.risk-group{
+    display:flex;
+    align-items:center;
+    background:white;
+    border:2px inset gray;
+}
+
+.risk-group input{
+    flex:1;
+}
+
+.risk-group select{
+    width:45px;
+    background:#eee;
+    border-left:1px solid gray;
+    font-size:12px;
+}
+
+.dir-btn{
+    background-color:var(--win-gray);
+
+    border-top:2px solid var(--win-white);
+    border-left:2px solid var(--win-white);
+    border-right:2px solid var(--win-black);
+    border-bottom:2px solid var(--win-black);
+
+    cursor:pointer;
+    font-weight:bold;
+    font-size:11px;
+    padding:8px 0;
+    color:black;
+    font-family:'Segoe UI',Tahoma,sans-serif;
+
+    touch-action:manipulation;
+    width:100%;
+}
+
+.dir-btn.active{
+    border-top:2px solid var(--win-black);
+    border-left:2px solid var(--win-black);
+    border-right:2px solid var(--win-white);
+    border-bottom:2px solid var(--win-white);
+
+    background-color:#e0e0e0;
+    color:var(--win-blue);
+}
+
+.lcd-display{
+    background:var(--lcd-bg);
+    color:var(--lcd-text);
+
+    padding:12px;
+    border:3px inset gray;
+    margin-top:15px;
+
+    font-family:monospace;
+    text-shadow:0 0 2px rgba(0,255,0,0.4);
+}
+
+.lcd-row{
+    display:flex;
+    justify-content:space-between;
+    border-bottom:1px dashed #333;
+    padding-bottom:4px;
+    margin-bottom:6px;
+    font-size:13px;
+    align-items:center;
+}
+
+.lcd-big{
+    font-size:22px;
+    font-weight:bold;
+    text-align:right;
+    color:#fff;
+    margin:10px 0;
+}
+
+.tp-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:8px;
+
+    margin-top:10px;
+    text-align:center;
+    font-size:11px;
+}
+
+.tp-box{
+    border:1px solid #444;
+    padding:6px;
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+}
+
+.tp-box-wide{
+    grid-column:1 / -1;
+    border-color:#666;
+    margin-top:4px;
+
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding:8px;
+}
+
+.tp-label{
+    color:#888;
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:1px;
+}
+
+.tp-price{
+    color:yellow;
+    font-weight:bold;
+    font-size:13px;
+    word-break:break-all;
+}
+
+.tp-money{
+    color:#00ff00;
+    font-size:11px;
+    font-weight:bold;
+    margin-top:2px;
+}
+
+.custom-tp-input{
+    width:100px;
+    background:#222;
+    border:1px solid #555;
+    color:yellow;
+
+    font-family:monospace;
+    font-size:12px;
+    text-align:center;
+    height:25px;
+    flex:1;
+}
+
+.custom-tp-input:focus{
+    outline:1px solid #00ff00;
+    background:#000;
+}
+
+.footer{
+    margin-top:auto;
+    padding-top:15px;
+    font-size:11px;
+    display:flex;
+    justify-content:space-between;
+    color:#555;
+}
+</style>
+</head>
+
+<body>
+
+<div class="window-container">
+
+<div class="title-bar">
+    <span>risk_manager.exe</span>
+
+    <div style="display:flex; gap:2px;">
+        <button class="win-btn" style="width:20px; height:20px; font-size:12px;">_</button>
+        <button class="win-btn" style="width:20px; height:20px; font-size:12px;">X</button>
+    </div>
+</div>
+
+<div class="tabs-wrapper">
+    <button class="tab-btn active" id="tab-forex">FOREX</button>
+    <button class="tab-btn" id="tab-gold">GOLD</button>
+    <button class="tab-btn" id="tab-crypto">CRYPTO</button>
+    <button class="tab-btn" id="tab-stock">STOCK</button>
+</div>
+
+<div class="content-area">
+
+<div class="form-row">
+    <div class="form-col">
+        <label>Balance ($):</label>
+        <div class="win-inset">
+            <input type="number" id="balance" placeholder="1000" oninput="calculate()">
+        </div>
+    </div>
+
+    <div class="form-col">
+        <label>Leverage (1:x):</label>
+        <div class="win-inset">
+            <input type="number" id="leverage" placeholder="100" value="100" oninput="calculate()">
+        </div>
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-col">
+        <label>Risk:</label>
+
+        <div class="risk-group">
+            <input type="number" id="riskVal" placeholder="2" oninput="calculate()">
+
+            <select id="riskType" onchange="calculate()">
+                <option value="%">%</option>
+                <option value="$">$</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-col">
+        <label>Max Loss:</label>
+
+        <div class="win-inset" style="background:#ddd;">
+            <input type="text" id="maxLoss" readonly placeholder="0.00">
+        </div>
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-col">
+        <label>Entry Price:</label>
+
+        <div class="win-inset">
+            <input type="number" id="entry" placeholder="0.00" step="any" oninput="calculate()">
+        </div>
+    </div>
+
+    <div class="form-col">
+        <label>Stop Loss:</label>
+
+        <div class="win-inset">
+            <input type="number" id="sl" placeholder="0.00" step="any" oninput="handleSLInput()">
+        </div>
+    </div>
+</div>
+
+<!-- RISK REWARD -->
+<div class="form-row" style="margin-top:-5px;">
+
+    <div class="form-col">
+        <label>Risk Reward:</label>
+
+        <div class="win-inset">
+            <input type="number" id="rr" placeholder="2" step="0.1" oninput="handleRRInput()">
+        </div>
+    </div>
+
+    <div class="form-col">
+        <label>Risk Distance:</label>
+
+        <div class="win-inset" style="background:#ddd;">
+            <input type="text" id="riskDistance" readonly placeholder="0.00">
+        </div>
+    </div>
+</div>
+
+<div class="form-row" style="margin-top:-8px;">
+    <div class="form-col">
+        <button class="dir-btn active" id="btn-dir-1" onclick="setTradeDir(1)">
+            LONG / BUY
+        </button>
+    </div>
+
+    <div class="form-col">
+        <button class="dir-btn" id="btn-dir--1" onclick="setTradeDir(-1)">
+            SHORT / SELL
+        </button>
+    </div>
+</div>
+
+<div class="lcd-display">
+
+<div class="lcd-row">
+    <span>MODE</span>
+    <span id="lcd-mode" style="color:cyan">FOREX</span>
+</div>
+
+<div class="lcd-big" id="lcd-lot">0.00 LOT</div>
+
+<div class="lcd-row">
+    <span>MARGIN REQ</span>
+    <span id="lcd-margin">0.00</span>
+</div>
+
+<div class="lcd-row" style="border:none; margin-bottom:0;">
+    <span>VOLUME</span>
+    <span id="lcd-units">-</span>
+</div>
+
+<div style="border-top:1px dashed #444; margin-top:8px; padding-top:4px; font-size:10px; text-align:center; color:#777;">
+TARGET PROFIT & ESTIMATED VALUE
+</div>
+
+<div class="tp-grid">
+
+<div class="tp-box">
+    <div class="tp-label">TP 1 (1:1)</div>
+    <div class="tp-price" id="tp1">0.00</div>
+    <div class="tp-money" id="money1">$0.00</div>
+</div>
+
+<div class="tp-box">
+    <div class="tp-label">TP 2 (1:2)</div>
+    <div class="tp-price" id="tp2">0.00</div>
+    <div class="tp-money" id="money2">$0.00</div>
+</div>
+
+<div class="tp-box">
+    <div class="tp-label">TP 3 (1:3)</div>
+    <div class="tp-price" id="tp3">0.00</div>
+    <div class="tp-money" id="money3">$0.00</div>
+</div>
+
+</div>
+</div>
+
+<div class="footer">
+    <span>Status: Perfect UI</span>
+    <span>@CendekiaTrader</span>
+</div>
+
+</div>
+</div>
+
+<script>
+
+var tradeDir = 1;
+
+window.setTradeDir = function(dir){
+
+    tradeDir = dir;
+
+    document.getElementById('btn-dir-1').classList.remove('active');
+    document.getElementById('btn-dir--1').classList.remove('active');
+
+    document.getElementById('btn-dir-' + dir).classList.add('active');
+
+    calculate();
+}
+
+window.handleRRInput = function(){
+
+    var ent = parseFloat(document.getElementById('entry').value);
+    var rr = parseFloat(document.getElementById('rr').value);
+
+    if(isNaN(ent) || isNaN(rr) || rr <= 0){
+        calculate();
+        return;
+    }
+
+    var lev = parseFloat(document.getElementById('leverage').value) || 100;
+
+    var riskDistance = ent / lev;
+
+    var sl = 0;
+
+    if(tradeDir === 1){
+        sl = ent - (riskDistance / rr);
+    }else{
+        sl = ent + (riskDistance / rr);
+    }
+
+    if(sl < 0) sl = 0;
+
+    document.getElementById('sl').value = sl.toFixed(6);
+
+    calculate();
+}
+
+window.handleSLInput = function(){
+
+    var ent = parseFloat(document.getElementById('entry').value);
+    var sl = parseFloat(document.getElementById('sl').value);
+
+    if(!isNaN(ent) && !isNaN(sl)){
+
+        if(sl < ent && tradeDir !== 1){
+            setTradeDir(1);
+        }
+
+        else if(sl > ent && tradeDir !== -1){
+            setTradeDir(-1);
+        }
+
+        var lev = parseFloat(document.getElementById('leverage').value) || 100;
+
+        var liqDistance = ent / lev;
+        var slDistance = Math.abs(ent - sl);
+
+        if(slDistance > 0){
+
+            var rr = liqDistance / slDistance;
+
+            document.getElementById('rr').value = rr.toFixed(2);
+        }
+    }
+
+    calculate();
+}
+
+function fmt(num,sym){
+    return sym + num.toLocaleString('en-US',{
+        minimumFractionDigits:2,
+        maximumFractionDigits:2
+    });
+}
+
+window.calculate = function(){
+
+    var bal = parseFloat(document.getElementById('balance').value) || 0;
+    var lev = parseFloat(document.getElementById('leverage').value) || 100;
+
+    var riskVal = parseFloat(document.getElementById('riskVal').value) || 0;
+
+    var riskType = document.getElementById('riskType').value;
+
+    var entry = parseFloat(document.getElementById('entry').value) || 0;
+
+    var sl = parseFloat(document.getElementById('sl').value) || 0;
+
+    var riskAmt = (riskType === '%')
+        ? bal * (riskVal / 100)
+        : riskVal;
+
+    document.getElementById('maxLoss').value = fmt(riskAmt,'$');
+
+    if(!entry || !sl) return;
+
+    var diff = Math.abs(entry - sl);
+
+    document.getElementById('riskDistance').value = diff.toFixed(6);
+
+    if(diff <= 0) return;
+
+    var lot = riskAmt / diff;
+
+    document.getElementById('lcd-lot').innerText =
+        lot.toFixed(2) + " LOT";
+
+    document.getElementById('lcd-margin').innerText =
+        fmt((lot * entry) / lev,'$');
+
+    document.getElementById('lcd-units').innerText =
+        lot.toFixed(2);
+
+    var tp1 = entry + (diff * 1 * tradeDir);
+    var tp2 = entry + (diff * 2 * tradeDir);
+    var tp3 = entry + (diff * 3 * tradeDir);
+
+    document.getElementById('tp1').innerText = tp1.toFixed(6);
+    document.getElementById('tp2').innerText = tp2.toFixed(6);
+    document.getElementById('tp3').innerText = tp3.toFixed(6);
+
+    document.getElementById('money1').innerText =
+        "+" + fmt(riskAmt * 1,'$');
+
+    document.getElementById('money2').innerText =
+        "+" + fmt(riskAmt * 2,'$');
+
+    document.getElementById('money3').innerText =
+        "+" + fmt(riskAmt * 3,'$');
+}
+
+</script>
+
+</body>
+</html>

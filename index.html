@@ -394,24 +394,11 @@ TARGET PROFIT
 <div class="tp-money" id="money3">0.00</div>
 </div>
 
-<!-- TP RR -->
-<div class="tp-box" style="grid-column:1 / -1; border-color:#777;">
-
-<div class="tp-label" style="color:cyan;">
-TP SESUAI RR (<span id="rrLabel">1:0</span>)
-</div>
-
-<div class="tp-price" id="tpRR">0.00</div>
-
-<div class="tp-money" id="moneyRR">0.00</div>
-
-</div>
-
 <!-- CUSTOM TP -->
 <div class="tp-box tp-box-wide">
 
 <div class="tp-label" style="color:cyan; white-space:nowrap;">
-CUSTOM TP:
+CUSTOM TP (RR):
 </div>
 
 <input
@@ -540,59 +527,51 @@ function calculate(){
     document.getElementById('riskmoney').innerText =
         fmt(riskAmt);
 
-    if(!ent) return;
+    if(!ent || !stop) return;
 
-    // RR -> SL
-    if(lastEdited === 'rr' && rrVal > 0){
+    // AUTO SWITCH
+    if(stop < ent){
 
-        let riskDistance = ent / lev;
+        tradeDir = 1;
 
-        if(tradeDir === 1){
-
-            stop = ent - (riskDistance / rrVal);
-
-        }else{
-
-            stop = ent + (riskDistance / rrVal);
-        }
-
-        sl.value = stop.toFixed(4);
+        document.getElementById('btnBuy').classList.add('active');
+        document.getElementById('btnSell').classList.remove('active');
     }
 
-    // SL -> RR
-    if(lastEdited === 'sl' && stop){
+    if(stop > ent){
 
-        let liqDistance = ent / lev;
+        tradeDir = -1;
 
-        let slDistance = Math.abs(ent - stop);
-
-        if(slDistance > 0){
-
-            rrVal = liqDistance / slDistance;
-
-            rr.value = rrVal.toFixed(2);
-        }
-
-        // AUTO SWITCH
-        if(stop < ent){
-
-            tradeDir = 1;
-            setDirection(1);
-        }
-
-        if(stop > ent){
-
-            tradeDir = -1;
-            setDirection(-1);
-        }
+        document.getElementById('btnSell').classList.add('active');
+        document.getElementById('btnBuy').classList.remove('active');
     }
-
-    if(!stop) return;
 
     let diff = Math.abs(ent - stop);
 
     document.getElementById('riskDistance').value =
         diff.toFixed(4);
+
+    // RR -> CUSTOM TP
+    let ctp = cleanNumber(customTp.value);
+
+    if(lastEdited === 'rr' && rrVal > 0){
+
+        ctp =
+            ent + (diff * rrVal * tradeDir);
+
+        customTp.value = ctp.toFixed(4);
+    }
+
+    // CUSTOM TP -> RR
+    if(lastEdited === 'customTp' && ctp){
+
+        let rrCalc =
+            Math.abs(ctp - ent) / diff;
+
+        rr.value = rrCalc.toFixed(2);
+
+        rrVal = rrCalc;
+    }
 
     let lot = riskAmt / diff;
 
@@ -602,13 +581,13 @@ function calculate(){
     document.getElementById('margin').innerText =
         fmt((lot * ent) / lev);
 
-    // TP 1
+    // TP1
     let tp1 = ent + (diff * 1 * tradeDir);
 
-    // TP 2
+    // TP2
     let tp2 = ent + (diff * 2 * tradeDir);
 
-    // TP 3
+    // TP3
     let tp3 = ent + (diff * 3 * tradeDir);
 
     document.getElementById('tp1').innerText =
@@ -629,25 +608,7 @@ function calculate(){
     document.getElementById('money3').innerText =
         '+' + fmt(riskAmt * 3);
 
-    // TP RR
-    if(rrVal > 0){
-
-        let tpRR =
-            ent + (diff * rrVal * tradeDir);
-
-        document.getElementById('tpRR').innerText =
-            tpRR.toFixed(4);
-
-        document.getElementById('moneyRR').innerText =
-            '+' + fmt(riskAmt * rrVal);
-
-        document.getElementById('rrLabel').innerText =
-            '1:' + rrVal;
-    }
-
-    // CUSTOM TP
-    let ctp = cleanNumber(customTp.value);
-
+    // CUSTOM TP PROFIT
     if(ctp){
 
         let cDiff = Math.abs(ctp - ent);

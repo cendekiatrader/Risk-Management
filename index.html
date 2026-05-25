@@ -453,7 +453,7 @@ select{
         <label>Entry Price:</label>
 
         <div class="win-inset">
-            <input type="number" id="entry" placeholder="0.00" step="any" oninput="calculate()">
+            <input type="number" id="entry" placeholder="0.00" inputmode="decimal" oninput="calculate()">
         </div>
     </div>
 
@@ -461,7 +461,7 @@ select{
         <label>Stop Loss:</label>
 
         <div class="win-inset">
-            <input type="number" id="sl" placeholder="0.00" step="any" oninput="handleSLInput()">
+            <input type="number" id="sl" placeholder="0.00" inputmode="decimal" oninput="handleSLInput()">
         </div>
     </div>
 </div>
@@ -691,7 +691,16 @@ window.calculate = function(){
     document.getElementById('money3').innerText =
         "+" + fmt(riskAmt * 3,'$');
 }
+// AUTO GANTI KOMA MENJADI TITIK
+document.querySelectorAll('input').forEach(function(input){
 
+    input.addEventListener('input', function(){
+
+        this.value = this.value.replace(/,/g, '.');
+
+    });
+
+});
 </script>
 
 </body>

@@ -1,4 +1,3 @@
-javascript
 const CACHE_NAME = "risk-manager-v1";
 
 const urlsToCache = [

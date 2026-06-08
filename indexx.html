@@ -200,13 +200,8 @@
             </div>
             <div id="cfg-forex" class="compact-options" style="display:none;">
                 <span class="compact-label">PAIR:</span>
-                <label class="radio-item"><input type="radio" name="fxPair" value="std" checked onchange="updateUI()"> Standard</label>
-                <label class="radio-item"><input type="radio" name="fxPair" value="cross" onchange="updateUI()"> Cross/JPY</label>
-                <input type="text" id="forexSymbol" class="fx-symbol-input" placeholder="GBPJPY" maxlength="6" oninput="handleForexSymbolInput()" title="Optional: auto fetch rate, e.g. GBPJPY">
-                <div id="cross-input" style="display:none; margin-left:auto; border-left:1px solid #999; padding-left:5px;">
-                    <input type="number" id="crossRate" placeholder="Price" style="width:70px; height:20px; font-size:11px; background:white; border:1px solid gray;" oninput="calculate()">
-                </div>
-                <span id="fxRateStatus" class="fx-rate-status">Manual mode</span>
+                <input type="text" id="forexSymbol" class="fx-symbol-input" placeholder="GBPJPY" maxlength="6" oninput="handleForexSymbolInput()" title="Auto fetch rate, e.g. GBPJPY">
+                <span id="fxRateStatus" class="fx-rate-status">Isi pair</span>
             </div>
             <div id="cfg-gold" class="compact-options" style="display:none;">
                 <span class="compact-label">ACC:</span>
@@ -490,7 +485,7 @@
 
         if (!rawSymbol) {
             fxRatesValid = false;
-            setFxRateStatus('Manual mode');
+            setFxRateStatus('Isi pair');
             calculate();
             return;
         }
@@ -561,10 +556,8 @@
 
         if (currentMode === 'forex') {
             lblBal.innerText = "Balance ($):"; entry.placeholder = "1.0850"; sl.placeholder = "Auto-Liq";
-            var isCross = document.querySelector('input[name="fxPair"]:checked').value === 'cross';
-            document.getElementById('cross-input').style.display = isCross ? 'block' : 'none';
             var hasFxSymbol = !!document.getElementById('forexSymbol').value.trim();
-            if (!hasFxSymbol) setFxRateStatus('Manual mode');
+            if (!hasFxSymbol) setFxRateStatus('Isi pair');
         } 
         else if (currentMode === 'gold') {
             var gAcc = document.querySelector('input[name="goldAcc"]:checked').value;
@@ -644,31 +637,21 @@
         // Asset Logic
         if (currentMode === 'forex') {
             var contract = 100000;
-            var fxType = document.querySelector('input[name="fxPair"]:checked').value;
             var symbolInput = document.getElementById('forexSymbol');
             var hasFxSymbol = symbolInput && symbolInput.value.trim() !== '';
 
-            if (hasFxSymbol) {
-                if (!fxRatesValid) {
-                    setFxRateStatus('Rate belum valid. Perbaiki symbol/fetch dulu.', 'error');
-                    return;
-                }
-                lot = riskAmt / (diff * contract * fxQuoteToUsd);
-                margin = (lot * contract * fxBaseToUsd) / lev;
-            } else if (fxType === 'std') {
-                lot = riskAmt / (diff * contract);
-                margin = (lot * contract * entry) / lev;
-            } else {
-                var crossRateValue = document.getElementById('crossRate').value;
-                var cRate = parseFloat(crossRateValue);
-                if (isNaN(cRate) || cRate <= 0) {
-                    setFxRateStatus('Isi rate manual cross/JPY yang valid.', 'error');
-                    return;
-                }
-                lot = (riskAmt * cRate) / (diff * contract);
-                margin = (lot * contract * entry) / lev;
-                setFxRateStatus('Manual cross rate aktif', '');
+            if (!hasFxSymbol) {
+                setFxRateStatus('Isi pair', 'error');
+                return;
             }
+
+            if (!fxRatesValid) {
+                setFxRateStatus('Rate belum valid. Perbaiki symbol/fetch dulu.', 'error');
+                return;
+            }
+
+            lot = riskAmt / (diff * contract * fxQuoteToUsd);
+            margin = (lot * contract * fxBaseToUsd) / lev;
             units = (lot * 100000).toFixed(0) + " Units";
         }
         else if (currentMode === 'gold') {

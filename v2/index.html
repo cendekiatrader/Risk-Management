@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#111827">
+  <meta name="description" content="Risk Manager V2 - kalkulator position sizing modern untuk Forex, Gold, Crypto, Indices, dan Stock.">
+  <title>Risk Manager V2</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="../icons/icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #060816;
+      --surface: rgba(15, 23, 42, .76);
+      --surface-strong: rgba(15, 23, 42, .94);
+      --surface-soft: rgba(30, 41, 59, .68);
+      --line: rgba(148, 163, 184, .18);
+      --line-strong: rgba(148, 163, 184, .34);
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --muted-2: #64748b;
+      --primary: #38bdf8;
+      --primary-strong: #0ea5e9;
+      --accent: #a78bfa;
+      --success: #22c55e;
+      --danger: #fb7185;
+      --warning: #facc15;
+      --shadow: 0 24px 80px rgba(0, 0, 0, .45);
+      --radius-xl: 32px;
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --radius-sm: 12px;
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+    html { min-height: 100%; background: var(--bg); }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      min-height: 100dvh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 12% 8%, rgba(56, 189, 248, .28), transparent 30%),
+        radial-gradient(circle at 88% 12%, rgba(167, 139, 250, .28), transparent 32%),
+        radial-gradient(circle at 50% 96%, rgba(34, 197, 94, .14), transparent 36%),
+        linear-gradient(135deg, #020617 0%, #0f172a 52%, #111827 100%);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+      background-size: 46px 46px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,.9), transparent 85%);
+    }
+
+    button, input, select { font: inherit; }
+    button { border: 0; cursor: pointer; }
+
+    .app-shell {
+      width: min(1180px, 100%);
+      margin: 0 auto;
+      padding: calc(24px + var(--safe-top)) 18px calc(28px + var(--safe-bottom));
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 20px;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .brand {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      width: 54px;
+      height: 54px;
+      display: grid;
+      place-items: center;
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(56,189,248,.95), rgba(167,139,250,.9));
+      box-shadow: 0 16px 48px rgba(56, 189, 248, .28);
+      font-size: 28px;
+    }
+
+    .eyebrow {
+      margin: 0 0 4px;
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(28px, 4vw, 48px);
+      line-height: 1;
+      letter-spacing: -.05em;
+    }
+
+    .hero-copy {
+      margin: 8px 0 0;
+      max-width: 680px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      justify-self: end;
+      padding: 10px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(15, 23, 42, .62);
+      color: var(--muted);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      white-space: nowrap;
+    }
+
+    .status-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: var(--success);
+      box-shadow: 0 0 0 6px rgba(34, 197, 94, .14), 0 0 24px rgba(34, 197, 94, .7);
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(0, 1.02fr) minmax(360px, .98fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .panel {
+      position: relative;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      background: linear-gradient(180deg, rgba(15, 23, 42, .88), rgba(15, 23, 42, .72));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(24px);
+      overflow: hidden;
+    }
+
+    .panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      border-radius: inherit;
+      background: linear-gradient(135deg, rgba(255,255,255,.12), transparent 36%, rgba(56,189,248,.08));
+      mask: linear-gradient(#000, transparent 58%);
+    }
+
+    .panel-header {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 22px 22px 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .panel-title { margin: 0; font-size: 18px; letter-spacing: -.02em; }
+    .panel-subtitle { margin: 5px 0 0; color: var(--muted); font-size: 13px; line-height: 1.45; }
+
+    .card-body { position: relative; padding: 20px; }
+
+    .mode-tabs {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .tab-btn {
+      min-height: 52px;
+      padding: 10px 8px;
+      border-radius: 17px;
+      border: 1px solid var(--line);
+      background: rgba(15, 23, 42, .68);
+      color: var(--muted);
+      display: grid;
+      gap: 3px;
+      place-items: center;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease, color .18s ease;
+    }
+
+    .tab-btn:hover { transform: translateY(-1px); border-color: var(--line-strong); color: var(--text); }
+    .tab-btn.active {
+      background: linear-gradient(135deg, rgba(14,165,233,.24), rgba(167,139,250,.2));
+      border-color: rgba(56,189,248,.62);
+      color: var(--text);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.04), 0 14px 34px rgba(14,165,233,.12);
+    }
+    .tab-icon { font-size: 18px; }
+    .tab-label { font-size: 11px; font-weight: 800; letter-spacing: .05em; }
+
+    .config-strip {
+      display: none;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: rgba(2, 6, 23, .34);
+    }
+    .config-strip.show { display: flex; }
+    .strip-label { color: var(--muted); font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+
+    .chip-group { display: flex; gap: 8px; flex-wrap: wrap; }
+    .chip input { position: absolute; opacity: 0; pointer-events: none; }
+    .chip span {
+      display: inline-flex;
+      align-items: center;
+      min-height: 36px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(15, 23, 42, .7);
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .chip input:checked + span {
+      border-color: rgba(56,189,248,.68);
+      color: var(--text);
+      background: rgba(56,189,248,.16);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .field { min-width: 0; }
+    .field.full { grid-column: 1 / -1; }
+    label.field-label {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      margin: 0 0 7px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .input-wrap {
+      display: flex;
+      align-items: center;
+      min-height: 52px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: rgba(2, 6, 23, .44);
+      transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
+      overflow: hidden;
+    }
+    .input-wrap:focus-within {
+      border-color: rgba(56, 189, 248, .75);
+      box-shadow: 0 0 0 4px rgba(56, 189, 248, .12);
+      background: rgba(2, 6, 23, .65);
+    }
+    .input-prefix, .input-suffix {
+      padding: 0 14px;
+      color: var(--muted-2);
+      font-weight: 800;
+    }
+    input, select {
+      width: 100%;
+      border: 0;
+      outline: 0;
+      color: var(--text);
+      background: transparent;
+      min-height: 50px;
+      padding: 0 14px;
+      font-weight: 750;
+    }
+    input::placeholder { color: rgba(148, 163, 184, .52); }
+    select { max-width: 72px; border-left: 1px solid var(--line); color: var(--text); }
+    option { color: #0f172a; }
+
+    .direction-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .dir-btn {
+      min-height: 54px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      background: rgba(15, 23, 42, .74);
+      font-weight: 900;
+      letter-spacing: .04em;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+    }
+    .dir-btn:hover { transform: translateY(-1px); }
+    .dir-btn.long.active { border-color: rgba(34,197,94,.72); color: #dcfce7; background: rgba(34,197,94,.14); }
+    .dir-btn.short.active { border-color: rgba(251,113,133,.72); color: #ffe4e6; background: rgba(251,113,133,.15); }
+
+    .result-panel { position: sticky; top: 18px; }
+    .metric-hero {
+      padding: 22px;
+      border-radius: calc(var(--radius-xl) - 8px);
+      background:
+        radial-gradient(circle at 16% 12%, rgba(56,189,248,.24), transparent 34%),
+        linear-gradient(135deg, rgba(14,165,233,.18), rgba(167,139,250,.14));
+      border: 1px solid rgba(56,189,248,.24);
+    }
+    .metric-label { margin: 0 0 7px; color: var(--muted); font-size: 12px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+    .metric-value { margin: 0; font-size: clamp(36px, 6vw, 64px); line-height: .98; letter-spacing: -.07em; }
+    .metric-note { margin: 10px 0 0; color: var(--muted); line-height: 1.45; }
+
+    .stats-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; margin-top: 14px; }
+    .stat-card, .target-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: rgba(2, 6, 23, .34);
+      padding: 15px;
+    }
+    .stat-card small, .target-card small {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .stat-card strong { display: block; font-size: 20px; word-break: break-word; }
+    .stat-card.danger strong { color: var(--danger); }
+    .stat-card.success strong { color: var(--success); }
+
+    .targets { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px; margin-top: 14px; }
+    .target-card strong { display: block; font-size: 19px; color: var(--warning); word-break: break-word; }
+    .target-card span { display: block; margin-top: 6px; color: var(--success); font-weight: 850; }
+
+    .custom-profit { margin-top: 14px; }
+    .custom-profit strong { color: var(--success); }
+    .custom-profit.loss strong { color: var(--danger); }
+
+    .insight-bar {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .insight-bar b { display: block; color: var(--text); font-size: 14px; margin-top: 3px; }
+
+    .rate-status {
+      min-height: 36px;
+      display: inline-flex;
+      align-items: center;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      background: rgba(15, 23, 42, .7);
+    }
+    .rate-status.success { color: #bbf7d0; border-color: rgba(34,197,94,.4); background: rgba(34,197,94,.1); }
+    .rate-status.error { color: #fecdd3; border-color: rgba(251,113,133,.42); background: rgba(251,113,133,.1); }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 18px;
+      color: var(--muted-2);
+      font-size: 12px;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @media (max-width: 960px) {
+      .workspace { grid-template-columns: 1fr; }
+      .result-panel { position: static; }
+    }
+
+    @media (max-width: 680px) {
+      .app-shell { padding-inline: 12px; }
+      .hero { grid-template-columns: 1fr; }
+      .status-pill { justify-self: start; }
+      .brand-mark { width: 48px; height: 48px; border-radius: 16px; }
+      .mode-tabs { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .form-grid, .stats-grid, .targets, .insight-bar { grid-template-columns: 1fr; }
+      .panel-header { flex-direction: column; }
+      .card-body, .panel-header { padding-inline: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app-shell">
+    <header class="hero">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">📈</div>
+        <div>
+          <p class="eyebrow">Risk Manager V2</p>
+          <h1>Position sizing yang lebih cepat, modern, dan presisi.</h1>
+          <p class="hero-copy">Hitung lot, margin, target profit, dan estimasi liquidation stop dalam satu dashboard mobile-first untuk berbagai market.</p>
+        </div>
+      </div>
+      <div class="status-pill" aria-live="polite"><span class="status-dot"></span><span id="appStatus">Ready offline</span></div>
+    </header>
+
+    <section class="workspace" aria-label="Risk manager calculator">
+      <form class="panel" id="riskForm" autocomplete="off">
+        <div class="panel-header">
+          <div>
+            <h2 class="panel-title">Setup Trade</h2>
+            <p class="panel-subtitle">Pilih market, masukkan balance, risk, entry, dan stop loss. Biarkan stop loss kosong untuk estimasi auto-liquidation berdasarkan leverage.</p>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <div class="mode-tabs" role="tablist" aria-label="Market mode">
+            <button type="button" class="tab-btn active" data-mode="forex" role="tab" aria-selected="true"><span class="tab-icon">💱</span><span class="tab-label">Forex</span></button>
+            <button type="button" class="tab-btn" data-mode="gold" role="tab" aria-selected="false"><span class="tab-icon">🥇</span><span class="tab-label">Gold</span></button>
+            <button type="button" class="tab-btn" data-mode="crypto" role="tab" aria-selected="false"><span class="tab-icon">₿</span><span class="tab-label">Crypto</span></button>
+            <button type="button" class="tab-btn" data-mode="indices" role="tab" aria-selected="false"><span class="tab-icon">📊</span><span class="tab-label">Indices</span></button>
+            <button type="button" class="tab-btn" data-mode="stock" role="tab" aria-selected="false"><span class="tab-icon">🏦</span><span class="tab-label">Stock</span></button>
+          </div>
+
+          <div class="config-strip show" id="cfg-forex">
+            <span class="strip-label">Pair</span>
+            <div class="input-wrap" style="max-width: 180px; min-height: 40px;">
+              <input id="forexSymbol" type="text" maxlength="6" value="EURUSD" placeholder="GBPJPY" aria-label="Forex pair">
+            </div>
+            <span class="rate-status" id="fxRateStatus">Menggunakan EURUSD default</span>
+          </div>
+
+          <div class="config-strip" id="cfg-gold">
+            <span class="strip-label">Account</span>
+            <div class="chip-group">
+              <label class="chip"><input type="radio" name="goldAcc" value="std" checked><span>Standard</span></label>
+              <label class="chip"><input type="radio" name="goldAcc" value="cent"><span>Cent</span></label>
+            </div>
+          </div>
+
+          <div class="config-strip" id="cfg-indices">
+            <span class="strip-label">Multiplier</span>
+            <div class="chip-group">
+              <label class="chip"><input type="radio" name="idxMult" value="1" checked><span>x1</span></label>
+              <label class="chip"><input type="radio" name="idxMult" value="10"><span>x10</span></label>
+              <label class="chip"><input type="radio" name="idxMult" value="custom"><span>Custom</span></label>
+            </div>
+            <div class="input-wrap" id="customMultWrap" style="max-width: 130px; min-height: 40px; display:none;">
+              <input id="idxCustomMult" type="number" value="5" step="any" aria-label="Custom multiplier">
+            </div>
+          </div>
+
+          <div class="config-strip" id="cfg-stock">
+            <span class="strip-label">Currency</span>
+            <div class="chip-group">
+              <label class="chip"><input type="radio" name="stockCurr" value="IDR" checked><span>IDR</span></label>
+              <label class="chip"><input type="radio" name="stockCurr" value="USD"><span>USD</span></label>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="field">
+              <label class="field-label" for="balance">Balance</label>
+              <div class="input-wrap"><span class="input-prefix" id="balancePrefix">$</span><input id="balance" type="number" inputmode="decimal" min="0" step="any" placeholder="1000"></div>
+            </div>
+            <div class="field" id="leverageField">
+              <label class="field-label" for="leverage">Leverage 1:x</label>
+              <div class="input-wrap"><span class="input-prefix">1:</span><input id="leverage" type="number" inputmode="decimal" min="1" step="any" value="100" placeholder="100"></div>
+            </div>
+            <div class="field">
+              <label class="field-label" for="riskVal">Risk</label>
+              <div class="input-wrap"><input id="riskVal" type="number" inputmode="decimal" min="0" step="any" placeholder="2"><select id="riskType" aria-label="Risk type"><option value="%">%</option><option value="$">$</option></select></div>
+            </div>
+            <div class="field">
+              <label class="field-label" for="maxLoss">Max Loss</label>
+              <div class="input-wrap"><input id="maxLoss" type="text" readonly value="$0.00"></div>
+            </div>
+            <div class="field">
+              <label class="field-label" for="entry">Entry Price</label>
+              <div class="input-wrap"><input id="entry" type="number" inputmode="decimal" min="0" step="any" placeholder="0.00"></div>
+            </div>
+            <div class="field">
+              <label class="field-label" for="sl">Stop Loss</label>
+              <div class="input-wrap"><input id="sl" type="number" inputmode="decimal" min="0" step="any" placeholder="Auto-liq"></div>
+            </div>
+            <div class="field">
+              <label class="field-label" for="rr">Risk Reward</label>
+              <div class="input-wrap"><span class="input-prefix">1:</span><input id="rr" type="number" inputmode="decimal" min="0" step="any" placeholder="2"></div>
+            </div>
+            <div class="field">
+              <label class="field-label" for="customTpTop">Take Profit</label>
+              <div class="input-wrap"><input id="customTpTop" type="number" inputmode="decimal" min="0" step="any" placeholder="0.00"></div>
+            </div>
+            <div class="field full">
+              <label class="field-label">Direction</label>
+              <div class="direction-grid">
+                <button type="button" class="dir-btn long active" data-dir="1">LONG / BUY</button>
+                <button type="button" class="dir-btn short" data-dir="-1">SHORT / SELL</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <aside class="panel result-panel" aria-live="polite">
+        <div class="panel-header">
+          <div>
+            <h2 class="panel-title">Output</h2>
+            <p class="panel-subtitle">Angka diperbarui otomatis saat input berubah.</p>
+          </div>
+          <span class="status-pill" style="box-shadow:none;"><span class="status-dot"></span><span id="modeLabel">FOREX</span></span>
+        </div>
+
+        <div class="card-body">
+          <div class="metric-hero">
+            <p class="metric-label">Recommended Size</p>
+            <h3 class="metric-value" id="lotOutput">0.00 LOT</h3>
+            <p class="metric-note" id="sizeNote">Isi data untuk memulai kalkulasi.</p>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat-card danger"><small>Max Loss</small><strong id="lossOutput">$0.00</strong></div>
+            <div class="stat-card"><small>Margin Required</small><strong id="marginOutput">$0.00</strong></div>
+            <div class="stat-card"><small>Volume</small><strong id="unitsOutput">-</strong></div>
+            <div class="stat-card success"><small>Liq. Price / SL</small><strong id="liqOutput">-</strong></div>
+          </div>
+
+          <div class="targets">
+            <div class="target-card"><small>TP 1 · 1R</small><strong id="tp1">0.00</strong><span id="money1">+$0.00</span></div>
+            <div class="target-card"><small>TP 2 · 2R</small><strong id="tp2">0.00</strong><span id="money2">+$0.00</span></div>
+            <div class="target-card"><small>TP 3 · 3R</small><strong id="tp3">0.00</strong><span id="money3">+$0.00</span></div>
+          </div>
+
+          <div class="stat-card custom-profit" id="customProfitCard">
+            <small>Custom TP Profit / Loss</small>
+            <strong id="moneyCustom">-</strong>
+          </div>
+
+          <div class="insight-bar">
+            <span>Mode<b id="insightMode">Forex</b></span>
+            <span>Direction<b id="insightDirection">Long</b></span>
+            <span>Risk Amount<b id="insightRisk">$0.00</b></span>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <footer class="footer">
+      <span>Risk Manager V2 PWA</span>
+      <span>@CendekiaTrader</span>
+    </footer>
+  </main>
+
+  <script>
+    const state = {
+      mode: 'forex',
+      tradeDir: 1,
+      fxBaseToUsd: 1,
+      fxQuoteToUsd: 1,
+      fxRatesValid: true,
+      fxBase: 'eur',
+      fxQuote: 'usd',
+      debounceTimer: null,
+    };
+
+    const $ = (selector) => document.querySelector(selector);
+    const $$ = (selector) => Array.from(document.querySelectorAll(selector));
+
+    const els = {
+      form: $('#riskForm'),
+      modeLabel: $('#modeLabel'),
+      balance: $('#balance'),
+      balancePrefix: $('#balancePrefix'),
+      leverage: $('#leverage'),
+      leverageField: $('#leverageField'),
+      riskVal: $('#riskVal'),
+      riskType: $('#riskType'),
+      maxLoss: $('#maxLoss'),
+      entry: $('#entry'),
+      sl: $('#sl'),
+      rr: $('#rr'),
+      customTpTop: $('#customTpTop'),
+      forexSymbol: $('#forexSymbol'),
+      fxRateStatus: $('#fxRateStatus'),
+      customMultWrap: $('#customMultWrap'),
+      idxCustomMult: $('#idxCustomMult'),
+      appStatus: $('#appStatus'),
+      lotOutput: $('#lotOutput'),
+      sizeNote: $('#sizeNote'),
+      lossOutput: $('#lossOutput'),
+      marginOutput: $('#marginOutput'),
+      unitsOutput: $('#unitsOutput'),
+      liqOutput: $('#liqOutput'),
+      tp1: $('#tp1'),
+      tp2: $('#tp2'),
+      tp3: $('#tp3'),
+      money1: $('#money1'),
+      money2: $('#money2'),
+      money3: $('#money3'),
+      moneyCustom: $('#moneyCustom'),
+      customProfitCard: $('#customProfitCard'),
+      insightMode: $('#insightMode'),
+      insightDirection: $('#insightDirection'),
+      insightRisk: $('#insightRisk'),
+    };
+
+    function numberValue(el, fallback = 0) {
+      const value = parseFloat(el?.value);
+      return Number.isFinite(value) ? value : fallback;
+    }
+
+    function getPrecision(value) {
+      const text = String(value || '');
+      return text.includes('.') ? text.split('.')[1].length : 2;
+    }
+
+    function currencySymbol() {
+      if (state.mode === 'stock') {
+        return document.querySelector('input[name="stockCurr"]:checked')?.value === 'IDR' ? 'Rp ' : '$';
+      }
+      return '$';
+    }
+
+    function formatMoney(value, symbol = '$') {
+      const amount = Number.isFinite(value) ? value : 0;
+      if (symbol === 'Rp ') {
+        return symbol + amount.toLocaleString('id-ID', { maximumFractionDigits: 0 });
+      }
+      return symbol + amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function setFxRateStatus(message, type = '') {
+      els.fxRateStatus.textContent = message;
+      els.fxRateStatus.className = 'rate-status' + (type ? ` ${type}` : '');
+    }
+
+    function parseForexSymbol(symbol) {
+      const normalized = (symbol || '').trim().toUpperCase();
+      if (!/^[A-Z]{6}$/.test(normalized)) {
+        throw new Error('Pair harus 6 huruf, contoh GBPJPY.');
+      }
+      return { symbol: normalized, base: normalized.slice(0, 3).toLowerCase(), quote: normalized.slice(3, 6).toLowerCase() };
+    }
+
+    async function fetchCurrencyRates(currency) {
+      const response = await fetch(`https://latest.currency-api.pages.dev/v1/currencies/${currency}.json`);
+      if (!response.ok) throw new Error(`Gagal fetch ${currency.toUpperCase()} (${response.status}).`);
+      return response.json();
+    }
+
+    async function getCurrencyToUsd(currency) {
+      const code = (currency || '').toLowerCase();
+      if (code === 'usd') return 1;
+      const data = await fetchCurrencyRates(code);
+      const rate = data?.[code]?.usd;
+      if (!Number.isFinite(rate) || rate <= 0) throw new Error(`Rate USD untuk ${code.toUpperCase()} tidak tersedia.`);
+      return rate;
+    }
+
+    async function updateForexRates() {
+      let parsed;
+      try {
+        parsed = parseForexSymbol(els.forexSymbol.value);
+      } catch (error) {
+        state.fxRatesValid = false;
+        setFxRateStatus(error.message, 'error');
+        calculate();
+        return;
+      }
+
+      state.fxBase = parsed.base;
+      state.fxQuote = parsed.quote;
+
+      setFxRateStatus(`Fetching ${parsed.symbol}...`);
+      try {
+        const basePromise = parsed.quote === 'usd' ? Promise.resolve(1) : getCurrencyToUsd(parsed.base);
+        const quotePromise = getCurrencyToUsd(parsed.quote);
+        const [baseRate, quoteRate] = await Promise.all([basePromise, quotePromise]);
+        state.fxBaseToUsd = baseRate;
+        state.fxQuoteToUsd = quoteRate;
+        state.fxRatesValid = true;
+        setFxRateStatus(parsed.quote === 'usd' ? `${parsed.symbol}: pakai entry sebagai rate margin` : `${parsed.symbol}: rate aktif`, 'success');
+      } catch (error) {
+        state.fxRatesValid = false;
+        setFxRateStatus(error.message, 'error');
+      }
+      calculate();
+    }
+
+    function setMode(mode) {
+      state.mode = mode;
+      $$('.tab-btn').forEach((button) => {
+        const active = button.dataset.mode === mode;
+        button.classList.toggle('active', active);
+        button.setAttribute('aria-selected', String(active));
+      });
+
+      ['forex', 'gold', 'indices', 'stock'].forEach((name) => {
+        const el = $(`#cfg-${name}`);
+        if (el) el.classList.toggle('show', name === mode);
+      });
+
+      els.leverageField.style.display = mode === 'stock' ? 'none' : '';
+      els.modeLabel.textContent = mode.toUpperCase();
+      els.insightMode.textContent = mode.charAt(0).toUpperCase() + mode.slice(1);
+      updateUiLabels();
+      calculate();
+    }
+
+    function updateUiLabels() {
+      const sym = currencySymbol();
+      els.balancePrefix.textContent = sym.trim() || '$';
+      if (state.mode === 'gold') {
+        const isCent = document.querySelector('input[name="goldAcc"]:checked')?.value === 'cent';
+        els.balancePrefix.textContent = isCent ? '¢' : '$';
+      }
+      els.customMultWrap.style.display = document.querySelector('input[name="idxMult"]:checked')?.value === 'custom' ? 'flex' : 'none';
+    }
+
+    function setTradeDir(dir) {
+      state.tradeDir = dir;
+      $$('.dir-btn').forEach((button) => button.classList.toggle('active', parseInt(button.dataset.dir, 10) === dir));
+      els.insightDirection.textContent = dir === 1 ? 'Long' : 'Short';
+      calculate();
+    }
+
+    function syncDirectionFromStop() {
+      const entry = numberValue(els.entry, NaN);
+      const sl = numberValue(els.sl, NaN);
+      if (!Number.isFinite(entry) || !Number.isFinite(sl)) return;
+      if (sl < entry && state.tradeDir !== 1) setTradeDir(1);
+      if (sl > entry && state.tradeDir !== -1) setTradeDir(-1);
+    }
+
+    function syncTpFromRr() {
+      const rr = numberValue(els.rr, NaN);
+      const entry = numberValue(els.entry, NaN);
+      const sl = numberValue(els.sl, NaN);
+      if (!Number.isFinite(rr) || !Number.isFinite(entry) || !Number.isFinite(sl)) return;
+      const tp = entry + Math.abs(entry - sl) * rr * state.tradeDir;
+      els.customTpTop.value = tp.toFixed(Math.max(2, getPrecision(els.entry.value)));
+    }
+
+    function syncRrFromTp() {
+      const customTp = numberValue(els.customTpTop, NaN);
+      const entry = numberValue(els.entry, NaN);
+      const sl = numberValue(els.sl, NaN);
+      if (!Number.isFinite(customTp) || !Number.isFinite(entry) || !Number.isFinite(sl)) return;
+      const diff = Math.abs(entry - sl);
+      if (diff > 0) els.rr.value = (Math.abs(customTp - entry) / diff).toFixed(2);
+    }
+
+    function resetOutputs(message = 'Isi data untuk memulai kalkulasi.') {
+      els.lotOutput.textContent = '0.00 LOT';
+      els.sizeNote.textContent = message;
+      els.marginOutput.textContent = formatMoney(0, currencySymbol());
+      els.unitsOutput.textContent = '-';
+      els.liqOutput.textContent = '-';
+      els.tp1.textContent = '0.00';
+      els.tp2.textContent = '0.00';
+      els.tp3.textContent = '0.00';
+      els.money1.textContent = '+' + formatMoney(0, currencySymbol());
+      els.money2.textContent = '+' + formatMoney(0, currencySymbol());
+      els.money3.textContent = '+' + formatMoney(0, currencySymbol());
+      els.moneyCustom.textContent = '-';
+    }
+
+    function calculate() {
+      updateUiLabels();
+      const sym = currencySymbol();
+      let balance = numberValue(els.balance, 0);
+      const riskInput = numberValue(els.riskVal, 0);
+      const riskType = els.riskType.value;
+      const entry = numberValue(els.entry, 0);
+      const leverage = Math.max(numberValue(els.leverage, 1), 1);
+      const entryText = els.entry.value;
+      const customTp = numberValue(els.customTpTop, 0);
+
+      if (state.mode === 'gold' && document.querySelector('input[name="goldAcc"]:checked')?.value === 'cent') {
+        balance = balance / 100;
+      }
+
+      const riskAmount = riskType === '%' ? balance * (riskInput / 100) : riskInput;
+      els.maxLoss.value = formatMoney(riskAmount, sym);
+      els.lossOutput.textContent = formatMoney(riskAmount, sym);
+      els.insightRisk.textContent = formatMoney(riskAmount, sym);
+
+      if (!balance || !riskAmount || !entry) {
+        resetOutputs('Balance, risk, dan entry wajib diisi.');
+        return;
+      }
+
+      if (state.mode === 'forex' && !state.fxRatesValid) {
+        resetOutputs('Rate forex belum valid. Periksa pair terlebih dahulu.');
+        return;
+      }
+
+      const slText = els.sl.value.trim();
+      let stopLoss = numberValue(els.sl, NaN);
+      let isAutoLiq = false;
+      if (!Number.isFinite(stopLoss) || slText === '') {
+        isAutoLiq = true;
+        stopLoss = Math.max(entry - (entry / leverage) * state.tradeDir, 0);
+      }
+
+      let diff = Math.abs(entry - stopLoss);
+      if (!Number.isFinite(diff) || diff <= 0) diff = 0.0000001;
+
+      let size = 0;
+      let margin = 0;
+      let units = '-';
+      let lotText = '0.00 LOT';
+      let note = '';
+
+      if (state.mode === 'forex') {
+        const contract = 100000;
+        size = riskAmount / (diff * contract * state.fxQuoteToUsd);
+        const baseToUsdForMargin = state.fxQuote === 'usd' ? entry : state.fxBaseToUsd;
+        margin = (size * contract * baseToUsdForMargin) / leverage;
+        units = `${(size * contract).toFixed(0)} Units`;
+        lotText = `${size.toFixed(2)} LOT`;
+        note = 'Lot forex dihitung dari nilai quote currency terhadap USD.';
+      } else if (state.mode === 'gold') {
+        size = riskAmount / (diff * 100);
+        margin = (size * 100 * entry) / leverage;
+        units = `${(size * 100).toFixed(1)} Oz`;
+        lotText = `${size.toFixed(2)} LOT`;
+        note = 'Kontrak gold diasumsikan 100 oz per lot.';
+      } else if (state.mode === 'crypto') {
+        size = riskAmount / diff;
+        margin = (size * entry) / leverage;
+        units = `Lev 1:${leverage}`;
+        lotText = `${size.toFixed(Math.max(4, getPrecision(entryText)))} COIN`;
+        note = 'Size crypto ditampilkan dalam jumlah coin.';
+      } else if (state.mode === 'indices') {
+        const multType = document.querySelector('input[name="idxMult"]:checked')?.value || '1';
+        const multiplier = multType === 'custom' ? Math.max(numberValue(els.idxCustomMult, 1), 0.000001) : parseFloat(multType);
+        size = riskAmount / (diff * multiplier);
+        margin = (size * multiplier * entry) / leverage;
+        units = `Val: ${multiplier}/Pt`;
+        lotText = `${size.toFixed(2)} LOT`;
+        note = 'Multiplier menentukan nilai tiap poin indeks.';
+      } else if (state.mode === 'stock') {
+        const shares = Math.floor(riskAmount / diff);
+        const isIdr = document.querySelector('input[name="stockCurr"]:checked')?.value === 'IDR';
+        size = isIdr ? shares / 100 : shares;
+        margin = shares * entry;
+        units = isIdr ? `${shares} Lembar` : 'US Market';
+        lotText = isIdr ? `${size.toFixed(2)} LOT` : `${shares} SHARE`;
+        note = 'Stock tanpa leverage; size dibulatkan ke jumlah saham utuh.';
+      }
+
+      const decimals = Math.max(state.mode === 'crypto' ? 4 : 2, state.mode === 'stock' && sym === 'Rp ' ? 0 : getPrecision(entryText));
+      const tp1 = entry + diff * state.tradeDir;
+      const tp2 = entry + diff * 2 * state.tradeDir;
+      const tp3 = entry + diff * 3 * state.tradeDir;
+
+      els.lotOutput.textContent = lotText;
+      els.sizeNote.textContent = note;
+      els.marginOutput.textContent = formatMoney(margin, sym);
+      els.unitsOutput.textContent = units;
+      els.liqOutput.textContent = isAutoLiq ? stopLoss.toFixed(decimals) : stopLoss.toFixed(decimals);
+      els.tp1.textContent = tp1.toFixed(decimals);
+      els.tp2.textContent = tp2.toFixed(decimals);
+      els.tp3.textContent = tp3.toFixed(decimals);
+      els.money1.textContent = '+' + formatMoney(riskAmount, sym);
+      els.money2.textContent = '+' + formatMoney(riskAmount * 2, sym);
+      els.money3.textContent = '+' + formatMoney(riskAmount * 3, sym);
+
+      if (customTp > 0) {
+        const profit = (Math.abs(customTp - entry) / diff) * riskAmount;
+        const isWinDirection = (state.tradeDir === 1 && customTp > entry) || (state.tradeDir === -1 && customTp < entry);
+        els.customProfitCard.classList.toggle('loss', !isWinDirection);
+        els.moneyCustom.textContent = `${isWinDirection ? '+' : '-'}${formatMoney(profit, sym)}`;
+      } else {
+        els.customProfitCard.classList.remove('loss');
+        els.moneyCustom.textContent = '-';
+      }
+    }
+
+    $$('.tab-btn').forEach((button) => button.addEventListener('click', () => setMode(button.dataset.mode)));
+    $$('.dir-btn').forEach((button) => button.addEventListener('click', () => setTradeDir(parseInt(button.dataset.dir, 10))));
+    $$('input, select').forEach((input) => input.addEventListener('input', calculate));
+    $$('input[type="radio"]').forEach((input) => input.addEventListener('change', calculate));
+
+    els.sl.addEventListener('input', syncDirectionFromStop);
+    els.rr.addEventListener('input', syncTpFromRr);
+    els.customTpTop.addEventListener('input', syncRrFromTp);
+    els.forexSymbol.addEventListener('input', () => {
+      clearTimeout(state.debounceTimer);
+      state.debounceTimer = setTimeout(updateForexRates, 550);
+    });
+
+    window.addEventListener('online', () => { els.appStatus.textContent = 'Online'; });
+    window.addEventListener('offline', () => { els.appStatus.textContent = 'Offline mode'; });
+
+    setMode('forex');
+    setTradeDir(1);
+    updateForexRates();
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./service-worker.js')
+          .then(() => { els.appStatus.textContent = navigator.onLine ? 'PWA ready' : 'Offline mode'; })
+          .catch(() => { els.appStatus.textContent = 'PWA cache unavailable'; });
+      });
+    }
+  </script>
+</body>
+</html>

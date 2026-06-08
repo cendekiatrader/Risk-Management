@@ -97,6 +97,10 @@
         .compact-label { font-weight: bold; margin-right: 5px; }
         .radio-item { display: flex; align-items: center; gap: 6px; cursor: pointer; }
         .radio-item input { margin: 0; transform: scale(1.2); cursor: pointer; }
+        .fx-symbol-input { width: 72px !important; height: 22px !important; font-size: 11px !important; background: white !important; border: 1px solid gray !important; text-transform: uppercase; }
+        .fx-rate-status { font-size: 10px; color: #333; min-width: 90px; max-width: 150px; line-height: 1.2; }
+        .fx-rate-status.error { color: #b00020; font-weight: bold; }
+        .fx-rate-status.success { color: #006400; font-weight: bold; }
 
         .form-row { display: flex; gap: 10px; margin-bottom: 12px; }
         .form-col { flex: 1; display: flex; flex-direction: column; min-width: 0; }
@@ -198,9 +202,11 @@
                 <span class="compact-label">PAIR:</span>
                 <label class="radio-item"><input type="radio" name="fxPair" value="std" checked onchange="updateUI()"> Standard</label>
                 <label class="radio-item"><input type="radio" name="fxPair" value="cross" onchange="updateUI()"> Cross/JPY</label>
+                <input type="text" id="forexSymbol" class="fx-symbol-input" placeholder="GBPJPY" maxlength="6" oninput="handleForexSymbolInput()" title="Optional: auto fetch rate, e.g. GBPJPY">
                 <div id="cross-input" style="display:none; margin-left:auto; border-left:1px solid #999; padding-left:5px;">
                     <input type="number" id="crossRate" placeholder="Price" style="width:70px; height:20px; font-size:11px; background:white; border:1px solid gray;" oninput="calculate()">
                 </div>
+                <span id="fxRateStatus" class="fx-rate-status">Manual mode</span>
             </div>
             <div id="cfg-gold" class="compact-options" style="display:none;">
                 <span class="compact-label">ACC:</span>
@@ -350,6 +356,11 @@
 <script>
     var currentMode = 'forex';
     var tradeDir = 1; // 1 untuk LONG, -1 untuk SHORT
+    var fxBaseToUsd = 1;
+    var fxQuoteToUsd = 1;
+    var fxSymbol = 'EURUSD';
+    var fxRatesValid = false;
+    var fxRateDebounceTimer = null;
 
     document.addEventListener('DOMContentLoaded', function() {
         setupTab('tab-forex', 'forex');
@@ -429,6 +440,90 @@
         handleCustomTPInput();
     }
 
+    function setFxRateStatus(message, type) {
+        var status = document.getElementById('fxRateStatus');
+        if (!status) return;
+        status.textContent = message;
+        status.className = 'fx-rate-status' + (type ? ' ' + type : '');
+    }
+
+    function parseForexSymbol(symbol) {
+        var normalized = (symbol || '').trim().toUpperCase();
+        if (!/^[A-Z]{6}$/.test(normalized)) {
+            throw new Error('Symbol harus 6 huruf, contoh GBPJPY.');
+        }
+        return {
+            symbol: normalized,
+            base: normalized.slice(0, 3).toLowerCase(),
+            quote: normalized.slice(3, 6).toLowerCase()
+        };
+    }
+
+    async function fetchCurrencyRates(currency) {
+        var response = await fetch('https://latest.currency-api.pages.dev/v1/currencies/' + currency + '.json');
+        if (!response.ok) {
+            throw new Error('Gagal fetch rate ' + currency.toUpperCase() + ' (HTTP ' + response.status + ').');
+        }
+        return response.json();
+    }
+
+    async function getCurrencyToUsd(currency) {
+        var code = (currency || '').toLowerCase();
+        if (code === 'usd') return 1;
+
+        var data = await fetchCurrencyRates(code);
+        var rates = data[code];
+        if (!rates || typeof rates.usd !== 'number' || rates.usd <= 0) {
+            throw new Error('Rate USD untuk ' + code.toUpperCase() + ' tidak tersedia.');
+        }
+        return rates.usd;
+    }
+
+    window.handleForexSymbolInput = function() {
+        clearTimeout(fxRateDebounceTimer);
+        fxRateDebounceTimer = setTimeout(updateForexRatesFromSymbol, 650);
+    }
+
+    window.updateForexRatesFromSymbol = async function() {
+        var symbolInput = document.getElementById('forexSymbol');
+        var rawSymbol = symbolInput ? symbolInput.value.trim() : '';
+
+        if (!rawSymbol) {
+            fxRatesValid = false;
+            setFxRateStatus('Manual mode');
+            calculate();
+            return;
+        }
+
+        var parsed;
+        try {
+            parsed = parseForexSymbol(rawSymbol);
+        } catch (err) {
+            fxRatesValid = false;
+            setFxRateStatus(err.message, 'error');
+            return;
+        }
+
+        setFxRateStatus('Fetching ' + parsed.symbol + '...', '');
+        try {
+            var rates = await Promise.all([
+                getCurrencyToUsd(parsed.base),
+                getCurrencyToUsd(parsed.quote)
+            ]);
+
+            fxBaseToUsd = rates[0];
+            fxQuoteToUsd = rates[1];
+            fxSymbol = parsed.symbol;
+            fxRatesValid = true;
+
+            setFxRateStatus(parsed.symbol + ': ' + parsed.quote.toUpperCase() + '→USD ' + fxQuoteToUsd.toPrecision(6), 'success');
+            calculate();
+        } catch (err) {
+            fxRatesValid = false;
+            setFxRateStatus(err.message, 'error');
+        }
+    }
+
     window.setMode = function(mode) {
         currentMode = mode;
         document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
@@ -468,6 +563,8 @@
             lblBal.innerText = "Balance ($):"; entry.placeholder = "1.0850"; sl.placeholder = "Auto-Liq";
             var isCross = document.querySelector('input[name="fxPair"]:checked').value === 'cross';
             document.getElementById('cross-input').style.display = isCross ? 'block' : 'none';
+            var hasFxSymbol = !!document.getElementById('forexSymbol').value.trim();
+            if (!hasFxSymbol) setFxRateStatus('Manual mode');
         } 
         else if (currentMode === 'gold') {
             var gAcc = document.querySelector('input[name="goldAcc"]:checked').value;
@@ -548,12 +645,35 @@
         if (currentMode === 'forex') {
             var contract = 100000;
             var fxType = document.querySelector('input[name="fxPair"]:checked').value;
-            if (fxType === 'std') { lot = riskAmt / (diff * contract); } 
-            else {
-                var cRate = parseFloat(document.getElementById('crossRate').value) || 1;
+            var symbolInput = document.getElementById('forexSymbol');
+            var hasFxSymbol = symbolInput && symbolInput.value.trim() !== '';
+
+            if (hasFxSymbol) {
+                if (!fxRatesValid) {
+                    setFxRateStatus('Rate belum valid. Perbaiki symbol/fetch dulu.', 'error');
+                    return;
+                }
+                if (fxSymbol.slice(3, 6) === 'USD') {
+                    lot = riskAmt / (diff * contract);
+                    margin = (lot * contract * entry) / lev;
+                } else {
+                    lot = riskAmt / (diff * contract * fxQuoteToUsd);
+                    margin = (lot * contract * fxBaseToUsd) / lev;
+                }
+            } else if (fxType === 'std') {
+                lot = riskAmt / (diff * contract);
+                margin = (lot * contract * entry) / lev;
+            } else {
+                var crossRateValue = document.getElementById('crossRate').value;
+                var cRate = parseFloat(crossRateValue);
+                if (isNaN(cRate) || cRate <= 0) {
+                    setFxRateStatus('Isi rate manual cross/JPY yang valid.', 'error');
+                    return;
+                }
                 lot = (riskAmt * cRate) / (diff * contract);
+                margin = (lot * contract * entry) / lev;
+                setFxRateStatus('Manual cross rate aktif', '');
             }
-            margin = (lot * contract * entry) / lev;
             units = (lot * 100000).toFixed(0) + " Units";
         }
         else if (currentMode === 'gold') {

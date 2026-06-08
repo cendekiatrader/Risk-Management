@@ -1,4 +1,4 @@
-const CACHE_NAME = "risk-manager-v1";
+const CACHE_NAME = "risk-manager-v2";
 
 const urlsToCache = [
   "./",

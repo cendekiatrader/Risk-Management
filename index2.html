@@ -424,7 +424,7 @@
             fxSymbol = parsed.symbol;
             fxRatesValid = true;
 
-            setFxRateStatus(parsed.symbol + ': ' + parsed.quote.toUpperCase() + '→USD ' + fxQuoteToUsd.toPrecision(6), 'success');
+            setFxRateStatus(parsed.symbol + ': ' + parsed.base.toUpperCase() + '→USD ' + fxBaseToUsd.toPrecision(6) + ' | ' + parsed.quote.toUpperCase() + '→USD ' + fxQuoteToUsd.toPrecision(6), 'success');
             calculate();
         } catch (err) {
             fxRatesValid = false;
@@ -553,13 +553,8 @@
                     setFxRateStatus('Rate belum valid. Perbaiki symbol/fetch dulu.', 'error');
                     return;
                 }
-                if (fxSymbol.slice(3, 6) === 'USD') {
-                    lot = riskAmt / (diff * contract);
-                    margin = (lot * contract * entry) / lev;
-                } else {
-                    lot = riskAmt / (diff * contract * fxQuoteToUsd);
-                    margin = (lot * contract * fxBaseToUsd) / lev;
-                }
+                lot = riskAmt / (diff * contract * fxQuoteToUsd);
+                margin = (lot * contract * fxBaseToUsd) / lev;
             } else if (fxType === 'std') {
                 lot = riskAmt / (diff * contract);
                 margin = (lot * contract * entry) / lev;

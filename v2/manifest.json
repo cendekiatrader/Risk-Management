@@ -1,0 +1,35 @@
+{
+  "name": "Risk Manager V2",
+  "short_name": "Risk V2",
+  "description": "Kalkulator risk management modern untuk Forex, Gold, Crypto, Indices, dan Stock.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "background_color": "#060816",
+  "theme_color": "#111827",
+  "orientation": "portrait-primary",
+  "categories": ["finance", "productivity", "utilities"],
+  "icons": [
+    {
+      "src": "../icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "../icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Buka Kalkulator",
+      "short_name": "Calculator",
+      "description": "Langsung buka Risk Manager V2.",
+      "url": "./index.html"
+    }
+  ]
+}

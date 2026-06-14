@@ -13,8 +13,45 @@
             --win-black: #000000;
             --win-blue: #000080;
             --desktop-teal: #008080;
+            --field-bg: #ffffff;
+            --field-soft-bg: #eeeeee;
+            --panel-bg: #e0e0e0;
+            --text-main: #000000;
+            --text-muted: #555555;
+            --status-text: #333333;
+            --lcd-border: #808080;
+            --tp-border: #444444;
             --lcd-bg: #1a1a1a;
             --lcd-text: #00ff00;
+            --lcd-strong: #ffffff;
+            --custom-tp-bg: #222222;
+            --custom-tp-focus-bg: #000000;
+            --custom-tp-border: #555555;
+            --shadow-color: rgba(0,0,0,0.5);
+        }
+
+        body.theme-dark {
+            --win-gray: #1f2937;
+            --win-dark-gray: #111827;
+            --win-white: #4b5563;
+            --win-black: #020617;
+            --win-blue: #0f172a;
+            --desktop-teal: #020617;
+            --field-bg: #111827;
+            --field-soft-bg: #374151;
+            --panel-bg: #273244;
+            --text-main: #f8fafc;
+            --text-muted: #cbd5e1;
+            --status-text: #e5e7eb;
+            --lcd-border: #4b5563;
+            --tp-border: #64748b;
+            --lcd-bg: #020617;
+            --lcd-text: #34d399;
+            --lcd-strong: #f8fafc;
+            --custom-tp-bg: #111827;
+            --custom-tp-focus-bg: #020617;
+            --custom-tp-border: #64748b;
+            --shadow-color: rgba(0,0,0,0.85);
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -22,20 +59,20 @@
         body {
             background-color: var(--desktop-teal);
             font-family: 'Segoe UI', Tahoma, sans-serif;
-            margin: 0; padding: 0; 
+            margin: 0; padding: 0;
             min-height: 100vh;
-            display: flex; justify-content: center; align-items: center; 
-            color: black; font-size: 14px;
+            display: flex; justify-content: center; align-items: center;
+            color: var(--text-main); font-size: 14px;
         }
 
         /* WINDOW CONTAINER */
         .window-container {
             background-color: var(--win-gray);
-            width: 100%; max-width: 480px; 
+            width: 100%; max-width: 480px;
             display: flex; flex-direction: column;
             border-top: 2px solid var(--win-white); border-left: 2px solid var(--win-white);
             border-right: 2px solid var(--win-black); border-bottom: 2px solid var(--win-black);
-            box-shadow: 5px 5px 15px rgba(0,0,0,0.5); 
+            box-shadow: 5px 5px 15px var(--shadow-color);
         }
 
         /* MOBILE OVERRIDE */
@@ -45,7 +82,7 @@
         }
 
         .win-inset {
-            background-color: white;
+            background-color: var(--field-bg);
             border-top: 2px solid var(--win-dark-gray); border-left: 2px solid var(--win-dark-gray);
             border-right: 2px solid var(--win-white); border-bottom: 2px solid var(--win-white);
         }
@@ -58,6 +95,16 @@
         }
         .win-btn:active { border-style: inset; transform: translateY(1px); }
 
+        .theme-control {
+            display: flex; align-items: center; gap: 4px; margin-right: 6px;
+            font-size: 10px; color: white; font-weight: bold;
+        }
+        .theme-control select {
+            width: 66px; height: 20px; padding: 0 2px; border: 1px solid var(--win-black);
+            background: var(--field-bg); color: var(--text-main);
+            font-size: 10px; font-family: 'Segoe UI', Tahoma, sans-serif;
+        }
+
         .title-bar {
             background: linear-gradient(90deg, var(--win-blue), #1084d0);
             padding: 6px 10px; display: flex; justify-content: space-between; align-items: center;
@@ -65,7 +112,7 @@
         }
 
         /* TABS */
-        .tabs-wrapper { 
+        .tabs-wrapper {
             padding: 8px 8px 0 8px; display: flex; gap: 2px; flex-shrink: 0; background: var(--win-gray);
         }
         .tab-btn {
@@ -80,8 +127,8 @@
             border-right: 2px solid var(--win-dark-gray);
         }
 
-        .content-area { 
-            padding: 15px; background: var(--win-gray); 
+        .content-area {
+            padding: 15px; background: var(--win-gray);
             border: 2px solid var(--win-white); border-right-color: black; border-bottom-color: black;
             margin: 0 6px 6px 6px; flex-grow: 1; display: flex; flex-direction: column;
         }
@@ -89,29 +136,29 @@
 
         /* INPUTS */
         .compact-options {
-            display: flex; align-items: center; gap: 10px; 
-            background: #e0e0e0; padding: 6px 10px; 
+            display: flex; align-items: center; gap: 10px;
+            background: var(--panel-bg); padding: 6px 10px;
             border: 1px dotted #888; margin-bottom: 15px; font-size: 12px;
         }
         .compact-label { font-weight: bold; margin-right: 5px; }
         .radio-item { display: flex; align-items: center; gap: 6px; cursor: pointer; }
         .radio-item input { margin: 0; transform: scale(1.2); cursor: pointer; }
-        .fx-symbol-input { width: 72px !important; height: 22px !important; font-size: 11px !important; background: white !important; border: 1px solid gray !important; text-transform: uppercase; }
-        .fx-rate-status { font-size: 10px; color: #333; min-width: 90px; max-width: 150px; line-height: 1.2; }
+        .fx-symbol-input { width: 72px !important; height: 22px !important; font-size: 11px !important; background: var(--field-bg) !important; border: 1px solid gray !important; text-transform: uppercase; }
+        .fx-rate-status { font-size: 10px; color: var(--status-text); min-width: 90px; max-width: 150px; line-height: 1.2; }
         .fx-rate-status.error { color: #b00020; font-weight: bold; }
         .fx-rate-status.success { color: #006400; font-weight: bold; }
 
         .form-row { display: flex; gap: 10px; margin-bottom: 12px; }
         .form-col { flex: 1; display: flex; flex-direction: column; min-width: 0; }
         .form-col label { margin-bottom: 4px; font-size: 12px; font-weight: 600; }
-        
-        input[type="number"], input[type="text"], select { 
-            width: 100%; height: 35px; padding: 0 8px; border: none; background: transparent; 
-            font-size: 15px; font-weight: bold; font-family: monospace; outline: none; 
+
+        input[type="number"], input[type="text"], select {
+            width: 100%; height: 35px; padding: 0 8px; border: none; background: transparent;
+            color: var(--text-main); font-size: 15px; font-weight: bold; font-family: monospace; outline: none;
         }
-        .risk-group { display: flex; align-items: center; background: white; border: 2px inset gray; }
+        .risk-group { display: flex; align-items: center; background: var(--field-bg); border: 2px inset gray; }
         .risk-group input { flex: 1; }
-        .risk-group select { width: 45px; background: #eee; border-left: 1px solid gray; font-size: 12px; }
+        .risk-group select { width: 45px; background: var(--field-soft-bg); border-left: 1px solid gray; font-size: 12px; }
 
         /* DIRECTION BUTTONS (LONG/SHORT) */
         .dir-btn {
@@ -119,30 +166,30 @@
             border-top: 2px solid var(--win-white); border-left: 2px solid var(--win-white);
             border-right: 2px solid var(--win-black); border-bottom: 2px solid var(--win-black);
             cursor: pointer; font-weight: bold; font-size: 11px; padding: 8px 0;
-            color: black; font-family: 'Segoe UI', Tahoma, sans-serif;
+            color: var(--text-main); font-family: 'Segoe UI', Tahoma, sans-serif;
             touch-action: manipulation; width: 100%;
         }
         .dir-btn.active {
             border-top: 2px solid var(--win-black); border-left: 2px solid var(--win-black);
             border-right: 2px solid var(--win-white); border-bottom: 2px solid var(--win-white);
-            background-color: #e0e0e0; color: var(--win-blue);
+            background-color: var(--panel-bg); color: var(--win-blue);
         }
 
         /* LCD DISPLAY */
-        .lcd-display { 
-            background: var(--lcd-bg); color: var(--lcd-text); 
-            padding: 12px; border: 3px inset gray; margin-top: 15px; 
-            font-family: monospace; text-shadow: 0 0 2px rgba(0,255,0,0.4); 
+        .lcd-display {
+            background: var(--lcd-bg); color: var(--lcd-text);
+            padding: 12px; border: 3px inset var(--lcd-border); margin-top: 15px;
+            font-family: monospace; text-shadow: 0 0 2px rgba(0,255,0,0.4);
         }
         .lcd-row { display: flex; justify-content: space-between; border-bottom: 1px dashed #333; padding-bottom: 4px; margin-bottom: 6px; font-size: 13px; align-items: center; }
-        .lcd-big { font-size: 22px; font-weight: bold; text-align: right; color: #fff; margin: 10px 0; }
-        
+        .lcd-big { font-size: 22px; font-weight: bold; text-align: right; color: var(--lcd-strong); margin: 10px 0; }
+
         /* TP GRID */
-        .tp-grid { 
-            display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; 
-            margin-top: 10px; text-align: center; font-size: 11px; 
+        .tp-grid {
+            display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;
+            margin-top: 10px; text-align: center; font-size: 11px;
         }
-        .tp-box { border: 1px solid #444; padding: 6px; display: flex; flex-direction: column; gap: 2px; }
+        .tp-box { border: 1px solid var(--tp-border); padding: 6px; display: flex; flex-direction: column; gap: 2px; }
         .tp-box-wide {
             grid-column: 1 / -1; border-color: #666; margin-top: 4px;
             display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 10px; padding: 8px;
@@ -153,12 +200,12 @@
         .tp-money { color: #00ff00; font-size: 11px; font-weight: bold; margin-top: 2px; }
 
         .custom-tp-input {
-            width: 100px; background: #222; border: 1px solid #555; color: yellow;
+            width: 100px; background: var(--custom-tp-bg); border: 1px solid var(--custom-tp-border); color: yellow;
             font-family: monospace; font-size: 12px; text-align: center; height: 25px; flex: 1;
         }
-        .custom-tp-input:focus { outline: 1px solid #00ff00; background: #000; }
+        .custom-tp-input:focus { outline: 1px solid #00ff00; background: var(--custom-tp-focus-bg); }
 
-        .footer { margin-top: auto; padding-top: 15px; font-size: 11px; display: flex; justify-content: space-between; color: #555; }
+        .footer { margin-top: auto; padding-top: 15px; font-size: 11px; display: flex; justify-content: space-between; color: var(--text-muted); }
     </style>
     <!-- PWA -->
     <link rel="manifest" href="manifest.json">
@@ -174,6 +221,13 @@
     <div class="title-bar">
         <span>risk_manager.exe</span>
         <div style="display:flex; gap:2px;">
+            <label class="theme-control" for="dashboardTheme">
+                THEME
+                <select id="dashboardTheme" onchange="setDashboardTheme(this.value)" title="Pilih tema dashboard">
+                    <option value="light">Light</option>
+                    <option value="dark">Dark</option>
+                </select>
+            </label>
             <button class="win-btn" style="width:20px; height:20px; font-size:12px;">_</button>
             <button class="win-btn" style="width:20px; height:20px; font-size:12px;">X</button>
         </div>
@@ -189,7 +243,7 @@
     </div>
 
     <div class="content-area">
-        
+
         <!-- CONFIGURE AREA -->
         <div id="config-area" style="display:none;">
             <!-- FOREX -->
@@ -198,14 +252,14 @@
                 <input type="text" id="forexSymbol" class="fx-symbol-input" placeholder="GBPJPY" maxlength="6" oninput="handleForexSymbolInput()" title="Auto fetch rate, e.g. GBPJPY">
                 <span id="fxRateStatus" class="fx-rate-status">Isi pair</span>
             </div>
-            
+
             <!-- GOLD -->
             <div id="cfg-gold" class="compact-options" style="display:none;">
                 <span class="compact-label">ACC:</span>
                 <label class="radio-item"><input type="radio" name="goldAcc" value="std" checked onchange="updateUI()"> Standard</label>
                 <label class="radio-item"><input type="radio" name="goldAcc" value="cent" onchange="updateUI()"> Cent</label>
             </div>
-            
+
             <!-- INDICES -->
             <div id="cfg-indices" class="compact-options" style="display:none;">
                 <span class="compact-label">MULT:</span>
@@ -295,15 +349,15 @@
             <div class="lcd-big" id="lcd-lot">0.00 LOT</div>
             <div class="lcd-row"><span>MARGIN REQ</span><span id="lcd-margin">0.00</span></div>
             <div class="lcd-row" style="border:none; margin-bottom: 0;"><span>VOLUME</span><span id="lcd-units">-</span></div>
-            
+
             <!-- AUTO LIQUIDATION (Singular) -->
             <div class="lcd-row" id="lcd-liq-row" style="display:none; border-top:1px dashed #333; padding-top:6px; margin-top:4px;">
                 <span style="color:red; font-size: 11px;">LIQ. PRICE (SL)</span>
                 <span id="lcd-liq" style="color:red; font-weight:bold; font-size:14px;">-</span>
             </div>
-            
+
             <div style="border-top:1px dashed #444; margin-top:8px; padding-top:4px; font-size:10px; text-align:center; color:#777;">TARGET PROFIT & ESTIMATED VALUE</div>
-            
+
             <div class="tp-grid">
                 <!-- TP 1-3 -->
                 <div class="tp-box">
@@ -321,7 +375,7 @@
                     <div class="tp-price" id="tp3">0.00</div>
                     <div class="tp-money" id="money3">$0.00</div>
                 </div>
-                
+
                 <!-- Custom TP -->
                 <div class="tp-box tp-box-wide">
                     <div class="tp-label" style="color:cyan; white-space:nowrap;">TAKE PROFIT:</div>
@@ -346,8 +400,10 @@
     var fxSymbol = 'EURUSD';
     var fxRatesValid = false;
     var fxRateDebounceTimer = null;
+    var DASHBOARD_THEME_KEY = 'riskManagerDashboardTheme';
 
     document.addEventListener('DOMContentLoaded', function() {
+        initDashboardTheme();
         setupTab('tab-forex', 'forex');
         setupTab('tab-gold', 'gold');
         setupTab('tab-crypto', 'crypto');
@@ -355,6 +411,26 @@
         setupTab('tab-stock', 'stock');
         setMode('forex');
     });
+
+    function initDashboardTheme() {
+        var savedTheme = localStorage.getItem(DASHBOARD_THEME_KEY) || 'light';
+        setDashboardTheme(savedTheme);
+    }
+
+    window.setDashboardTheme = function(theme) {
+        var selectedTheme = theme === 'dark' ? 'dark' : 'light';
+        document.body.classList.remove('theme-light', 'theme-dark');
+        document.body.classList.add('theme-' + selectedTheme);
+        localStorage.setItem(DASHBOARD_THEME_KEY, selectedTheme);
+
+        var themeSelect = document.getElementById('dashboardTheme');
+        if (themeSelect) themeSelect.value = selectedTheme;
+
+        var themeColorMeta = document.querySelector('meta[name="theme-color"]');
+        if (themeColorMeta) {
+            themeColorMeta.setAttribute('content', selectedTheme === 'dark' ? '#020617' : '#000080');
+        }
+    }
 
     function setupTab(id, mode) {
         var btn = document.getElementById(id);
@@ -383,7 +459,7 @@
         }
         calculate();
     }
-    
+
     // RR -> CUSTOM TP
     window.handleRRInput = function() {
         var rr = parseFloat(document.getElementById('rr').value);
@@ -421,7 +497,7 @@
         document.getElementById('customTpTop').value = document.getElementById('customTp').value;
         handleCustomTPInput();
     }
-    
+
     function setFxRateStatus(message, type) {
         var status = document.getElementById('fxRateStatus');
         if (!status) return;
@@ -526,8 +602,8 @@
         if(cfgIndices) cfgIndices.style.display = 'none';
         if(colLev) colLev.style.display = 'flex';
 
-        if (mode === 'forex') { configArea.style.display = 'block'; cfgForex.style.display = 'flex'; } 
-        else if (mode === 'stock') { configArea.style.display = 'block'; cfgStock.style.display = 'flex'; colLev.style.display = 'none'; } 
+        if (mode === 'forex') { configArea.style.display = 'block'; cfgForex.style.display = 'flex'; }
+        else if (mode === 'stock') { configArea.style.display = 'block'; cfgStock.style.display = 'flex'; colLev.style.display = 'none'; }
         else if (mode === 'gold') { configArea.style.display = 'block'; cfgGold.style.display = 'flex'; }
         else if (mode === 'indices') { configArea.style.display = 'block'; cfgIndices.style.display = 'flex'; }
 
@@ -538,14 +614,14 @@
         var lblBal = document.getElementById('lbl-balance');
         var entry = document.getElementById('entry');
         var sl = document.getElementById('sl');
-        
+
         document.getElementById('lcd-mode').innerText = currentMode.toUpperCase();
 
         if (currentMode === 'forex') {
             lblBal.innerText = "Balance ($):"; entry.placeholder = "1.0850"; sl.placeholder = "Auto-Liq";
             var hasFxSymbol = !!document.getElementById('forexSymbol').value.trim();
             if (!hasFxSymbol) setFxRateStatus('Isi pair');
-        } 
+        }
         else if (currentMode === 'gold') {
             var gAcc = document.querySelector('input[name="goldAcc"]:checked').value;
             lblBal.innerText = (gAcc === 'cent') ? "Balance (USC):" : "Balance ($):";
@@ -568,7 +644,7 @@
 
     function getPrecision(numStr) {
         if (!numStr) return 2;
-        if (numStr.indexOf('.') === -1) return 0; 
+        if (numStr.indexOf('.') === -1) return 0;
         return numStr.split('.')[1].length;
     }
 
@@ -581,7 +657,7 @@
         var lev = parseFloat(document.getElementById('leverage').value) || 100;
         var riskVal = parseFloat(document.getElementById('riskVal').value) || 0;
         var riskType = document.getElementById('riskType').value;
-        
+
         var entryStr = document.getElementById('entry').value;
         var entry = parseFloat(entryStr) || 0;
         var customTp = parseFloat(document.getElementById('customTp').value) || 0;
@@ -590,7 +666,7 @@
         var sym = '$';
         if (currentMode === 'stock') {
             sym = document.querySelector('input[name="stockCurr"]:checked').value === 'IDR' ? 'Rp ' : '$';
-            lev = 1; 
+            lev = 1;
         } else if (currentMode === 'gold') {
             sym = document.querySelector('input[name="goldAcc"]:checked').value === 'cent' ? 'USC ' : '$';
         }
@@ -609,16 +685,16 @@
         if (isNaN(sl) || slInputStr.trim() === '') {
             isLiq = true;
             // Hitung harga likuidasi berdasarkan tombol arah (tradeDir)
-            var liqDiff = entry / lev; 
-            sl = entry - (liqDiff * tradeDir); 
+            var liqDiff = entry / lev;
+            sl = entry - (liqDiff * tradeDir);
             if(sl < 0) sl = 0; // Harga tak bisa minus
-            
+
             diff = Math.abs(entry - sl);
         } else {
             diff = Math.abs(entry - sl);
         }
 
-        if(diff === 0) diff = 0.0000001; 
+        if(diff === 0) diff = 0.0000001;
 
         var lot = 0; var margin = 0; var units = "";
 
@@ -651,14 +727,14 @@
         else if (currentMode === 'indices') {
             var idxMultType = document.querySelector('input[name="idxMult"]:checked').value;
             var mult = (idxMultType === 'custom') ? (parseFloat(document.getElementById('idxCustomMult').value) || 1) : parseFloat(idxMultType);
-            lot = riskAmt / (diff * mult); 
-            margin = (lot * mult * entry) / lev; 
+            lot = riskAmt / (diff * mult);
+            margin = (lot * mult * entry) / lev;
             units = "Val: " + mult + "/Pt";
         }
         else if (currentMode === 'stock') {
             var shares = Math.floor(riskAmt / diff);
             var isIDR = document.querySelector('input[name="stockCurr"]:checked').value === 'IDR';
-            if (isIDR) { lot = shares / 100; margin = shares * entry; units = shares + " Lembar"; } 
+            if (isIDR) { lot = shares / 100; margin = shares * entry; units = shares + " Lembar"; }
             else { lot = shares; margin = shares * entry; units = "US Market"; }
         }
 
@@ -669,7 +745,7 @@
             lotTxt = lot.toFixed(coinPrecision) + " COIN";
         }
         if (currentMode === 'stock' && sym === '$') lotTxt = lot + " SHARE";
-        
+
         document.getElementById('lcd-lot').innerText = lotTxt;
         document.getElementById('lcd-margin').innerText = fmt(margin, sym);
         document.getElementById('lcd-units').innerText = units;
@@ -682,7 +758,7 @@
             if (decL < 2) decL = 2;
             if (currentMode === 'stock' && sym === 'Rp ') decL = 0;
             if (currentMode === 'crypto' && decL < 4) decL = 4;
-            
+
             document.getElementById('lcd-liq').innerText = sl.toFixed(decL);
         } else {
             liqRow.style.display = 'none';
@@ -690,9 +766,9 @@
 
         // --- TP & MONEY CALC ---
         var decimals = getPrecision(entryStr);
-        if (decimals < 2) decimals = 2; 
+        if (decimals < 2) decimals = 2;
         if (currentMode === 'stock' && sym === 'Rp ') decimals = 0;
-        if (currentMode === 'crypto' && decimals < 4) decimals = 4; 
+        if (currentMode === 'crypto' && decimals < 4) decimals = 4;
 
         // Gunakan arah dari tombol (tradeDir)
         var tp1Val = entry + (diff * 1 * tradeDir);
@@ -703,7 +779,7 @@
         document.getElementById('tp2').innerText = tp2Val.toFixed(decimals);
         document.getElementById('tp3').innerText = tp3Val.toFixed(decimals);
 
-        var sign = "+"; 
+        var sign = "+";
         document.getElementById('money1').innerText = sign + fmt(riskAmt * 1, sym);
         document.getElementById('money2').innerText = sign + fmt(riskAmt * 2, sym);
         document.getElementById('money3').innerText = sign + fmt(riskAmt * 3, sym);
@@ -718,7 +794,7 @@
             var pCustom = (diffCustom / diff) * riskAmt;
             if (isWinDir) {
                 moneyCustomEl.innerText = "+" + fmt(pCustom, sym);
-                moneyCustomEl.style.color = "#00ff00"; 
+                moneyCustomEl.style.color = "#00ff00";
             } else {
                 moneyCustomEl.innerText = "-" + fmt(pCustom, sym);
                 moneyCustomEl.style.color = "red";

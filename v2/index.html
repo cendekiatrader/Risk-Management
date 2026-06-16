@@ -520,6 +520,14 @@
               <div class="input-wrap"><input id="sl" type="number" inputmode="decimal" min="0" step="any" placeholder="Auto-liq"></div>
             </div>
             <div class="field">
+              <label class="field-label" for="fixedSlPoints">Fix SL Points</label>
+              <div class="input-wrap"><input id="fixedSlPoints" type="number" inputmode="decimal" min="0" step="any" placeholder="0.00"></div>
+            </div>
+            <div class="field">
+              <label class="field-label" for="fixedTpPoints">Fix TP Points</label>
+              <div class="input-wrap"><input id="fixedTpPoints" type="number" inputmode="decimal" min="0" step="any" placeholder="0.00"></div>
+            </div>
+            <div class="field">
               <label class="field-label" for="rr">Risk Reward</label>
               <div class="input-wrap"><span class="input-prefix">1:</span><input id="rr" type="number" inputmode="decimal" min="0" step="any" placeholder="2"></div>
             </div>
@@ -614,6 +622,8 @@
       maxLoss: $('#maxLoss'),
       entry: $('#entry'),
       sl: $('#sl'),
+      fixedSlPoints: $('#fixedSlPoints'),
+      fixedTpPoints: $('#fixedTpPoints'),
       rr: $('#rr'),
       customTpTop: $('#customTpTop'),
       forexSymbol: $('#forexSymbol'),
@@ -757,6 +767,34 @@
       state.tradeDir = dir;
       $$('.dir-btn').forEach((button) => button.classList.toggle('active', parseInt(button.dataset.dir, 10) === dir));
       els.insightDirection.textContent = dir === 1 ? 'Long' : 'Short';
+      if (hasFixedPoints()) {
+        syncFixedPoints();
+      } else {
+        calculate();
+      }
+    }
+
+    function hasFixedPoints() {
+      return numberValue(els.fixedSlPoints, NaN) > 0 || numberValue(els.fixedTpPoints, NaN) > 0;
+    }
+
+    function syncFixedPoints() {
+      const entry = numberValue(els.entry, NaN);
+      const slPoints = numberValue(els.fixedSlPoints, NaN);
+      const tpPoints = numberValue(els.fixedTpPoints, NaN);
+      if (!Number.isFinite(entry)) {
+        calculate();
+        return;
+      }
+
+      const precision = Math.max(2, getPrecision(els.entry.value));
+      if (slPoints > 0) {
+        els.sl.value = (entry - (slPoints * state.tradeDir)).toFixed(precision);
+      }
+      if (tpPoints > 0) {
+        els.customTpTop.value = (entry + (tpPoints * state.tradeDir)).toFixed(precision);
+      }
+      syncRrFromTp();
       calculate();
     }
 
@@ -920,6 +958,9 @@
     $$('input[type="radio"]').forEach((input) => input.addEventListener('change', calculate));
 
     els.sl.addEventListener('input', syncDirectionFromStop);
+    els.entry.addEventListener('input', syncFixedPoints);
+    els.fixedSlPoints.addEventListener('input', syncFixedPoints);
+    els.fixedTpPoints.addEventListener('input', syncFixedPoints);
     els.rr.addEventListener('input', syncTpFromRr);
     els.customTpTop.addEventListener('input', syncRrFromTp);
     els.forexSymbol.addEventListener('input', () => {

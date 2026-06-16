@@ -308,11 +308,23 @@
         <div class="form-row">
             <div class="form-col">
                 <label>Entry Price:</label>
-                <div class="win-inset"><input type="number" id="entry" placeholder="0.00" step="any" oninput="calculate()"></div>
+                <div class="win-inset"><input type="number" id="entry" placeholder="0.00" step="any" oninput="syncFixedPoints()"></div>
             </div>
             <div class="form-col">
                 <label>Stop Loss:</label>
                 <div class="win-inset"><input type="number" id="sl" placeholder="Auto-Liq" step="any" oninput="handleSLInput()"></div>
+            </div>
+        </div>
+
+        <!-- FIXED POINTS -->
+        <div class="form-row">
+            <div class="form-col">
+                <label>Fix SL Points:</label>
+                <div class="win-inset"><input type="number" id="fixedSlPoints" placeholder="0.00" step="any" oninput="syncFixedPoints()"></div>
+            </div>
+            <div class="form-col">
+                <label>Fix TP Points:</label>
+                <div class="win-inset"><input type="number" id="fixedTpPoints" placeholder="0.00" step="any" oninput="syncFixedPoints()"></div>
             </div>
         </div>
 
@@ -446,6 +458,52 @@
         document.getElementById('btn-dir-1').classList.remove('active');
         document.getElementById('btn-dir--1').classList.remove('active');
         document.getElementById('btn-dir-' + dir).classList.add('active');
+        if (hasFixedPoints()) {
+            syncFixedPoints();
+        } else {
+            calculate();
+        }
+    }
+
+    function fixedNumberValue(id, fallback) {
+        var el = document.getElementById(id);
+        var value = parseFloat(el && el.value);
+        return isNaN(value) ? fallback : value;
+    }
+
+    function fixedPointPrecision(value) {
+        var text = String(value || '');
+        return text.indexOf('.') >= 0 ? text.split('.')[1].length : 2;
+    }
+
+    function hasFixedPoints() {
+        return fixedNumberValue('fixedSlPoints', NaN) > 0 || fixedNumberValue('fixedTpPoints', NaN) > 0;
+    }
+
+    window.syncFixedPoints = function() {
+        var entryEl = document.getElementById('entry');
+        var slEl = document.getElementById('sl');
+        var customTpTopEl = document.getElementById('customTpTop');
+        var customTpEl = document.getElementById('customTp');
+        var entry = fixedNumberValue('entry', NaN);
+        var slPoints = fixedNumberValue('fixedSlPoints', NaN);
+        var tpPoints = fixedNumberValue('fixedTpPoints', NaN);
+
+        if (isNaN(entry)) {
+            calculate();
+            return;
+        }
+
+        var precision = Math.max(2, fixedPointPrecision(entryEl.value));
+        if (slPoints > 0) {
+            slEl.value = (entry - (slPoints * tradeDir)).toFixed(precision);
+        }
+        if (tpPoints > 0) {
+            var fixedTp = (entry + (tpPoints * tradeDir)).toFixed(precision);
+            customTpTopEl.value = fixedTp;
+            if (customTpEl) customTpEl.value = fixedTp;
+        }
+        handleCustomTPInput();
         calculate();
     }
 

@@ -277,6 +277,18 @@
             </div>
         </div>
 
+        <!-- FIXED POINTS -->
+        <div class="form-row">
+            <div class="form-col">
+                <label>Fix SL Points:</label>
+                <div class="win-inset"><input type="number" id="fixedSlPoints" placeholder="0.00" step="any" oninput="syncFixedPoints()"></div>
+            </div>
+            <div class="form-col">
+                <label>Fix TP Points:</label>
+                <div class="win-inset"><input type="number" id="fixedTpPoints" placeholder="0.00" step="any" oninput="syncFixedPoints()"></div>
+            </div>
+        </div>
+
         <div class="form-row">
             <div class="form-col">
                 <label id="lbl-balance">Balance ($):</label>
@@ -313,18 +325,6 @@
             <div class="form-col">
                 <label>Stop Loss:</label>
                 <div class="win-inset"><input type="number" id="sl" placeholder="Auto-Liq" step="any" oninput="handleSLInput()"></div>
-            </div>
-        </div>
-
-        <!-- FIXED POINTS -->
-        <div class="form-row">
-            <div class="form-col">
-                <label>Fix SL Points:</label>
-                <div class="win-inset"><input type="number" id="fixedSlPoints" placeholder="0.00" step="any" oninput="syncFixedPoints()"></div>
-            </div>
-            <div class="form-col">
-                <label>Fix TP Points:</label>
-                <div class="win-inset"><input type="number" id="fixedTpPoints" placeholder="0.00" step="any" oninput="syncFixedPoints()"></div>
             </div>
         </div>
 

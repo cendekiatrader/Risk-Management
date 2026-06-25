@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prop Firm Consistency Analyzer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom scrollbar for better look */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        /* Smooth transitions */
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex items-center justify-center p-4">
+
+    <div class="max-w-xl w-full bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
+        <!-- Header -->
+        <div class="bg-blue-600 p-6 text-white text-center">
+            <h1 class="text-2xl font-bold flex justify-center items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+                Consistency Analyzer
+            </h1>
+            <p class="text-blue-100 text-sm mt-1">Cek pelanggaran aturan konsistensi profit Prop Firm</p>
+        </div>
+
+        <!-- Form Area -->
+        <div class="p-6 space-y-5">
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">1. Upload Laporan MT4/MT5 (.html)</label>
+                <div class="relative">
+                    <input type="file" id="reportFile" accept=".html" class="block w-full text-sm text-slate-500
+                        file:mr-4 file:py-2.5 file:px-4
+                        file:rounded-lg file:border-0
+                        file:text-sm file:font-semibold
+                        file:bg-blue-50 file:text-blue-700
+                        hover:file:bg-blue-100 border border-slate-200 rounded-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                </div>
+                <p class="text-xs text-slate-400 mt-1">Hanya mendukung format HTML yang disimpan dari terminal MT4/MT5.</p>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">2. Batas Consistency Rule (%)</label>
+                <div class="relative">
+                    <input type="number" id="rulePercent" value="15" min="1" max="100" 
+                        class="block w-full pl-4 pr-10 py-2.5 border border-slate-200 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-slate-700" placeholder="15">
+                    <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                        <span class="text-slate-400 font-medium">%</span>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="analyzeReport()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                Analisa Laporan Sekarang
+            </button>
+        </div>
+
+        <!-- Result Area (Hidden by default) -->
+        <div id="resultBox" class="hidden border-t border-slate-100 bg-slate-50 p-6 fade-in">
+            
+            <div id="statusAlert" class="rounded-lg p-4 mb-6 flex items-start gap-3">
+                <div id="statusIcon" class="mt-0.5"></div>
+                <div>
+                    <h3 id="statusTitle" class="font-bold text-lg">Status</h3>
+                    <p id="statusDesc" class="text-sm mt-1"></p>
+                </div>
+            </div>
+
+            <!-- Account Info Box -->
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-4 mb-6 grid grid-cols-2 gap-4">
+                <div>
+                    <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Nama</p>
+                    <p id="txtNama" class="text-sm font-bold text-slate-800 mt-1 truncate">-</p>
+                </div>
+                <div>
+                    <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Akun</p>
+                    <p id="txtAkun" class="text-sm font-bold text-slate-800 mt-1 truncate">-</p>
+                </div>
+                <div>
+                    <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Perusahaan</p>
+                    <p id="txtPerusahaan" class="text-sm font-bold text-slate-800 mt-1 truncate">-</p>
+                </div>
+                <div>
+                    <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Tanggal</p>
+                    <p id="txtTanggal" class="text-sm font-bold text-slate-800 mt-1 truncate">-</p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden mb-6">
+                <div class="grid grid-cols-2 divide-x divide-slate-100 border-b border-slate-100">
+                    <div class="p-4">
+                        <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Total Net Profit</p>
+                        <p id="txtNetProfit" class="text-xl font-bold text-slate-800 mt-1">$0.00</p>
+                    </div>
+                    <div class="p-4">
+                        <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Trade Terbesar</p>
+                        <p id="txtMaxProfit" class="text-xl font-bold text-slate-800 mt-1">$0.00</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 divide-x divide-slate-100">
+                    <div class="p-4 bg-slate-50/50">
+                        <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Batas Diizinkan</p>
+                        <p id="txtAllowedProfit" class="text-lg font-semibold text-slate-700 mt-1">$0.00</p>
+                    </div>
+                    <div class="p-4 bg-slate-50/50">
+                        <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Status Profit</p>
+                        <p id="txtCurrentPercent" class="text-lg font-bold mt-1">0%</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Target Action Box -->
+            <div id="targetBox" class="hidden bg-blue-50 border border-blue-200 rounded-xl p-5 relative overflow-hidden">
+                <div class="absolute -right-4 -top-4 opacity-10">
+                    <svg class="w-24 h-24 text-blue-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clip-rule="evenodd"></path></svg>
+                </div>
+                <h4 class="font-bold text-blue-900 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                    Target Recovery Lolos Evaluasi
+                </h4>
+                <p class="text-blue-800 text-sm mt-2">Untuk menyelamatkan trade profit terbesar Anda dan memenuhi aturan konsistensi, Anda harus mencapai Total Net Profit sebesar:</p>
+                <div class="mt-3 bg-white py-2 px-4 rounded-lg inline-block font-black text-2xl text-blue-700 border border-blue-100 shadow-sm">
+                    <span id="txtTargetNetProfit">$0.00</span>
+                </div>
+                <p class="text-xs text-blue-600 mt-3 font-medium bg-blue-100/50 p-2 rounded">
+                    ⚠️ PENTING: Saat mengejar target ini, dilarang keras mencetak profit lebih dari <span id="txtMaxLock" class="font-bold"></span> dalam satu transaksi.
+                </p>
+            </div>
+            
+            <!-- Trading Journal Area -->
+            <div id="journalBox" class="hidden mt-8 border border-slate-200 rounded-xl overflow-hidden bg-white shadow-sm">
+                <div class="bg-slate-50 px-5 py-4 border-b border-slate-200 flex justify-between items-center">
+                    <h3 class="font-bold text-slate-800 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        Trading Journal
+                    </h3>
+                    <span class="text-xs font-semibold text-slate-500 bg-slate-200 px-2 py-1 rounded-full" id="txtTotalTrades">0 Trades</span>
+                </div>
+                <div class="overflow-x-auto max-h-[400px] overflow-y-auto">
+                    <table class="min-w-full text-left text-sm whitespace-nowrap">
+                        <thead class="bg-slate-50 sticky top-0 border-b border-slate-200 shadow-sm z-10">
+                            <tr>
+                                <th class="px-4 py-3 font-semibold text-slate-600">Waktu Buka</th>
+                                <th class="px-4 py-3 font-semibold text-slate-600">Simbol</th>
+                                <th class="px-4 py-3 font-semibold text-slate-600">Tipe</th>
+                                <th class="px-4 py-3 font-semibold text-slate-600">Volume</th>
+                                <th class="px-4 py-3 font-semibold text-slate-600">Harga Buka</th>
+                                <th class="px-4 py-3 font-semibold text-slate-600">Waktu Tutup</th>
+                                <th class="px-4 py-3 font-semibold text-slate-600">Harga Tutup</th>
+                                <th class="px-4 py-3 font-semibold text-slate-600 text-right">Profit (USD)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="journalTableBody" class="divide-y divide-slate-100">
+                            <!-- Rows will be injected here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Error Toast -->
+    <div id="toast" class="fixed bottom-4 right-4 bg-slate-800 text-white px-6 py-3 rounded-lg shadow-xl transform translate-y-20 opacity-0 transition-all duration-300">
+        <span id="toastMsg">Error message</span>
+    </div>
+
+    <script>
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').innerText = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        function analyzeReport() {
+            const fileInput = document.getElementById('reportFile');
+            const ruleInput = document.getElementById('rulePercent');
+            const rulePercent = parseFloat(ruleInput.value);
+
+            if (fileInput.files.length === 0) {
+                showToast('Harap upload file laporan (.html) terlebih dahulu!');
+                return;
+            }
+            if (isNaN(rulePercent) || rulePercent <= 0) {
+                showToast('Persentase aturan tidak valid!');
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                const htmlContent = e.target.result;
+                processHTML(htmlContent, rulePercent);
+            };
+
+            reader.onerror = function() {
+                showToast('Gagal membaca file!');
+            };
+
+            reader.readAsText(file);
+        }
+
+        function processHTML(htmlString, rulePercent) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(htmlString, 'text/html');
+            const tds = doc.querySelectorAll('td, th'); // Kadang label ada di th
+
+            let netProfit = null;
+            let maxProfit = null;
+            let accName = '-', accNumber = '-', accCompany = '-', accDate = '-';
+            let positions = [];
+            let currentSection = '';
+
+            // Ekstraksi Tabel Posisi untuk Jurnal
+            const trs = doc.querySelectorAll('tr');
+            for (let i = 0; i < trs.length; i++) {
+                const tr = trs[i];
+                const ths = tr.querySelectorAll('th');
+                
+                // Deteksi bagian (Section) untuk mengambil area 'Posisi' saja
+                if (ths.length > 0) {
+                    const headerText = tr.textContent.trim();
+                    if (headerText === 'Posisi' || headerText === 'Positions') currentSection = 'posisi';
+                    else if (headerText === 'Order' || headerText === 'Orders') currentSection = 'order';
+                    else if (headerText === 'Transaksi' || headerText === 'Deals') currentSection = 'transaksi';
+                    continue;
+                }
+
+                // Ekstrak baris posisi (mengabaikan baris header kolom warna #E5F0FC)
+                if (currentSection === 'posisi') {
+                    const bgColor = tr.getAttribute('bgcolor');
+                    if (bgColor && bgColor !== '#E5F0FC') {
+                        // Ambil <td> yang tidak disembunyikan (not .hidden)
+                        const visibleTds = tr.querySelectorAll('td:not(.hidden)');
+                        if (visibleTds.length >= 10) {
+                            positions.push({
+                                openTime: visibleTds[0]?.textContent.trim(),
+                                ticket: visibleTds[1]?.textContent.trim(),
+                                symbol: visibleTds[2]?.textContent.trim(),
+                                type: visibleTds[3]?.textContent.trim(),
+                                volume: visibleTds[4]?.textContent.trim(),
+                                openPrice: visibleTds[5]?.textContent.trim(),
+                                closeTime: visibleTds[8]?.textContent.trim(),
+                                closePrice: visibleTds[9]?.textContent.trim(),
+                                profit: visibleTds[visibleTds.length - 1]?.textContent.trim()
+                            });
+                        }
+                    }
+                }
+            }
+
+            // Logika ekstraksi data
+            for (let i = 0; i < tds.length; i++) {
+                const text = tds[i].textContent.trim();
+                
+                // Info Akun
+                if (text === 'Nama:' || text === 'Name:') accName = getNextStringValue(tds, i) || '-';
+                if (text === 'Akun:' || text === 'Account:') accNumber = getNextStringValue(tds, i) || '-';
+                if (text === 'Perusahaan:' || text === 'Company:') accCompany = getNextStringValue(tds, i) || '-';
+                if (text === 'Tanggal:' || text === 'Date:') accDate = getNextStringValue(tds, i) || '-';
+
+                // Cari Total Keuntungan Bersih (Total Net Profit)
+                if (text === 'Total Keuntungan Bersih:' || text === 'Total Net Profit:' || text === 'Total Keuntungan Bersih') {
+                    // Coba cari angka di td/b selanjutnya yang relevan
+                    let valText = getNextNumericValue(tds, i);
+                    if(valText !== null) netProfit = valText;
+                }
+                
+                // Cari Profit Terbesar (Largest profit trade)
+                if (text === 'Terbesar Keuntungan Dagang:' || text === 'Largest profit trade:' || text === 'Terbesar Keuntungan Dagang') {
+                    let valText = getNextNumericValue(tds, i);
+                    if(valText !== null) maxProfit = valText;
+                }
+            }
+
+            if (netProfit === null || maxProfit === null) {
+                showToast('Format laporan tidak dikenali. Pastikan file valid.');
+                return;
+            }
+
+            renderResult({ netProfit, maxProfit, rulePercent, accName, accNumber, accCompany, accDate, positions });
+        }
+
+        // Fungsi bantuan untuk mencari string terdekat setelah label
+        function getNextStringValue(nodeList, startIndex) {
+            for (let j = startIndex + 1; j <= startIndex + 5; j++) {
+                if (j >= nodeList.length) break;
+                // Ambil text utuh termasuk spasi non-breaking jika ada
+                let textVal = nodeList[j].textContent.trim();
+                if (textVal && textVal !== '') {
+                    // Coba bersihkan nbsp yg mengganggu
+                    return textVal.replace(/\u00A0/g, ' ');
+                }
+            }
+            return null;
+        }
+
+        // Fungsi bantuan untuk mencari angka terdekat setelah label
+        function getNextNumericValue(nodeList, startIndex) {
+            for (let j = startIndex + 1; j <= startIndex + 5; j++) {
+                if (j >= nodeList.length) break;
+                // Bersihkan spasi biasa dan spasi non-breaking (&nbsp;)
+                let cleanStr = nodeList[j].textContent.replace(/[\s\u00A0]/g, '');
+                if (cleanStr && !isNaN(cleanStr) && cleanStr !== '') {
+                    return parseFloat(cleanStr);
+                }
+            }
+            return null;
+        }
+
+        function renderResult(data) {
+            const { netProfit, maxProfit, rulePercent, accName, accNumber, accCompany, accDate, positions } = data;
+
+            const resultBox = document.getElementById('resultBox');
+            const statusAlert = document.getElementById('statusAlert');
+            const statusIcon = document.getElementById('statusIcon');
+            const statusTitle = document.getElementById('statusTitle');
+            const statusDesc = document.getElementById('statusDesc');
+            const targetBox = document.getElementById('targetBox');
+            
+            // Kalkulasi
+            const allowedProfit = netProfit > 0 ? netProfit * (rulePercent / 100) : 0;
+            const currentPercent = netProfit > 0 ? (maxProfit / netProfit) * 100 : (maxProfit > 0 ? 100 : 0);
+            const isViolated = currentPercent > rulePercent;
+            
+            // Target net profit jika melanggar
+            const targetNetProfit = maxProfit / (rulePercent / 100);
+
+            // Format mata uang
+            const formatUSD = (num) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(num);
+
+            // Update UI - Info Akun
+            document.getElementById('txtNama').innerText = accName;
+            document.getElementById('txtNama').title = accName;
+            document.getElementById('txtAkun').innerText = accNumber;
+            document.getElementById('txtAkun').title = accNumber;
+            document.getElementById('txtPerusahaan').innerText = accCompany;
+            document.getElementById('txtPerusahaan').title = accCompany;
+            document.getElementById('txtTanggal').innerText = accDate;
+            document.getElementById('txtTanggal').title = accDate;
+
+            // Update UI - Data Cards
+            document.getElementById('txtNetProfit').innerText = formatUSD(netProfit);
+            document.getElementById('txtMaxProfit').innerText = formatUSD(maxProfit);
+            document.getElementById('txtAllowedProfit').innerText = formatUSD(allowedProfit);
+            
+            const txtCurrentPercent = document.getElementById('txtCurrentPercent');
+            txtCurrentPercent.innerText = currentPercent.toFixed(2) + '%';
+
+            // Reset classes
+            statusAlert.className = 'rounded-lg p-4 mb-6 flex items-start gap-3';
+            
+            if (netProfit <= 0) {
+                // Kasus akun minus
+                statusAlert.classList.add('bg-slate-200', 'text-slate-800');
+                statusIcon.innerHTML = `<svg class="w-6 h-6 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
+                statusTitle.innerText = 'Akun Sedang Minus';
+                statusDesc.innerText = 'Total net profit Anda di bawah nol. Fokuslah pada recovery saldo awal terlebih dahulu.';
+                txtCurrentPercent.className = 'text-lg font-bold mt-1 text-slate-500';
+                targetBox.classList.add('hidden');
+            }
+            else if (isViolated) {
+                // Melanggar
+                statusAlert.classList.add('bg-red-50', 'text-red-900', 'border', 'border-red-200');
+                statusIcon.innerHTML = `<svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>`;
+                statusTitle.innerText = 'Melanggar Consistency Rule!';
+                statusDesc.innerText = `Profit terbesar Anda menyumbang ${currentPercent.toFixed(1)}% dari total profit. Ini melebihi batas yang diizinkan (${rulePercent}%).`;
+                txtCurrentPercent.className = 'text-lg font-bold mt-1 text-red-600';
+                
+                // Tampilkan target
+                document.getElementById('txtTargetNetProfit').innerText = formatUSD(targetNetProfit);
+                document.getElementById('txtMaxLock').innerText = formatUSD(maxProfit);
+                targetBox.classList.remove('hidden');
+            } else {
+                // Aman
+                statusAlert.classList.add('bg-emerald-50', 'text-emerald-900', 'border', 'border-emerald-200');
+                statusIcon.innerHTML = `<svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
+                statusTitle.innerText = 'Aman & Konsisten';
+                statusDesc.innerText = 'Akun Anda aman. Distribusi profit Anda baik dan tidak ada satu trade pun yang melebihi batas maksimal.';
+                txtCurrentPercent.className = 'text-lg font-bold mt-1 text-emerald-600';
+                targetBox.classList.add('hidden');
+            }
+
+            // Render Trading Journal
+            const journalBox = document.getElementById('journalBox');
+            const journalTbody = document.getElementById('journalTableBody');
+            
+            document.getElementById('txtTotalTrades').innerText = `${positions.length} Trades`;
+            journalTbody.innerHTML = ''; // bersihkan tabel lama
+
+            if (positions.length > 0) {
+                positions.forEach(pos => {
+                    // Buat angka profit agar dapat dievaluasi +/- nya
+                    const profitVal = parseFloat(pos.profit.replace(/ /g, ''));
+                    const isProfit = profitVal >= 0;
+                    
+                    const profitClass = isProfit ? 'text-emerald-600 font-bold' : 'text-red-500 font-bold';
+                    const typeClass = pos.type.toLowerCase() === 'buy' ? 'text-blue-600 bg-blue-50' : 'text-rose-600 bg-rose-50';
+                    
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-slate-50 transition-colors';
+                    tr.innerHTML = `
+                        <td class="px-4 py-3 text-slate-500">${pos.openTime}</td>
+                        <td class="px-4 py-3 font-semibold text-slate-700">${pos.symbol}</td>
+                        <td class="px-4 py-3">
+                            <span class="px-2 py-1 rounded text-xs font-semibold ${typeClass}">${pos.type.toUpperCase()}</span>
+                        </td>
+                        <td class="px-4 py-3 text-slate-600">${pos.volume}</td>
+                        <td class="px-4 py-3 text-slate-500">${pos.openPrice}</td>
+                        <td class="px-4 py-3 text-slate-500">${pos.closeTime}</td>
+                        <td class="px-4 py-3 text-slate-500">${pos.closePrice}</td>
+                        <td class="px-4 py-3 text-right ${profitClass}">${pos.profit}</td>
+                    `;
+                    journalTbody.appendChild(tr);
+                });
+                journalBox.classList.remove('hidden');
+            } else {
+                journalBox.classList.add('hidden');
+            }
+
+            // Tampilkan dengan animasi
+            resultBox.classList.remove('hidden');
+            
+            // Scroll sedikit ke bawah untuk menampilkan hasil
+            setTimeout(() => {
+                resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        }
+    </script>
+</body>
+</html>

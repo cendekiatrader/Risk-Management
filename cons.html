@@ -76,6 +76,26 @@
                 </div>
             </div>
 
+            <!-- Account Info Box -->
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-4 mb-6 grid grid-cols-2 gap-4">
+                <div>
+                    <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Nama</p>
+                    <p id="txtNama" class="text-sm font-bold text-slate-800 mt-1 truncate">-</p>
+                </div>
+                <div>
+                    <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Akun</p>
+                    <p id="txtAkun" class="text-sm font-bold text-slate-800 mt-1 truncate">-</p>
+                </div>
+                <div>
+                    <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Perusahaan</p>
+                    <p id="txtPerusahaan" class="text-sm font-bold text-slate-800 mt-1 truncate">-</p>
+                </div>
+                <div>
+                    <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Tanggal</p>
+                    <p id="txtTanggal" class="text-sm font-bold text-slate-800 mt-1 truncate">-</p>
+                </div>
+            </div>
+
             <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden mb-6">
                 <div class="grid grid-cols-2 divide-x divide-slate-100 border-b border-slate-100">
                     <div class="p-4">
@@ -171,11 +191,18 @@
 
             let netProfit = null;
             let maxProfit = null;
+            let accName = '-', accNumber = '-', accCompany = '-', accDate = '-';
 
             // Logika ekstraksi data
             for (let i = 0; i < tds.length; i++) {
                 const text = tds[i].textContent.trim();
                 
+                // Info Akun
+                if (text === 'Nama:' || text === 'Name:') accName = getNextStringValue(tds, i) || '-';
+                if (text === 'Akun:' || text === 'Account:') accNumber = getNextStringValue(tds, i) || '-';
+                if (text === 'Perusahaan:' || text === 'Company:') accCompany = getNextStringValue(tds, i) || '-';
+                if (text === 'Tanggal:' || text === 'Date:') accDate = getNextStringValue(tds, i) || '-';
+
                 // Cari Total Keuntungan Bersih (Total Net Profit)
                 if (text === 'Total Keuntungan Bersih:' || text === 'Total Net Profit:' || text === 'Total Keuntungan Bersih') {
                     // Coba cari angka di td/b selanjutnya yang relevan
@@ -195,7 +222,21 @@
                 return;
             }
 
-            renderResult(netProfit, maxProfit, rulePercent);
+            renderResult({ netProfit, maxProfit, rulePercent, accName, accNumber, accCompany, accDate });
+        }
+
+        // Fungsi bantuan untuk mencari string terdekat setelah label
+        function getNextStringValue(nodeList, startIndex) {
+            for (let j = startIndex + 1; j <= startIndex + 5; j++) {
+                if (j >= nodeList.length) break;
+                // Ambil text utuh termasuk spasi non-breaking jika ada
+                let textVal = nodeList[j].textContent.trim();
+                if (textVal && textVal !== '') {
+                    // Coba bersihkan nbsp yg mengganggu
+                    return textVal.replace(/\u00A0/g, ' ');
+                }
+            }
+            return null;
         }
 
         // Fungsi bantuan untuk mencari angka terdekat setelah label
@@ -211,7 +252,9 @@
             return null;
         }
 
-        function renderResult(netProfit, maxProfit, rulePercent) {
+        function renderResult(data) {
+            const { netProfit, maxProfit, rulePercent, accName, accNumber, accCompany, accDate } = data;
+
             const resultBox = document.getElementById('resultBox');
             const statusAlert = document.getElementById('statusAlert');
             const statusIcon = document.getElementById('statusIcon');
@@ -229,6 +272,16 @@
 
             // Format mata uang
             const formatUSD = (num) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(num);
+
+            // Update UI - Info Akun
+            document.getElementById('txtNama').innerText = accName;
+            document.getElementById('txtNama').title = accName;
+            document.getElementById('txtAkun').innerText = accNumber;
+            document.getElementById('txtAkun').title = accNumber;
+            document.getElementById('txtPerusahaan').innerText = accCompany;
+            document.getElementById('txtPerusahaan').title = accCompany;
+            document.getElementById('txtTanggal').innerText = accDate;
+            document.getElementById('txtTanggal').title = accDate;
 
             // Update UI - Data Cards
             document.getElementById('txtNetProfit').innerText = formatUSD(netProfit);

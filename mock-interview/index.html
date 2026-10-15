@@ -1,0 +1,1265 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mock Interview — Digital Marketing Executive @ Y Ventures Enterprise</title>
+<style>
+:root{
+  --bg:#0f1115; --panel:#171a21; --panel2:#1d2129; --panel3:#232833;
+  --line:#2a2f3a; --text:#e6e9ef; --muted:#98a1b0; --accent:#4f8cff;
+  --good:#3ecf8e; --warn:#f2c14e; --bad:#ff6b6b; --radius:12px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--bg); color:var(--text);
+  font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:var(--accent)}
+h1,h2,h3,h4{margin:0 0 .4em; line-height:1.3}
+h3{font-size:15px; letter-spacing:.02em; text-transform:uppercase; color:var(--muted); font-weight:600}
+p{margin:0 0 .8em}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+.tiny{font-size:12px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+
+header.top{
+  position:sticky; top:0; z-index:20; background:rgba(15,17,21,.92);
+  backdrop-filter:blur(8px); border-bottom:1px solid var(--line);
+}
+.top-inner{display:flex;gap:16px;align-items:center;flex-wrap:wrap;padding:12px 0}
+.brand{font-weight:700;font-size:16px;letter-spacing:-.01em}
+.brand span{color:var(--accent)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{
+  display:inline-block; font-size:11.5px; padding:3px 9px; border-radius:999px;
+  background:var(--panel2); border:1px solid var(--line); color:var(--muted); white-space:nowrap;
+}
+.chip.hot{color:var(--accent);border-color:rgba(79,140,255,.4);background:rgba(79,140,255,.1)}
+.chip.must{color:var(--warn);border-color:rgba(242,193,78,.35);background:rgba(242,193,78,.08)}
+.grow{flex:1}
+.lang{display:flex;align-items:center;gap:6px}
+.lang label{font-size:12px;color:var(--muted)}
+select,input[type=text],textarea{
+  background:var(--panel2); color:var(--text); border:1px solid var(--line);
+  border-radius:8px; padding:8px 10px; font:inherit; font-size:13.5px; width:100%;
+}
+select{width:auto;padding:6px 8px}
+textarea{resize:vertical;line-height:1.6}
+textarea:focus,select:focus{outline:2px solid rgba(79,140,255,.35);outline-offset:0;border-color:var(--accent)}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin:18px 0 22px;flex-wrap:wrap}
+.tabs button{
+  background:none;border:none;color:var(--muted);font:inherit;font-weight:600;font-size:14px;
+  padding:10px 14px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;
+}
+.tabs button:hover{color:var(--text)}
+.tabs button.on{color:var(--accent);border-bottom-color:var(--accent)}
+.card{
+  background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+  padding:18px 20px; margin-bottom:16px;
+}
+.card.tight{padding:14px 16px}
+.grid2{display:grid;grid-template-columns:1.05fr .95fr;gap:16px;align-items:start}
+@media(max-width:960px){.grid2{grid-template-columns:1fr}}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.row.end{justify-content:flex-end}
+.spacer{height:8px}
+button.btn{
+  background:var(--panel2); color:var(--text); border:1px solid var(--line);
+  border-radius:8px; padding:8px 14px; font:inherit; font-size:13.5px; font-weight:600; cursor:pointer;
+}
+button.btn:hover{border-color:#3d4657;background:var(--panel3)}
+button.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+button.btn.primary:hover{background:#3f7ef0}
+button.btn.ghost{background:none}
+button.btn.danger{color:var(--bad)}
+button.btn:disabled{opacity:.45;cursor:not-allowed}
+.progress{display:flex;gap:8px;align-items:center;margin-bottom:14px;flex-wrap:wrap}
+.dot{
+  width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:var(--panel2);
+  color:var(--muted);font-size:12.5px;font-weight:700;cursor:pointer;display:grid;place-items:center;
+}
+.dot.on{border-color:var(--accent);color:var(--accent);background:rgba(79,140,255,.12)}
+.dot.done{border-color:rgba(62,207,142,.5);color:var(--good)}
+.dot.skip{border-color:rgba(255,107,107,.4);color:var(--bad)}
+.q-card{border-left:3px solid var(--accent)}
+.q-head{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.qnum{margin-left:auto;font-size:12px;color:var(--muted);font-weight:600}
+.lead{font-size:17px;line-height:1.55;margin:0}
+.probe{border-left:2px solid var(--line);padding-left:12px;margin-bottom:14px}
+.probe-q{font-size:14px;margin-bottom:6px}
+.probe-q b{color:var(--accent);font-weight:700}
+.timer{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.clock{font-variant-numeric:tabular-nums;font-size:26px;font-weight:700;letter-spacing:.02em;min-width:88px}
+.clock.over{color:var(--bad)}
+.clock.good{color:var(--good)}
+.counts{display:flex;gap:12px;flex-wrap:wrap;margin:8px 0 12px;font-size:12.5px;color:var(--muted)}
+.counts .ok{color:var(--good)} .counts .warn{color:var(--warn)} .counts .bad{color:var(--bad)}
+.hint{margin-bottom:8px}
+.hint button.rung{
+  width:100%;text-align:left;background:var(--panel2);border:1px dashed var(--line);color:var(--muted);
+  border-radius:8px;padding:9px 12px;font:inherit;font-size:13px;cursor:pointer;
+}
+.hint button.rung:hover{border-color:var(--accent);color:var(--text)}
+.hint .rung-body{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:13.5px}
+details.card summary{cursor:pointer;font-weight:600;font-size:14px;list-style:none}
+details.card summary::-webkit-details-marker{display:none}
+details.card summary::before{content:"▸ ";color:var(--muted)}
+details.card[open] summary::before{content:"▾ "}
+details.card summary + *{margin-top:14px}
+.anchor{display:flex;gap:10px;padding:8px 0;border-top:1px solid var(--line);font-size:13.5px}
+.anchor:first-of-type{border-top:none}
+.lvl{
+  flex:0 0 26px;height:26px;border-radius:6px;display:grid;place-items:center;font-weight:700;font-size:12px;
+  background:var(--panel2);border:1px solid var(--line);color:var(--muted);
+}
+.lvl.n4{color:var(--good);border-color:rgba(62,207,142,.4)}
+.lvl.n3{color:var(--accent);border-color:rgba(79,140,255,.4)}
+.dim{padding:12px 0;border-top:1px solid var(--line)}
+.dim:first-of-type{border-top:none}
+.dim-head{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.dim-name{font-weight:600;font-size:14px}
+.scores{display:flex;gap:4px}
+.scores button{
+  width:34px;height:30px;border-radius:7px;border:1px solid var(--line);background:var(--panel2);
+  color:var(--muted);font:inherit;font-size:13px;font-weight:700;cursor:pointer;
+}
+.scores button:hover{border-color:#3d4657;color:var(--text)}
+.scores button.on{background:rgba(79,140,255,.16);border-color:var(--accent);color:var(--accent)}
+.scores button.on.n4{background:rgba(62,207,142,.14);border-color:var(--good);color:var(--good)}
+.dim-note{font-size:13px;color:var(--muted);margin-top:8px}
+.dim-note b{color:var(--text);font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;font-weight:600}
+tr:last-child td{border-bottom:none}
+.vote{
+  display:flex;gap:14px;align-items:center;flex-wrap:wrap;
+  background:var(--panel2);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;
+}
+.vote .big{font-size:22px;font-weight:800;letter-spacing:-.01em}
+.vote.yes .big{color:var(--good)} .vote.no .big{color:var(--bad)}
+.vote.insuff .big{color:var(--warn)}
+.banner{
+  background:rgba(242,193,78,.08);border:1px solid rgba(242,193,78,.35);color:#f6d68b;
+  border-radius:var(--radius);padding:12px 16px;margin-bottom:16px;font-size:13.5px;
+}
+.toast{
+  position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:var(--panel3);
+  border:1px solid var(--line);border-radius:10px;padding:10px 18px;font-size:13.5px;z-index:50;
+  box-shadow:0 8px 30px rgba(0,0,0,.5);
+}
+ul.clean{margin:.4em 0 .8em;padding-left:20px}
+ul.clean li{margin-bottom:.35em}
+.kv{display:grid;grid-template-columns:150px 1fr;gap:4px 14px;font-size:13.5px}
+.kv dt{color:var(--muted)}
+.kv dd{margin:0}
+footer{color:var(--muted);font-size:12.5px;padding:26px 0 50px;text-align:center}
+@media print{
+  header.top,.tabs,.no-print{display:none!important}
+  body{background:#fff;color:#000}
+  .card{border-color:#ccc;background:#fff}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap top-inner">
+    <div class="brand">Mock<span>Interview</span></div>
+    <div class="chips" id="sessionChips"></div>
+    <div class="grow"></div>
+    <div class="lang">
+      <label for="langSel" id="langLabel"></label>
+      <select id="langSel">
+        <option value="hybrid">Hybrid</option>
+        <option value="en">English</option>
+        <option value="id">Indonesia</option>
+      </select>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="tabs" id="tabs"></div>
+  <div id="storageWarn"></div>
+  <main>
+    <div id="interview"></div>
+    <div id="report" hidden></div>
+    <div id="prep" hidden></div>
+  </main>
+  <footer id="footNote"></footer>
+</div>
+
+<script>
+"use strict";
+
+const COMP = {
+  tool:{must:true, label:{en:"Hands-on tools & learning fast", id:"Hands-on tool & belajar cepat"}},
+  vendor:{must:true, label:{en:"Judging vendor / technical claims", id:"Menilai klaim vendor & teknis"}},
+  ownership:{must:true, label:{en:"Ownership with minimal oversight", id:"Ownership & delivery"}},
+  comms:{must:true, label:{en:"Communication across business & technical stakeholders", id:"Komunikasi lintas stakeholder"}},
+  growth:{must:false, label:{en:"Motivation & growth into business development", id:"Motivasi & arah ke business development"}}
+};
+const MUST = Object.keys(COMP).filter(k => COMP[k].must);
+
+const DIMS = [
+  {k:"structure", name:{en:"Structure", id:"Struktur"}, lv:[
+    {en:"No arc, rambling", id:"Tanpa alur, melebar"},
+    {en:"Arc present, but the setup dominates", id:"Ada alur, tapi konteksnya terlalu panjang"},
+    {en:"Clear context → actions → outcome", id:"Jelas: konteks → aksi → hasil"},
+    {en:"Clear arc, point landed early", id:"Alur rapi, intinya disampaikan lebih dulu"}]},
+  {k:"specificity", name:{en:"Specificity", id:"Spesifisitas"}, lv:[
+    {en:"Hypothetical or generic", id:"Hipotetis atau generik"},
+    {en:"One real instance, vague actions", id:"Ada satu contoh nyata, tapi aksinya kabur"},
+    {en:"Concrete actions, people, timeline", id:"Aksi, orang, dan timeline yang konkret"},
+    {en:"Checkable detail and the reason behind each choice", id:"Detail yang bisa dicek + alasan di balik tiap pilihan"}]},
+  {k:"ownership", name:{en:"Ownership", id:"Ownership"}, lv:[
+    {en:"Only \"we\"; your role stays unclear", id:"Hanya \"kami\"; peranmu tidak jelas"},
+    {en:"Your role only appears after a probe", id:"Peranmu baru muncul setelah ditanya"},
+    {en:"Clear \"I\" actions inside a team context", id:"\"Saya\" yang jelas di dalam konteks tim"},
+    {en:"Own decisions and reasons; the team credited once", id:"Keputusanmu dan alasannya jelas; tim tetap disebut sekali"}]},
+  {k:"result", name:{en:"Result & reflection", id:"Hasil & refleksi"}, lv:[
+    {en:"No outcome at all", id:"Tidak ada hasil sama sekali"},
+    {en:"Qualitative only, or a number with no basis", id:"Kualitatif saja, atau angka tanpa dasar"},
+    {en:"Outcome with a measure or range you can source", id:"Hasil dengan angka atau rentang yang bisa kamu jelaskan sumbernya"},
+    {en:"As level 3, plus a lesson you have used since", id:"Seperti level 3, plus pelajaran yang sudah kamu pakai lagi"}]},
+  {k:"relevance", name:{en:"Relevance", id:"Relevansi"}, lv:[
+    {en:"Misses the question", id:"Tidak menjawab pertanyaannya"},
+    {en:"Answers it, but the fit to this JD is weak", id:"Menjawab, tapi kaitannya ke JD ini lemah"},
+    {en:"On the question and on a JD competency", id:"Sesuai pertanyaan dan kompetensi di JD"},
+    {en:"On target and tied explicitly to this role", id:"Tepat sasaran dan dikaitkan langsung ke peran ini"}]},
+  {k:"concision", name:{en:"Concision (typed)", id:"Keringkasan (tertulis)"}, lv:[
+    {en:"Under 40 or over 450 words", id:"Di bawah 40 atau di atas 450 kata"},
+    {en:"40–90 or 350–450 words", id:"40–90 atau 350–450 kata"},
+    {en:"90–350 words", id:"90–350 kata"},
+    {en:"150–300 words, mostly action", id:"150–300 kata, isinya mayoritas aksi"}]}
+];
+
+const VERDICTS = [
+  {v:1, en:"Not yet shown", id:"Belum terlihat"},
+  {v:2, en:"Partly shown", id:"Sebagian terlihat"},
+  {v:3, en:"Solid", id:"Solid"},
+  {v:4, en:"Strong", id:"Kuat"}
+];
+
+const QS = [
+  {
+    id:"q1", comp:["ownership"],
+    tag:{en:"Opener · resume deep-dive", id:"Pembuka · resume deep-dive"},
+    lead:{
+      en:"Let's start with work you're proud of. Pick one project on your CV, tell me what it was — and which part you actually owned.",
+      id:"Kita mulai dari pekerjaan yang kamu banggakan. Pilih satu proyek di CV kamu, ceritakan proyeknya — dan bagian mana yang benar-benar kamu pegang sendiri."
+    },
+    probes:[
+      {en:"Your CV says you orchestrated 300+ KOL collaborations. Day to day, what did \"orchestrated\" actually mean — what did you do?",
+       id:"CV kamu menyebut kamu mengorkestrasi 300+ kolaborasi KOL. Sehari-hari, \"mengorkestrasi\" itu artinya apa — apa yang kamu kerjakan?"},
+      {en:"How did you know it worked? A rough range is fine.",
+       id:"Dari mana kamu tahu itu berhasil? Perkiraan kasar pun tidak masalah."},
+      {en:"If you hadn't been there, what would have gone differently?",
+       id:"Kalau kamu tidak ada di posisi itu, apa yang akan berbeda?"}
+    ],
+    anchors:[
+      {en:"Team-level recount; no personal actions, no outcome.", id:"Cerita level tim; tidak ada aksi pribadi, tanpa hasil."},
+      {en:"Names the project and some tasks; your part only appears after I ask; outcome stays qualitative.", id:"Menyebut proyek dan sebagian tugas; peranmu baru jelas setelah ditanya; hasil masih kualitatif."},
+      {en:"Clear arc: context → your actions (brief, tracker, timeline) → outcome with a measure or an honest range.", id:"Alur jelas: konteks → aksimu (brief, tracker, timeline) → hasil dengan angka atau rentang yang jujur."},
+      {en:"As level 3, plus the reasoning behind your decisions and a lesson you have used since.", id:"Seperti level 3, plus alasan di balik keputusanmu dan pelajaran yang kamu pakai lagi setelahnya."}
+    ],
+    hints:[
+      {en:"This one is about ownership and delivery: how clear your part is, and what changed because of it.", id:"Ini soal ownership & delivery: seberapa jelas peranmu, dan apa yang berubah karenanya."},
+      {en:"Real candidates from your CV: the 300+ KOL collaborations at Bersama Zatta, or the 4 SME projects you mentored as a teaching assistant at Unpad.", id:"Kandidat nyata dari CV-mu: kolaborasi 300+ KOL di Bersama Zatta, atau 4 proyek UMKM yang kamu mentoring sebagai teaching assistant di Unpad."},
+      {en:"Two sentences of context, then what you did, then the number or the change that followed.", id:"Dua kalimat konteks, lalu apa yang kamu lakukan, lalu angka atau perubahan yang terjadi setelahnya."}
+    ],
+    target:[90,120], words:[150,300], short:{en:"Project walk-through", id:"Cerita proyek"}
+  },
+  {
+    id:"q2", comp:["tool"],
+    tag:{en:"Must-have · tool fluency", id:"Must-have · penguasaan tool"},
+    lead:{
+      en:"This role is hands-on with tools you probably haven't used — Apollo, LinkedIn prospecting, a CRM. Tell me about a time you had to get productive in an unfamiliar tool or platform fast, with nobody showing you how.",
+      id:"Peran ini hands-on dengan tool yang mungkin belum pernah kamu pakai — Apollo, LinkedIn prospecting, CRM. Ceritakan saat kamu harus cepat produktif di tool atau platform yang asing, tanpa ada yang mengajari."
+    },
+    probes:[
+      {en:"What did you actually do in the first couple of days with it?",
+       id:"Apa yang sebenarnya kamu lakukan di dua hari pertama dengan tool itu?"},
+      {en:"How did you know you were genuinely up to speed?",
+       id:"Dari mana kamu tahu kamu benar-benar sudah menguasainya?"},
+      {en:"If you'd had half the time, what would you have skipped?",
+       id:"Kalau waktunya hanya separuh, bagian mana yang akan kamu lewati?"}
+    ],
+    anchors:[
+      {en:"Says \"I learn fast\" with no instance, or says they would need training first.", id:"Bilang \"aku cepat belajar\" tanpa contoh, atau bilang perlu dilatih dulu."},
+      {en:"One real instance, vague actions (\"watched tutorials\"), no evidence it worked.", id:"Ada satu contoh nyata, tapi aksinya kabur (\"lihat tutorial\"), tanpa bukti berhasil."},
+      {en:"Names the tool, what they did (docs, a trial account, one real task), and how they knew it worked.", id:"Menyebut tool-nya, apa yang dilakukan (dokumentasi, akun trial, satu tugas nyata), dan cara tahu itu berhasil."},
+      {en:"As level 3, plus a repeatable method, and proof it stuck — reused later or taught to someone else.", id:"Seperti level 3, plus metode yang bisa diulang, dan bukti ilmunya bertahan — dipakai lagi atau diajarkan ke orang lain."}
+    ],
+    hints:[
+      {en:"This one is about learning fast: how you take over a new tool without being hand-held.", id:"Ini soal learning fast: kecepatanmu mengambil alih tool baru tanpa disuapi."},
+      {en:"Candidates from your CV: Jira, Google Analytics and Miro at Inkloom Creative, or the advanced Excel work behind the 300+ SKU benchmark at Paragon.", id:"Kandidat dari CV-mu: Jira, Google Analytics, dan Miro di Inkloom Creative, atau kerja Excel advanced di balik benchmark 300+ SKU di Paragon."},
+      {en:"Name the tool, your concrete steps, then the proof: one deliverable that happened because of it.", id:"Sebut tool-nya, langkah konkretmu, lalu buktinya: satu deliverable yang terjadi karena tool itu."}
+    ],
+    target:[90,120], words:[150,300], short:{en:"New tool, fast", id:"Tool baru, cepat"}
+  },
+  {
+    id:"q3", comp:["vendor","comms"],
+    tag:{en:"Must-have · vendor claims", id:"Must-have · klaim vendor"},
+    lead:{
+      en:"Part of this job is telling the team when a vendor's proposal or timeline doesn't hold up. Tell me about a time someone — a partner, an agency, a senior colleague — proposed something you thought was unrealistic. What did you do?",
+      id:"Bagian dari pekerjaan ini adalah memberi tahu tim ketika proposal atau timeline dari vendor tidak masuk akal. Ceritakan saat seseorang — partner, agensi, atau senior — mengusulkan sesuatu yang menurutmu tidak realistis. Apa yang kamu lakukan?"
+    },
+    probes:[
+      {en:"How did you form your view before you said anything?",
+       id:"Bagaimana kamu membentuk pendapatmu sebelum bicara?"},
+      {en:"What exactly did you say, and to whom?",
+       id:"Apa persisnya yang kamu katakan, dan kepada siapa?"},
+      {en:"How did it end?",
+       id:"Akhirnya bagaimana?"}
+    ],
+    anchors:[
+      {en:"No instance, or stayed quiet and deferred to \"the expert\".", id:"Tidak punya contoh, atau diam dan pasrah ke \"yang lebih ahli\"."},
+      {en:"A mild instance; raised it vaguely or only to a peer; no evidence base.", id:"Contohnya ringan; disampaikan samar atau hanya ke rekan setingkat; tanpa dasar bukti."},
+      {en:"Checked the claim against something concrete (comparable timelines, a small test, the vendor's own past delivery) and told the decision-maker.", id:"Menguji klaim itu dengan sesuatu yang konkret (perbandingan timeline, uji kecil, rekam jejak vendor sendiri) dan menyampaikannya ke pengambil keputusan."},
+      {en:"As level 3, plus the outcome actually changed, and they can name the technical detail they tested and the trade-off they offered.", id:"Seperti level 3, plus hasilnya benar-benar berubah, dan kamu bisa menyebut detail teknis yang diuji plus opsi alternatif yang kamu tawarkan."}
+    ],
+    hints:[
+      {en:"This one covers judging vendor and technical claims, and getting that judgement heard.", id:"Ini menilai kemampuanmu menimbang klaim vendor/teknis, sekaligus menyampaikannya ke pengambil keputusan."},
+      {en:"Closest real material: scope and timeline negotiation across 300+ KOLs at Bersama Zatta, or cross-functional coordination at Paragon.", id:"Bahan terdekat: negosiasi scope dan timeline dengan 300+ KOL di Bersama Zatta, atau koordinasi lintas fungsi di Paragon."},
+      {en:"Name the claim, your basis for judging it, what you said and to whom, then how it ended.", id:"Sebut klaimnya, dasar penilaianmu, apa yang kamu sampaikan dan ke siapa, lalu bagaimana akhirnya."}
+    ],
+    target:[90,120], words:[150,300], short:{en:"Unrealistic proposal", id:"Proposal tidak realistis"}
+  },
+  {
+    id:"q4", comp:["ownership","tool"],
+    tag:{en:"Situational · straight from the JD", id:"Situasional · langsung dari JD"},
+    lead:{
+      en:"Let's do a situation you'd actually face here. It's your third week. I hand you Apollo and LinkedIn and say: get me 200 qualified leads for our SME product by Friday — nobody here has built a list before. Walk me through what you'd do.",
+      id:"Sekarang situasi yang akan kamu hadapi di sini. Ini minggu ketigamu. Saya serahkan Apollo dan LinkedIn dan bilang: kumpulkan 200 leads berkualitas untuk produk UKM kami sebelum Jumat — belum ada yang pernah membuat list seperti ini. Jelaskan apa yang akan kamu lakukan."
+    },
+    probes:[
+      {en:"What makes a lead qualified on that list — who's in, who's out?",
+       id:"Apa yang membuat sebuah lead berkualitas di list itu — siapa masuk, siapa keluar?"},
+      {en:"It's Thursday and you only have 60 that meet the bar. What do you do?",
+       id:"Hari Kamis, baru 60 yang memenuhi standar. Apa yang kamu lakukan?"},
+      {en:"What exactly do you hand over to the telemarketer?",
+       id:"Apa persisnya yang kamu serahkan ke telemarketer?"}
+    ],
+    anchors:[
+      {en:"Waits for instructions, or hands the task to someone else; no method at all.", id:"Menunggu instruksi, atau melempar tugasnya ke orang lain; tanpa metode."},
+      {en:"Generic steps (search, filter, export) with no definition of qualified and no plan B.", id:"Langkah generik (cari, filter, export) tanpa definisi \"qualified\" dan tanpa rencana B."},
+      {en:"Defines the qualification rule from the buyer's side, uses the tool's filters, tests on a small sample, checks quality (duplicates, invalid emails), and reports progress early.", id:"Mendefinisikan aturan kualifikasi dari sisi pembeli, memakai filter tool, uji sampel kecil, cek kualitas (duplikat, email invalid), dan lapor progres lebih awal."},
+      {en:"As level 3, plus prioritising by likelihood to convert, saying honestly what can't be done by Friday, and handing a list the telemarketer can act on immediately.", id:"Seperti level 3, plus prioritas berdasar peluang konversi, jujur soal apa yang tidak selesai Jumat, dan menyerahkan list yang langsung bisa dipakai telemarketer."}
+    ],
+    hints:[
+      {en:"This is about ownership and operational judgement with the tool, not feature recall.", id:"Ini soal ownership dan judgment operasional memakai tool, bukan hafalan fitur."},
+      {en:"The pattern is already in your CV: monitoring campaign performance at Inkloom, or the 300+ SKU benchmark at Paragon — define the criteria first, then work.", id:"Polanya sudah ada di CV-mu: monitoring performa campaign di Inkloom, atau benchmark 300+ SKU di Paragon — tentukan kriteria dulu, baru kerja."},
+      {en:"Target profile → in/out criteria → where in the tool it comes from → sample check → progress update → what you hand over.", id:"Profil target → kriteria masuk/keluar → sumbernya di tool mana → cek sampel → update progres → apa yang diserahkan."}
+    ],
+    target:[120,180], words:[150,400], short:{en:"200 leads by Friday", id:"200 leads sebelum Jumat"}
+  },
+  {
+    id:"q5", comp:["growth"],
+    tag:{en:"Fit · motivation and direction", id:"Fit · motivasi dan arah"},
+    lead:{
+      en:"Last one from me. This starts as a hands-on tool role, but it should grow into direct outreach and negotiation on our behalf. Where does that sit with where you want to go — and why this role?",
+      id:"Terakhir dari saya. Peran ini dimulai sebagai kerja hands-on dengan tool, tapi seharusnya berkembang ke outreach langsung dan negosiasi atas nama kami. Bagaimana itu cocok dengan arah kariermu — dan kenapa peran ini?"
+    },
+    probes:[
+      {en:"What in this posting made you apply?",
+       id:"Apa dari lowongan ini yang membuatmu melamar?"},
+      {en:"Which part of direct outreach would you find hardest?",
+       id:"Bagian mana dari outreach langsung yang paling sulit bagimu?"}
+    ],
+    anchors:[
+      {en:"Generic answer, or only the marketing half; no link to this posting.", id:"Jawaban generik, atau hanya separuh marketing; tanpa kaitan dengan lowongan ini."},
+      {en:"There is a reason, but it reads as \"I need a job\"; the business-development part sounds reluctant.", id:"Ada alasan, tapi terasa seperti \"butuh kerja\"; bagian business development terdengar enggan."},
+      {en:"Links one real experience to this work (data → tool → leads; KOL negotiation → later vendor negotiation) and names one thing to learn first.", id:"Menghubungkan satu pengalaman nyata ke pekerjaan ini (data → tool → leads; negosiasi KOL → negosiasi vendor nanti) dan menyebut satu hal yang mau dipelajari lebih dulu."},
+      {en:"As level 3, plus a specific six-month picture, honesty about the hardest part, and an informed question about the team.", id:"Seperti level 3, plus gambaran enam bulan yang spesifik, jujur soal bagian tersulit, dan satu pertanyaan yang menunjukkan kamu sudah membaca."}
+    ],
+    hints:[
+      {en:"This one is about motivation, and your direction into business development.", id:"Ini soal motivasi dan arah tumbuhmu ke business development."},
+      {en:"Bridges already in your CV: negotiating with 300+ KOLs, MC at 3 events of 500+ people, and 30+ media partnerships at TemanKita.", id:"Jembatan yang sudah ada di CV-mu: negosiasi dengan 300+ KOL, MC di 3 acara 500+ peserta, dan 30+ media partnership di TemanKita."},
+      {en:"One line on why this role, one proof from your CV, one thing to learn, and one question for me.", id:"Satu kalimat kenapa peran ini, satu bukti dari CV, satu hal yang mau dipelajari, dan satu pertanyaan untuk saya."}
+    ],
+    target:[60,120], words:[100,250], short:{en:"Why this role", id:"Kenapa peran ini"}
+  }
+];
+
+const CLOSING = {
+  en:"That's everything from me. Two things before we finish: is there anything we haven't covered that you'd want me to know? And then it's your turn — what questions do you have for me?",
+  id:"Itu semua dari saya. Dua hal sebelum selesai: ada yang belum kita bahas dan menurutmu penting saya tahu? Lalu giliranmu — apa pertanyaanmu untuk saya?"
+};
+
+const CLOSING_NOTE = {
+  en:"Not scored, but this is where weak interviews are lost and strong ones are won: have 2–3 questions ready, and use the space to repair an answer you fumbled.",
+  id:"Tidak dinilai, tapi di sini wawancara lemah kalah dan yang kuat menang: siapkan 2–3 pertanyaan, dan pakai kesempatan ini untuk memperbaiki jawaban yang tadi kurang."
+};
+
+const PREP = {
+  map:[
+    {req:{en:"Hands-on Apollo / LinkedIn / CRM to scale B2B lead generation",
+          id:"Hands-on Apollo / LinkedIn / CRM untuk menskalakan lead generation B2B"},
+     ev:{en:"None. Your experience is social media, KOL collaboration (B2C), Jira, Google Analytics, Miro, advanced Excel.",
+         id:"Tidak ada. Pengalamanmu social media, kolaborasi KOL (B2C), Jira, Google Analytics, Miro, Excel advanced."},
+     gap:{en:"No evidence of B2B prospecting, lists or a CRM.",
+          id:"Belum ada bukti prospecting B2B, pembuatan list, atau CRM."},
+     prep:{en:"Do not pretend. Better: create an Apollo trial account and build a 20-lead sample list this week, so you can describe the filters and the data-quality checks in the real interview.",
+           id:"Jangan berpura-pura. Lebih baik: buat akun trial Apollo dan susun sample list 20 lead minggu ini, supaya di wawancara asli kamu bisa menyebut filter dan pengecekan kualitas datanya."}},
+    {req:{en:"Assess vendor-proposed technical solutions, timelines and claims",
+          id:"Menilai solusi teknis, timeline, dan klaim yang diajukan vendor"},
+     ev:{en:"Negotiating scope and timelines with 300+ KOLs; cross-functional coordination at Paragon.",
+         id:"Negosiasi scope dan timeline dengan 300+ KOL; koordinasi lintas fungsi di Paragon."},
+     gap:{en:"You have never assessed a technical proposal or an IT vendor.",
+          id:"Belum pernah menilai proposal teknis atau vendor IT."},
+     prep:{en:"Prepare Q3 properly. An honest \"I haven't done this yet\" beats a borrowed story — then show your method: ask for the spec in writing, compare it to the vendor's own past delivery, run a small test, and ask \"what happens if this fails?\"",
+           id:"Siapkan Q3 dengan serius. \"Belum pernah, tapi begini caranya\" lebih kuat daripada cerita pinjaman — lalu tunjukkan metodemu: minta spesifikasi tertulis, bandingkan dengan rekam jejak vendor itu sendiri, uji kecil, dan tanya \"apa yang terjadi kalau ini gagal?\""}},
+    {req:{en:"Working knowledge of IT systems, software, APIs and website maintenance",
+          id:"Pengetahuan kerja soal sistem IT, software, API, dan maintenance website"},
+     ev:{en:"IT Division internship at Bukit Asam (2 months, one bullet); a UI/UX course mockup for Stempel Asli.",
+         id:"Intern di Divisi IT Bukit Asam (2 bulan, satu bullet); mockup UI/UX dari mata kuliah untuk Stempel Asli."},
+     gap:{en:"Thinnest area of your CV, and the JD asks for it explicitly.",
+          id:"Bagian terlemah di CV-mu, dan JD menanyakannya secara eksplisit."},
+     prep:{en:"Pick one concrete thing you actually understand — Docker-free: how a request/response API works, what a rate limit is, why a landing page is slow — and say it plainly. Prepare to name the site you'd audit and the three things you'd check first.",
+           id:"Pilih satu hal konkret yang benar-benar kamu pahami — cara kerja request/response API, apa itu rate limit, kenapa landing page lambat — dan ucapkan sederhana. Siapkan juga website mana yang akan kamu audit dan tiga hal pertama yang kamu cek."}},
+    {req:{en:"Strong ownership with minimal oversight",
+          id:"Ownership kuat dengan supervisi minimal"},
+     ev:{en:"Inkloom: ran 4 client brands with a team of 6, 16 months; KKN Halal Tourism Village digitalisation.",
+         id:"Inkloom: menangani 4 brand klien dengan tim 6 orang selama 16 bulan; digitalisasi Desa Wisata Halal saat KKN."},
+     gap:{en:"Solid on paper — but you need one story where you started something, not just executed a brief.",
+          id:"Secara CV kuat — tapi kamu butuh satu cerita di mana kamu yang memulai sesuatu, bukan hanya menjalankan brief."},
+     prep:{en:"Have the story ready in 90 seconds, ending with what changed and how you knew.",
+           id:"Siapkan ceritanya dalam 90 detik, diakhiri dengan apa yang berubah dan dari mana kamu tahu."}},
+    {req:{en:"Communicate across business and technical stakeholders",
+          id:"Komunikasi lintas stakeholder bisnis dan teknis"},
+     ev:{en:"Presenting market intelligence to cross-functional stakeholders at Paragon; mentoring international students.",
+         id:"Presentasi market intelligence ke lintas fungsi di Paragon; mentoring mahasiswa internasional."},
+     gap:{en:"Strong signal; the risk is length and translating data into a decision.",
+          id:"Sinyalnya kuat; risikonya ada di panjang jawaban dan menerjemahkan data jadi keputusan."},
+     prep:{en:"Practise one 60-second version: the number, what it meant, what you recommended.",
+           id:"Latih satu versi 60 detik: angkanya, artinya apa, dan rekomendasimu apa."}},
+    {req:{en:"Grow from marketing / technology into direct business development",
+          id:"Berkembang dari marketing/teknologi ke business development langsung"},
+     ev:{en:"MC at 3 events with 500+ participants; 30+ media partnerships; KOL negotiation.",
+         id:"MC di 3 acara 500+ peserta; 30+ media partnership; negosiasi KOL."},
+     gap:{en:"Real evidence exists — it just sits under \"organisational experience\", where a hiring manager skims past it.",
+          id:"Buktinya ada — hanya saja tersembunyi di bagian organisasi, yang sering dilewati hiring manager."},
+     prep:{en:"Move it into the answer for Q5 explicitly. Name the number, then the 6-month picture you want.",
+           id:"Pindahkan bukti itu ke jawaban Q5 secara eksplisit. Sebut angkanya, lalu gambaran 6 bulan yang kamu inginkan."}}
+  ],
+  risks:[
+    {t:{en:"Risk 1 — the JD is B2B prospecting; your CV is B2C content.",
+        id:"Risiko 1 — JD-nya prospecting B2B; CV-mu konten B2C."},
+     b:{en:"A hiring manager reading your CV sees a brand and social media generalist, not a lead generator. The fix is not to claim experience you don't have: it is to show the same underlying pattern (define the audience → set criteria → operate the tool → measure), plus evidence you have already started learning the specific tools.",
+        id:"Hiring manager yang membaca CV-mu melihat generalis brand dan social media, bukan pemburu lead. Solusinya bukan mengklaim pengalaman yang belum ada: tunjukkan pola yang sama (tentukan audiens → tetapkan kriteria → operasikan tool-nya → ukur), plus bukti bahwa kamu sudah mulai mempelajari tool spesifiknya."}},
+    {t:{en:"Risk 2 — \"working knowledge of APIs and website maintenance\" has almost no proof.",
+        id:"Risiko 2 — \"pengetahuan API dan maintenance website\" hampir tanpa bukti."},
+     b:{en:"Two months at Bukit Asam and one course mockup will not carry this. Whatever you say here has to be true, and concrete enough to be checked. If you get tested on it, \"I haven't worked with APIs in production\" costs less than being caught out.",
+        id:"Dua bulan di Bukit Asam dan satu mockup mata kuliah tidak cukup menopang ini. Apa pun yang kamu ucapkan harus benar dan cukup konkret untuk dicek. Kalau diuji dan kamu tidak tahu, \"saya belum pernah kerja dengan API di produksi\" jauh lebih murah daripada ketahuan mengarang."}},
+    {t:{en:"Risk 3 — every role except Inkloom ran 3–6 months.",
+        id:"Risiko 3 — semua pengalaman selain Inkloom hanya 3–6 bulan."},
+     b:{en:"The unspoken question is \"are you a generalist who just passes through?\" Answer it before it is asked: one sentence of thread (content → data → tools → lead generation), and the specific reason this role is a step in that direction rather than another stop.",
+        id:"Pertanyaan bawah sadarnya: \"kamu generalis yang cuma mampir?\" Jawab sebelum ditanya: satu kalimat benang merah (konten → data → tool → lead generation), dan alasan spesifik kenapa peran ini adalah langkah ke arah itu, bukan persinggahan berikutnya."}}
+  ],
+  ask:[
+    {en:"How do you qualify a lead today before it reaches the telemarketers — is that written down anywhere?",
+     id:"Bagaimana kalian menentukan lead yang layak hari ini sebelum sampai ke telemarketer — apakah itu terdokumentasi?"},
+    {en:"When YV Lab or an outreach vendor proposes a timeline, who checks it today?",
+     id:"Kalau YV Lab atau vendor outreach mengusulkan timeline, siapa yang memeriksanya hari ini?"},
+    {en:"What does a great first six months look like here — is it number of qualified leads, or something else?",
+     id:"Enam bulan pertama yang bagus itu seperti apa — jumlah lead berkualitas, atau yang lain?"},
+    {en:"Is this a new role or a replacement, and what happened to the person before?",
+     id:"Ini posisi baru atau pengganti, dan apa yang terjadi dengan orang sebelumnya?"},
+    {en:"Which tool has been the biggest disappointment so far, and why?",
+     id:"Tool mana yang sejauh ini paling mengecewakan, dan kenapa?"}
+  ]
+};
+
+const UI = {
+  id:{
+    interview:"Wawancara", report:"Laporan", prep:"Persiapan", langLabel:"Bahasa",
+    introTitle:"Cara pakai",
+    introBody:"Satu pertanyaan per halaman. Ucapkan jawabanmu dulu dengan suara keras — nyalakan timer — baru ketik yang kamu ucapkan. Kalau mentok, boleh pakai Hint, tapi hint membuat jawaban itu tidak bisa mendapat \"Strong Yes\". Setelah kelima pertanyaan selesai, buka tab Laporan, klik Export Markdown, lalu paste hasilnya ke chat coach untuk feedback tajam dan model answer.",
+    introDismiss:"Mengerti, mulai",
+    qOf:"Pertanyaan {n} dari {total}",
+    repeat:"Ulangi pertanyaannya",
+    probesTitle:"Probing yang akan menyusul",
+    probesNote:"Di wawancara asli saya akan memotong jawabanmu dengan ini. Tulis apa yang akan kamu tambahkan.",
+    answerTitle:"Jawabanmu",
+    start:"Mulai timer", pause:"Jeda", reset:"Reset",
+    clockIdle:"00:00",
+    target:"Target {a}–{b} dtk",
+    timeUp:"Sudah lewat target — mulai tutup dengan hasilnya.",
+    timeLow:"Masih di bawah target, cerita seperti ini biasanya butuh {a}–{b} detik.",
+    words:"{n} kata",
+    wordsOk:"{a}–{b} kata adalah rentang typikal",
+    wordsShort:"Masih pendek untuk sebuah cerita.",
+    wordsLong:"Terlalu panjang — potong konteksnya.",
+    hintsTitle:"Hint",
+    hintBtn:"Hint {n} — {label}",
+    hint1:"kompetensi", hint2:"kandidat cerita", hint3:"kerangka",
+    hintWarn:"Hint sudah dipakai untuk jawaban ini — otomatis tidak bisa \"Strong Yes\".",
+    rubric:"Rubrik & anchor (1–4)",
+    scoring:"Self-scoring jawaban ini",
+    scoringNote:"Bandingkan dengan anchor, bukan dengan perasaan. Feedback tajam dari coach menyusul lewat chat.",
+    verdict:"Verdict kompetensi untuk pertanyaan ini",
+    quote:"Kutipan bukti dari jawabanmu (kalimatmu sendiri)",
+    quotePh:"Tempel satu kalimat terkuat dari jawabanmu di sini…",
+    craft:"Rata-rata craft",
+    prev:"Sebelumnya", next:"Simpan & lanjut", skip:"Lewati", retry:"Ulangi jawaban",
+    skipped:"Dilewati", attempt:"Percobaan {n}", firstAttempt:"Percobaan 1",
+    done:"Selesai", closingTitle:"Penutup",
+    closingUser:"Jawabanmu & pertanyaanmu untuk interviewer",
+    voteTitle:"Interviewer vote (hasil mock ini saja, bukan prediksi)",
+    confidence:"keyakinan",
+    confHigh:"tinggi", confMed:"sedang", confLow:"rendah",
+    compTable:"Kompetensi must-have",
+    must:"must-have", fit:"fit", qRef:"Pertanyaan",
+    yourVerdict:"Verdictmu",
+    craft2:"Skor craft (percobaan pertama)",
+    priority:"Satu prioritas untuk sesi berikutnya",
+    priorityPh:"Tulis setelah dapat feedback coach…",
+    export:"Export Markdown", copy:"Copy transcript", json:"Export JSON", importJson:"Import JSON", resetAll:"Reset semua",
+    print:"Cetak / PDF",
+    none:"Belum ada jawaban.",
+    evidence:"Bukti (kutipan/jawabanmu)",
+    noAnswer:"— belum dijawab —",
+    storageWarn:"Autosave (localStorage) tidak aktif di browser ini. Pakai tombol Export supaya pekerjaanmu tidak hilang.",
+    copied:"Transcript di-copy ke clipboard.",
+    copyFail:"Copy gagal di browser ini — pakai Export Markdown (file akan diunduh).",
+    confirmReset:"Hapus semua jawaban dan mulai dari awal?",
+    req:"Kebutuhan di JD", evidenceOnCv:"Bukti di CV-mu", theGap:"Gap-nya", whatToPrep:"Yang harus disiapkan",
+    risks:"Tiga risiko yang akan dilihat interviewer ini",
+    askTitle:"Pertanyaan untuk ditanyakan ke interviewer",
+    foot:"Satu sesi itu berisik. Nilai kemajuan dari beberapa sesi, bukan dari satu skor.",
+    insufficient:"bukti belum cukup",
+    notReached:"belum dicapai",
+    exportHint:"Hasil export ini dirancang untuk ditempel ke chat coach: pertanyaan, jawaban, waktu bicara, hint yang dipakai, dan self-scoring-mu.",
+    roleCol:"Peran", notScored:"tidak dinilai"
+  },
+  en:{
+    interview:"Interview", report:"Report", prep:"Prep", langLabel:"Language",
+    introTitle:"How to use this",
+    introBody:"One question per page. Say your answer out loud first — start the timer — then type what you said. If you get stuck, you may use a Hint, but a hinted answer can never score \"Strong Yes\". After all five questions, open the Report tab, click Export Markdown, and paste it into the coach chat for sharp feedback and a model answer.",
+    introDismiss:"Got it, start",
+    qOf:"Question {n} of {total}",
+    repeat:"Repeat the question",
+    probesTitle:"Probes that will follow",
+    probesNote:"In the real interview I would cut in with these. Write what you would add.",
+    answerTitle:"Your answer",
+    start:"Start timer", pause:"Pause", reset:"Reset",
+    clockIdle:"00:00",
+    target:"Target {a}–{b}s",
+    timeUp:"Past the target — start closing with the outcome.",
+    timeLow:"Still under target; a story like this usually needs {a}–{b} seconds.",
+    words:"{n} words",
+    wordsOk:"{a}–{b} words is the typical range",
+    wordsShort:"Still short for a story.",
+    wordsLong:"Too long — cut the setup.",
+    hintsTitle:"Hints",
+    hintBtn:"Hint {n} — {label}",
+    hint1:"competency", hint2:"real candidates", hint3:"scaffold",
+    hintWarn:"A hint was used on this answer — it can no longer score \"Strong Yes\".",
+    rubric:"Rubric & anchors (1–4)",
+    scoring:"Self-score this answer",
+    scoringNote:"Compare against the anchors, not against how it felt. The coach's sharp feedback comes through the chat.",
+    verdict:"Competency verdict for this question",
+    quote:"Evidence quote from your answer (your own words)",
+    quotePh:"Paste the strongest sentence of your answer here…",
+    craft:"Craft average",
+    prev:"Previous", next:"Save & next", skip:"Skip", retry:"Retry answer",
+    skipped:"Skipped", attempt:"Attempt {n}", firstAttempt:"Attempt 1",
+    done:"Finished", closingTitle:"Closing",
+    closingUser:"Your answer & your questions for the interviewer",
+    voteTitle:"Interviewer vote (this mock only, not a prediction)",
+    confidence:"confidence",
+    confHigh:"high", confMed:"medium", confLow:"low",
+    compTable:"Must-have competencies",
+    must:"must-have", fit:"fit", qRef:"Question",
+    yourVerdict:"Your verdict",
+    craft2:"Craft scores (first attempts)",
+    priority:"One priority for your next session",
+    priorityPh:"Fill this in after the coach's feedback…",
+    export:"Export Markdown", copy:"Copy transcript", json:"Export JSON", importJson:"Import JSON", resetAll:"Reset all",
+    print:"Print / PDF",
+    none:"No answers yet.",
+    evidence:"Evidence (quotes / your answers)",
+    noAnswer:"— not answered —",
+    storageWarn:"Autosave (localStorage) is unavailable in this browser. Use Export so your work is not lost.",
+    copied:"Transcript copied to clipboard.",
+    copyFail:"Copy failed in this browser — use Export Markdown (a file will download).",
+    confirmReset:"Delete all answers and start over?",
+    req:"What the JD asks for", evidenceOnCv:"Evidence on your CV", theGap:"The gap", whatToPrep:"What to prepare",
+    risks:"Three risks this interviewer will see",
+    askTitle:"Questions to ask the interviewer",
+    foot:"One session is noisy. Judge progress over several sessions, not from one score.",
+    insufficient:"insufficient evidence",
+    notReached:"not reached",
+    exportHint:"This export is built to be pasted into the coach chat: questions, answers, speaking time, hints used, and your self-scores.",
+    roleCol:"Role", notScored:"not scored"
+  }
+};
+
+const LS_KEY = "mock-interview:y-ventures:v1";
+
+let state = {
+  lang:"hybrid", tab:"interview", cur:0, intro:false, store:true, q:{}, note:""
+};
+
+function uiLang(){ return state.lang === "en" ? "en" : "id"; }
+function qLang(){ return state.lang === "id" ? "id" : "en"; }
+function L(o){ if(o == null) return ""; if(typeof o === "string") return o; return o[uiLang()] || o.en; }
+function Q(o){ return o[qLang()] || o.en; }
+function ui(k, vars){
+  let s = UI[uiLang()][k];
+  if(s === undefined) s = UI.en[k] || k;
+  if(vars) for(const key in vars) s = s.split("{"+key+"}").join(vars[key]);
+  return s;
+}
+function esc(s){
+  return String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function el(id){ return document.getElementById(id); }
+function words(s){ const t = (s||"").trim(); return t ? t.split(/\s+/).length : 0; }
+function mmss(n){
+  n = Math.max(0, Math.round(n));
+  const m = Math.floor(n/60), s = n%60;
+  return (m<10?"0":"")+m+":"+(s<10?"0":"")+s;
+}
+
+function blankAttempt(){
+  return {text:"", seconds:0, hints:[false,false,false], probes:{}, dims:{}, verdict:null, quote:"", skipped:false};
+}
+function qState(id){
+  if(!state.q[id]) state.q[id] = {attempts:[blankAttempt()]};
+  return state.q[id];
+}
+function active(id){
+  const s = qState(id);
+  return s.attempts[s.attempts.length-1];
+}
+function answered(id){
+  const s = qState(id);
+  return s.attempts.some(a => !a.skipped && words(a.text) > 0);
+}
+function hinted(id){
+  return qState(id).attempts.some(a => a.hints.some(Boolean));
+}
+function dimAvg(a){
+  const vals = DIMS.map(d => a.dims[d.k]).filter(v => typeof v === "number");
+  if(!vals.length) return null;
+  return vals.reduce((x,y)=>x+y,0)/vals.length;
+}
+function round1(n){ return Math.round(n*10)/10; }
+
+let timer = {running:false, handle:null};
+let saveHandle = null;
+function save(){
+  if(!state.store) return;
+  clearTimeout(saveHandle);
+  saveHandle = setTimeout(()=>{
+    try{ localStorage.setItem(LS_KEY, JSON.stringify(state)); }
+    catch(e){ state.store = false; }
+  }, 300);
+}
+function load(){
+  try{
+    const raw = localStorage.getItem(LS_KEY);
+    if(raw){
+      const parsed = JSON.parse(raw);
+      if(parsed && typeof parsed === "object"){
+        state = Object.assign(state, parsed);
+        QS.forEach(q => qState(q.id));
+      }
+    }
+  }catch(e){ state.store = false; }
+  try{ localStorage.setItem(LS_KEY + ":probe", "1"); localStorage.removeItem(LS_KEY + ":probe"); }
+  catch(e){ state.store = false; }
+}
+
+function stopTimer(){ timer.running = false; if(timer.handle){ clearInterval(timer.handle); timer.handle = null; } }
+
+function toast(msg){
+  const old = document.querySelector(".toast");
+  if(old) old.remove();
+  const t = document.createElement("div");
+  t.className = "toast";
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(), 2600);
+}
+
+function renderChips(){
+  const c = el("sessionChips");
+  const pill = (txt, cls) => '<span class="chip'+(cls?" "+cls:"")+'">'+esc(txt)+'</span>';
+  c.innerHTML = [
+    pill("Hiring-manager round", "hot"),
+    pill("Digital Marketing Executive · Y Ventures Enterprise", "hot"),
+    pill(uiLang()==="id" ? "Persona: hiring manager" : "Persona: hiring manager"),
+    pill("Difficulty 2"),
+    pill(state.lang==="hybrid" ? "Hybrid: Q English / coach ID" : (state.lang==="en" ? "Full English" : "Full Indonesia")),
+    pill("Coach mode")
+  ].join("");
+}
+
+function renderTabs(){
+  const t = el("tabs");
+  const items = [["interview","interview"],["report","report"],["prep","prep"]];
+  t.innerHTML = items.map(function(it){
+    return '<button data-tab="'+it[0]+'"'+(state.tab===it[0]?' class="on"':'')+'>'+esc(ui(it[1]))+'</button>';
+  }).join("");
+  Array.prototype.forEach.call(t.querySelectorAll("button"), function(b){
+    b.onclick = function(){ stopTimer(); state.tab = b.getAttribute("data-tab"); render(); save(); window.scrollTo(0,0); };
+  });
+}
+
+function introCard(){
+  if(state.intro) return "";
+  return '<div class="card" id="introCard">'+
+    '<h3>'+esc(ui("introTitle"))+'</h3>'+
+    '<p class="small" style="margin:0 0 12px">'+esc(ui("introBody"))+'</p>'+
+    '<div class="row"><button class="btn primary" id="introOk">'+esc(ui("introDismiss"))+'</button></div>'+
+    '</div>';
+}
+
+function hintLadder(q, a){
+  let h = '<div class="hint"><h3>'+esc(ui("hintsTitle"))+'</h3>';
+  q.hints.forEach(function(r, i){
+    const label = [ui("hint1"), ui("hint2"), ui("hint3")][i];
+    if(a.hints[i]){
+      h += '<div style="margin-bottom:8px"><button class="btn rung" data-hint="'+i+'" disabled>'+esc(ui("hintBtn", {n:i+1, label:label}))+'</button>'+
+           '<div class="rung-body" style="margin-top:6px">'+esc(Q(r))+'</div></div>';
+    }else{
+      h += '<div style="margin-bottom:8px"><button class="btn rung" data-hint="'+i+'">'+esc(ui("hintBtn", {n:i+1, label:label}))+'</button></div>';
+    }
+  });
+  if(a.hints.some(Boolean)) h += '<p class="tiny" style="color:var(--warn);margin:6px 0 0">'+esc(ui("hintWarn"))+'</p>';
+  return h + '</div>';
+}
+
+function anchorsHtml(q){
+  return q.anchors.map(function(a, i){
+    const n = i+1;
+    return '<div class="anchor"><div class="lvl n'+n+'">'+n+'</div><div>'+esc(Q(a))+'</div></div>';
+  }).join("");
+}
+
+function dimHtml(d, a){
+  const cur = a.dims[d.k];
+  let s = '<div class="dim"><div class="dim-head"><div class="dim-name">'+esc(L(d.name))+'</div><div class="scores">';
+  for(let i=1;i<=4;i++){
+    s += '<button data-dim="'+d.k+'" data-lv="'+i+'"'+(cur===i?' class="on'+(i===4?" n4":"")+'"':'')+'>'+i+'</button>';
+  }
+  s += '</div></div>';
+  if(cur) s += '<div class="dim-note"><b>'+cur+'.</b> '+esc(L(d.lv[cur-1]))+'</div>';
+  return s + '</div>';
+}
+
+function verdictHtml(q, a){
+  let s = '<div class="dim"><div class="dim-head"><div class="dim-name">'+esc(ui("verdict"))+'</div><div class="scores">';
+  VERDICTS.forEach(function(x){
+    s += '<button data-verdict="'+x.v+'"'+(a.verdict===x.v?' class="on'+(x.v===4?" n4":"")+'"':'')+'>'+x.v+'</button>';
+  });
+  s += '</div></div>';
+  if(a.verdict) s += '<div class="dim-note"><b>'+a.verdict+' '+esc(L(VERDICTS[a.verdict-1]))+'</b> — '+esc(Q(q.anchors[a.verdict-1]))+'</div>';
+  return s + '</div>';
+}
+
+function renderInterview(){
+  const host = el("interview");
+  if(state.cur >= QS.length){
+    host.innerHTML = introCard() +
+      '<div class="card q-card"><div class="q-head"><span class="chip hot">'+esc(ui("closingTitle"))+'</span><span class="qnum">'+
+      esc(ui("qOf", {n:QS.length, total:QS.length}))+'</span></div><p class="lead">'+esc(Q(CLOSING))+'</p>'+
+      '<p class="small muted" style="margin:12px 0 0">'+esc(L(CLOSING_NOTE))+'</p></div>'+
+      '<div class="card"><h3>'+esc(ui("closingUser"))+'</h3>'+
+      '<textarea id="closingNote" rows="7" placeholder="'+esc(ui("priorityPh"))+'">'+esc(state.note||"")+'</textarea></div>'+
+      '<div class="progress"><div class="row"><button class="btn" id="goPrev2">'+esc(ui("prev"))+'</button>'+
+      '<button class="btn primary" id="goReport">'+esc(ui("done"))+' → '+esc(ui("report"))+'</button></div></div>';
+    el("closingNote").oninput = function(){ state.note = this.value; save(); };
+    el("goPrev2").onclick = function(){ stopTimer(); state.cur = QS.length-1; render(); save(); window.scrollTo(0,0); };
+    el("goReport").onclick = function(){ stopTimer(); state.tab = "report"; render(); save(); window.scrollTo(0,0); };
+    return;
+  }
+
+  const q = QS[state.cur];
+  const a = active(q.id);
+  const dots = QS.map(function(x, i){
+    const cls = i === state.cur ? "on" : (answered(x.id) ? "done" : (anyAttempt(x.id) ? "skip" : ""));
+    return '<button class="dot '+cls+'" data-goto="'+i+'">'+(i+1)+'</button>';
+  }).join("") + '<button class="dot'+(state.cur>=QS.length?" on":"")+'" data-goto="'+QS.length+'">★</button>';
+
+  const chips = q.comp.map(function(k){
+    return '<span class="chip '+(COMP[k].must?"must":"")+'">'+esc(L(COMP[k].label))+'</span>';
+  }).join("");
+
+  const probes = q.probes.map(function(p, i){
+    return '<div class="probe"><div class="probe-q"><b>'+(i+1)+'.</b> '+esc(Q(p))+'</div>'+
+      '<textarea rows="3" data-probe="'+i+'" placeholder="'+esc(ui("probesNote"))+'">'+esc(a.probes[i]||"")+'</textarea></div>';
+  }).join("");
+
+  host.innerHTML = introCard() +
+    '<div class="progress">'+dots+'<span class="muted small" style="margin-left:6px">'+esc(ui("qOf", {n:state.cur+1, total:QS.length}))+'</span></div>'+
+    '<div class="grid2">'+
+      '<div>'+
+        '<div class="card q-card"><div class="q-head"><span class="chip">'+esc(L(q.tag))+'</span>'+chips+
+          '<span class="qnum">'+esc(L(q.short))+'</span></div>'+
+          '<p class="lead">'+esc(Q(q.lead))+'</p>'+
+          '<div class="row" style="margin-top:14px"><button class="btn ghost" id="repeat">'+esc(ui("repeat"))+'</button></div>'+
+        '</div>'+
+        '<div class="card"><h3>'+esc(ui("probesTitle"))+'</h3>'+probes+'</div>'+
+      '</div>'+
+      '<div>'+
+        '<div class="card"><h3>'+esc(ui("answerTitle"))+'</h3>'+
+          '<div class="timer"><button class="btn primary" id="tStart">'+esc(ui("start"))+'</button>'+
+          '<button class="btn" id="tReset">'+esc(ui("reset"))+'</button>'+
+          '<span class="clock" id="clock">'+esc(ui("clockIdle"))+'</span>'+
+          '<span class="muted small">'+esc(ui("target", {a:q.target[0], b:q.target[1]}))+'</span></div>'+
+          '<div class="counts"><span class="tiny" id="twarn"></span></div>'+
+          '<textarea id="answer" rows="12">'+esc(a.text)+'</textarea>'+
+          '<div class="counts"><span id="wc" class="tiny">'+esc(ui("words", {n:words(a.text)}))+'</span>'+
+          '<span class="tiny muted" id="wband"></span></div>'+
+          hintLadder(q, a)+
+          '<div class="row end">'+
+            (state.cur>0 ? '<button class="btn" id="goPrev">'+esc(ui("prev"))+'</button>' : '')+
+            '<button class="btn danger" id="skipBtn">'+esc(ui("skip"))+'</button>'+
+            (qState(q.id).attempts.length===1 ? '<button class="btn" id="retryBtn">'+esc(ui("retry"))+'</button>' : '')+
+            '<button class="btn primary" id="nextBtn">'+esc(ui("next"))+'</button>'+
+          '</div>'+
+        '</div>'+
+        '<details class="card" id="rubricCard"'+(a.text?" open":"")+'><summary>'+esc(ui("rubric"))+'</summary>'+anchorsHtml(q)+'</details>'+
+        '<details class="card" id="scoreCard"'+(a.text?" open":"")+'><summary>'+esc(ui("scoring"))+'</summary>'+
+          '<p class="small muted">'+esc(ui("scoringNote"))+'</p>'+
+          DIMS.map(function(d){ return dimHtml(d, a); }).join("")+
+          verdictHtml(q, a)+
+          '<div class="dim"><div class="dim-name">'+esc(ui("quote"))+'</div>'+
+          '<textarea rows="2" id="quoteBox" style="margin-top:8px" placeholder="'+esc(ui("quotePh"))+'">'+esc(a.quote||"")+'</textarea></div>'+
+          '<div class="counts"><span class="tiny muted">'+esc(ui("craft"))+': '+(dimAvg(a)===null?"—":round1(dimAvg(a))+' / 4')+'</span></div>'+
+        '</details>'+
+      '</div>'+
+    '</div>';
+
+  bindInterview(q, a);
+}
+
+function anyAttempt(id){
+  const s = qState(id);
+  return s.attempts.some(function(a){ return words(a.text)>0 || a.hints.some(Boolean) || Object.keys(a.probes||{}).length; });
+}
+
+function bindInterview(q, a){
+  const host = el("interview");
+
+  const introBtn = el("introOk");
+  if(introBtn) introBtn.onclick = function(){ state.intro = true; render(); save(); };
+
+  Array.prototype.forEach.call(host.querySelectorAll("[data-goto]"), function(b){
+    b.onclick = function(){ stopTimer(); state.cur = parseInt(b.getAttribute("data-goto"),10); render(); save(); window.scrollTo(0,0); };
+  });
+
+  el("repeat").onclick = function(){ el("answer").focus(); toast(Q(q.lead).slice(0,140)+"…"); };
+
+  const clock = el("clock");
+  const warn = el("twarn");
+  function paintClock(){
+    clock.textContent = mmss(a.seconds);
+    const lo = q.target[0], hi = q.target[1];
+    clock.className = "clock" + (a.seconds > hi ? " over" : (a.seconds >= lo ? " good" : ""));
+    if(a.seconds > hi) warn.textContent = ui("timeUp");
+    else if(a.seconds > 0 && a.seconds < lo) warn.textContent = ui("timeLow", {a:lo, b:hi});
+    else warn.textContent = "";
+  }
+  paintClock();
+
+  el("tStart").onclick = function(){
+    if(timer.running){
+      stopTimer();
+      this.textContent = ui("start");
+    }else{
+      timer.running = true;
+      this.textContent = ui("pause");
+      timer.handle = setInterval(function(){ a.seconds += 1; paintClock(); save(); }, 1000);
+    }
+  };
+  el("tReset").onclick = function(){
+    stopTimer();
+    el("tStart").textContent = ui("start");
+    a.seconds = 0; paintClock(); save();
+  };
+
+  const ta = el("answer");
+  const wc = el("wc");
+  const wband = el("wband");
+  function paintWords(){
+    const n = words(a.text);
+    wc.textContent = ui("words", {n:n});
+    wc.className = "tiny" + (n===0 ? "" : (n < q.words[0] ? " bad" : (n > q.words[1] ? " warn" : " ok")));
+    if(n===0) wband.textContent = "";
+    else if(n < q.words[0]) wband.textContent = ui("wordsShort");
+    else if(n > q.words[1]) wband.textContent = ui("wordsLong");
+    else wband.textContent = ui("wordsOk", {a:q.words[0], b:q.words[1]});
+  }
+  paintWords();
+  ta.oninput = function(){ a.text = this.value; paintWords(); refreshScorePanel(); save(); };
+
+  Array.prototype.forEach.call(host.querySelectorAll("[data-probe]"), function(t){
+    t.oninput = function(){
+      a.probes[parseInt(this.getAttribute("data-probe"),10)] = this.value;
+      save();
+    };
+  });
+
+  Array.prototype.forEach.call(host.querySelectorAll("[data-hint]"), function(b){
+    b.onclick = function(){
+      a.hints[parseInt(b.getAttribute("data-hint"),10)] = true;
+      save(); render();
+    };
+  });
+
+  Array.prototype.forEach.call(host.querySelectorAll("[data-dim]"), function(b){
+    b.onclick = function(){
+      const k = b.getAttribute("data-dim");
+      const lv = parseInt(b.getAttribute("data-lv"),10);
+      a.dims[k] = (a.dims[k] === lv) ? undefined : lv;
+      save(); render();
+    };
+  });
+
+  Array.prototype.forEach.call(host.querySelectorAll("[data-verdict]"), function(b){
+    b.onclick = function(){
+      const v = parseInt(b.getAttribute("data-verdict"),10);
+      a.verdict = (a.verdict === v) ? null : v;
+      save(); render();
+    };
+  });
+
+  const qb = el("quoteBox");
+  if(qb) qb.oninput = function(){ a.quote = this.value; save(); };
+
+  el("nextBtn").onclick = function(){
+    if(!words(a.text) && !a.skipped) a.skipped = true;
+    stopTimer(); state.cur = Math.min(state.cur+1, QS.length); render(); save(); window.scrollTo(0,0);
+  };
+  el("skipBtn").onclick = function(){
+    a.skipped = true;
+    stopTimer(); state.cur = Math.min(state.cur+1, QS.length); render(); save(); window.scrollTo(0,0);
+  };
+  const rb = el("retryBtn");
+  if(rb) rb.onclick = function(){
+    stopTimer();
+    qState(q.id).attempts.push(blankAttempt());
+    render(); save(); window.scrollTo(0,0);
+  };
+  const pv = el("goPrev");
+  if(pv) pv.onclick = function(){ stopTimer(); state.cur = Math.max(0, state.cur-1); render(); save(); window.scrollTo(0,0); };
+
+  function refreshScorePanel(){ /* word counter only; scores re-render on click */ }
+}
+
+function compVerdict(k){
+  const a = state.answers && state.answers[k];
+  if(typeof a === "number") return a;
+  const qs = QS.filter(function(q){ return q.comp.indexOf(k) !== -1; });
+  const vals = [];
+  qs.forEach(function(q){
+    const first = qState(q.id).attempts[0];
+    if(first && typeof first.verdict === "number") vals.push(first.verdict);
+  });
+  if(!vals.length) return null;
+  return Math.min.apply(null, vals);
+}
+function userVerdict(k){
+  if(state.answers && typeof state.answers[k] === "number") return state.answers[k];
+  return null;
+}
+function finalVerdict(k){
+  const u = userVerdict(k);
+  return u === null ? compVerdict(k) : u;
+}
+
+function computeVote(){
+  const vals = [], missing = [];
+  MUST.forEach(function(k){
+    const v = finalVerdict(k);
+    if(v === null) missing.push(k); else vals.push(v);
+  });
+  const ones = vals.filter(function(x){ return x===1; }).length;
+  const twos = vals.filter(function(x){ return x===2; }).length;
+  const high = vals.filter(function(x){ return x>2; });
+  const avgHigh = high.length ? high.reduce(function(x,y){return x+y;},0)/high.length : 0;
+  let key = "no";
+  if(ones >= 2) key = "strong-no";
+  else if(ones === 1) key = "no";
+  else if(vals.length && twos === 0 && vals.every(function(x){return x>=3;})){
+    const strong = vals.filter(function(x){return x===4;}).length >= vals.length/2 && !QS.some(function(q){ return hinted(q.id); });
+    key = strong ? "strong-yes" : "yes";
+  }else if(twos === 1 && avgHigh >= 3.5) key = "yes";
+  else key = "no";
+
+  let conf = "high";
+  if(missing.length) conf = "low";
+  else{
+    const thin = QS.some(function(q){
+      const f = qState(q.id).attempts[0];
+      const probesUsed = f && f.probes && Object.keys(f.probes).filter(function(k){ return words(f.probes[k])>0; }).length;
+      return !f || f.skipped || words(f.text) < 70 || !probesUsed;
+    });
+    if(thin) conf = "medium";
+  }
+  const labels = {"strong-no":"Strong No","no":"No","yes":"Yes","strong-yes":"Strong Yes"};
+  return {key:key, label:labels[key], conf:conf, missing:missing, vals:vals};
+}
+
+function craftAverages(){
+  const rows = DIMS.map(function(d){
+    const vals = [];
+    QS.forEach(function(q){
+      const f = qState(q.id).attempts[0];
+      if(f && typeof f.dims[d.k] === "number") vals.push(f.dims[d.k]);
+    });
+    return {name:L(d.name), avg: vals.length ? round1(vals.reduce(function(x,y){return x+y;},0)/vals.length) : null, n:vals.length};
+  });
+  return rows;
+}
+
+function renderReport(){
+  const vote = computeVote();
+  const host = el("report");
+  const cls = vote.key.indexOf("strong-no")===0 || vote.key==="no" ? "no" : (vote.key==="insufficient" ? "insuff" : "yes");
+  const confLabel = vote.conf==="high" ? ui("confHigh") : (vote.conf==="medium" ? ui("confMed") : ui("confLow"));
+
+  const compRows = Object.keys(COMP).map(function(k){
+    const qs = QS.map(function(q,i){ return q.comp.indexOf(k)!==-1 ? "Q"+(i+1) : null; }).filter(Boolean).join(", ");
+    const v = finalVerdict(k);
+    const vlabel = v===null ? ui("notReached") : v+" "+L(VERDICTS[v-1]);
+    const opts = ['<option value="">auto</option>'].concat(VERDICTS.map(function(x){
+      return '<option value="'+x.v+'"'+(userVerdict(k)===x.v?" selected":"")+'>'+x.v+' '+esc(L(x))+'</option>';
+    })).join("");
+    return '<tr><td>'+esc(L(COMP[k].label))+'<div class="tiny muted">'+(COMP[k].must?esc(ui("must")):esc(ui("fit")))+' · '+esc(ui("qRef"))+': '+esc(qs)+'</div></td>'+
+      '<td><b>'+esc(vlabel)+'</b></td>'+
+      '<td><select data-comp="'+k+'">'+opts+'</select></td></tr>';
+  }).join("");
+
+  const craft = craftAverages().map(function(r){
+    return '<tr><td>'+esc(r.name)+'</td><td>'+(r.avg===null?"—":r.avg+" / 4")+' <span class="tiny muted">('+r.n+' ×)</span></td></tr>';
+  }).join("");
+
+  const perQ = QS.map(function(q, i){
+    const s = qState(q.id);
+    const f = s.attempts[0];
+    const avgs = dimAvg(f);
+    const probeLines = Object.keys(f.probes||{}).map(function(k){
+      return '<div class="tiny" style="margin-bottom:6px"><span class="muted">'+esc(Q(q.probes[parseInt(k,10)]))+'</span><br>'+esc(f.probes[k])+'</div>';
+    }).join("");
+    return '<div class="card tight"><div class="q-head"><span class="chip hot">Q'+(i+1)+'</span><span class="chip">'+esc(L(q.short))+'</span>'+
+      (f.skipped?'<span class="chip" style="color:var(--bad);border-color:rgba(255,107,107,.4)">'+esc(ui("skipped"))+'</span>':'')+
+      (f.hints.some(Boolean)?'<span class="chip" style="color:var(--warn);border-color:rgba(242,193,78,.35)">hint</span>':'')+
+      '<span class="qnum">'+mmss(f.seconds)+' · '+esc(ui("words", {n:words(f.text)}))+'</span></div>'+
+      (words(f.text) ? '<p class="small" style="white-space:pre-wrap;margin:0 0 10px">'+esc(f.text)+'</p>' : '<p class="small muted">'+esc(ui("noAnswer"))+'</p>')+
+      (probeLines ? '<div style="border-left:2px solid var(--line);padding-left:10px;margin-bottom:10px">'+probeLines+'</div>' : '')+
+      '<div class="tiny muted">'+esc(ui("craft"))+': '+(avgs===null?"—":round1(avgs))+
+      (f.verdict?' · '+esc(ui("verdict"))+': '+f.verdict+' '+esc(L(VERDICTS[f.verdict-1])):'')+'</div>'+
+      (f.quote?'<div class="tiny" style="margin-top:6px">“'+esc(f.quote)+'”</div>':'')+
+      '</div>';
+  }).join("");
+
+  const gapNote = vote.missing.length
+    ? '<p class="small" style="color:var(--warn)">'+esc(ui("insufficient"))+': '+vote.missing.map(function(k){return esc(L(COMP[k].label));}).join(", ")+'</p>'
+    : '';
+
+  host.innerHTML =
+    '<div class="card"><h3>'+esc(ui("voteTitle"))+'</h3>'+
+      '<div class="vote '+cls+'"><span class="big">'+esc(vote.label)+'</span>'+
+      '<span class="muted">'+esc(ui("confidence"))+': <b>'+esc(confLabel)+'</b></span></div>'+
+      gapNote+
+      '<p class="tiny muted" style="margin:12px 0 0">'+esc(ui("exportHint"))+'</p>'+
+    '</div>'+
+    '<div class="card"><h3>'+esc(ui("compTable"))+'</h3>'+
+      '<table><thead><tr><th>'+esc(ui("compTable"))+'</th><th>'+esc(ui("yourVerdict"))+'</th><th></th></tr></thead><tbody>'+compRows+'</tbody></table>'+
+    '</div>'+
+    '<div class="card"><h3>'+esc(ui("craft2"))+'</h3><table><tbody>'+craft+'</tbody></table></div>'+
+    '<div class="card"><h3>'+esc(ui("priority"))+'</h3>'+
+      '<textarea rows="3" id="prio" placeholder="'+esc(ui("priorityPh"))+'">'+esc(state.note||"")+'</textarea></div>'+
+    '<h3 style="margin:22px 0 10px">'+esc(ui("interview"))+'</h3>'+perQ+
+    '<div class="card no-print"><div class="row">'+
+      '<button class="btn primary" id="expMd">'+esc(ui("export"))+'</button>'+
+      '<button class="btn" id="cpMd">'+esc(ui("copy"))+'</button>'+
+      '<button class="btn" id="expJson">'+esc(ui("json"))+'</button>'+
+      '<button class="btn ghost" id="impJson">'+esc(ui("importJson"))+'</button>'+
+      '<button class="btn ghost" id="prt">'+esc(ui("print"))+'</button>'+
+      '<span class="grow"></span>'+
+      '<button class="btn danger ghost" id="rst">'+esc(ui("resetAll"))+'</button>'+
+    '</div><input type="file" id="impFile" accept=".json,application/json" hidden></div>';
+
+  Array.prototype.forEach.call(host.querySelectorAll("[data-comp]"), function(s){
+    s.onchange = function(){
+      const k = s.getAttribute("data-comp");
+      state.answers = state.answers || {};
+      if(this.value === "") delete state.answers[k]; else state.answers[k] = parseInt(this.value,10);
+      save(); renderReport();
+    };
+  });
+  const prio = el("prio");
+  if(prio) prio.oninput = function(){ state.note = this.value; save(); };
+
+  el("expMd").onclick = function(){ download(buildMarkdown(), "mock-interview-y-ventures-"+today()+".md", "text/markdown"); };
+  el("expJson").onclick = function(){ download(JSON.stringify(state, null, 2), "mock-interview-y-ventures-"+today()+".json", "application/json"); };
+  el("cpMd").onclick = function(){ copyText(buildMarkdown()); };
+  el("prt").onclick = function(){ window.print(); };
+  el("impJson").onclick = function(){ el("impFile").click(); };
+  el("impFile").onchange = function(){
+    const f = this.files && this.files[0];
+    if(!f) return;
+    const r = new FileReader();
+    r.onload = function(){
+      try{
+        const parsed = JSON.parse(r.result);
+        state = Object.assign(state, parsed);
+        QS.forEach(function(q){ qState(q.id); });
+        stopTimer(); render(); save(); toast("Imported.");
+      }catch(e){ toast("Import failed: " + e.message); }
+    };
+    r.readAsText(f);
+  };
+  el("rst").onclick = function(){
+    if(!window.confirm(ui("confirmReset"))) return;
+    try{ localStorage.removeItem(LS_KEY); }catch(e){}
+    state = {lang:state.lang, tab:"interview", cur:0, intro:false, store:state.store, q:{}, note:"", answers:{}};
+    QS.forEach(function(q){ qState(q.id); });
+    stopTimer(); render(); save();
+  };
+}
+
+function renderPrep(){
+  const host = el("prep");
+  const rows = PREP.map.map(function(r){
+    return '<tr><td>'+esc(L(r.req))+'</td><td>'+esc(L(r.ev))+'</td><td>'+esc(L(r.gap))+'</td><td>'+esc(L(r.prep))+'</td></tr>';
+  }).join("");
+  const risks = PREP.risks.map(function(r){
+    return '<div class="card tight"><h3 style="text-transform:none;color:var(--text);font-size:15px">'+esc(L(r.t))+'</h3><p class="small" style="margin:0">'+esc(L(r.b))+'</p></div>';
+  }).join("");
+  const ask = PREP.ask.map(function(a){ return '<li class="small">'+esc(L(a))+'</li>'; }).join("");
+  host.innerHTML =
+    '<div class="card"><h3>'+esc(ui("req"))+' → '+esc(ui("whatToPrep"))+'</h3>'+
+      '<table><thead><tr><th>'+esc(ui("req"))+'</th><th>'+esc(ui("evidenceOnCv"))+'</th><th>'+esc(ui("theGap"))+'</th><th>'+esc(ui("whatToPrep"))+'</th></tr></thead><tbody>'+rows+'</tbody></table>'+
+    '</div>'+
+    '<h3 style="margin:22px 0 10px">'+esc(ui("risks"))+'</h3>'+risks+
+    '<div class="card"><h3>'+esc(ui("askTitle"))+'</h3><ul class="clean">'+ask+'</ul></div>';
+}
+
+function today(){ return new Date().toISOString().slice(0,10); }
+
+function buildMarkdown(){
+  const out = [];
+  out.push("# Mock interview — Digital Marketing Executive @ Y Ventures Enterprise");
+  out.push("");
+  out.push("Hiring-manager round · Difficulty 2 · Coach mode · " +
+    (state.lang==="hybrid" ? "Hybrid (questions English / coach Indonesian)" : state.lang==="en" ? "Full English" : "Full Indonesia") +
+    " · " + today());
+  out.push("");
+  QS.forEach(function(q, i){
+    const s = qState(q.id);
+    const f = s.attempts[0];
+    const comps = q.comp.map(function(k){ return L(COMP[k].label); }).join(" / ");
+    out.push("## Q"+(i+1)+" — "+comps);
+    out.push("");
+    out.push("**Question:** "+Q(q.lead));
+    out.push("");
+    s.attempts.forEach(function(a, ai){
+      if(s.attempts.length > 1) out.push("### "+ui("attempt", {n:ai+1}));
+      out.push("- Spoken time: "+a.seconds+"s · Words: "+words(a.text)+(a.skipped?" · SKIPPED":"")+
+        (a.hints.some(Boolean)?" · hints used: "+a.hints.map(function(h,j){return h?(j+1):null;}).filter(Boolean).join(","):"")+
+        (a.verdict?" · verdict: "+a.verdict+" "+L(VERDICTS[a.verdict-1]):""));
+      out.push("");
+      out.push("```");
+      out.push(a.text || "(no answer)");
+      out.push("```");
+      Object.keys(a.probes||{}).forEach(function(k){
+        const p = q.probes[parseInt(k,10)];
+        if(p && words(a.probes[k])){ out.push("- Probe — \""+Q(p)+"\" → "+a.probes[k]); }
+      });
+      const avg = dimAvg(a);
+      if(avg !== null){
+        out.push("- Self-scores: "+DIMS.map(function(d){ return L(d.name)+" "+(a.dims[d.k]||"-"); }).join(" · ")+" → craft avg "+round1(avg));
+      }
+      if(a.quote) out.push("- Evidence quote: \""+a.quote+"\"");
+      out.push("");
+    });
+  });
+
+  const vote = computeVote();
+  out.push("## Vote summary");
+  out.push("");
+  out.push("| Competency | Must/fit | Verdict |");
+  out.push("| --- | --- | --- |");
+  Object.keys(COMP).forEach(function(k){
+    const v = finalVerdict(k);
+    out.push("| "+L(COMP[k].label)+" | "+(COMP[k].must?"must-have":"fit")+" | "+(v===null?ui("notReached"):v+" "+L(VERDICTS[v-1]))+" |");
+  });
+  out.push("");
+  out.push("Self-assessed interviewer vote: **"+vote.label+"** · confidence "+vote.conf+
+    (vote.missing.length ? " · insufficient evidence on: "+vote.missing.map(function(k){return L(COMP[k].label);}).join(", ") : ""));
+  out.push("");
+  const craft = craftAverages().filter(function(r){ return r.avg !== null; });
+  if(craft.length) out.push("Craft averages (first attempts): "+craft.map(function(r){ return r.name+" "+r.avg; }).join(" · "));
+  out.push("");
+  if(state.note) { out.push("Closing note / priority: "+state.note); out.push(""); }
+  out.push("---");
+  out.push("Paste this whole block into the coach chat for sharp feedback, the priority fix, and a model answer for the weakest question.");
+  return out.join("\n");
+}
+
+function download(text, filename, mime){
+  const blob = new Blob([text], {type:(mime||"text/plain")+";charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click();
+  setTimeout(function(){ a.remove(); URL.revokeObjectURL(url); }, 1000);
+}
+
+function copyText(text){
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){ toast(ui("copied")); }, function(){ legacyCopy(text); });
+  }else{ legacyCopy(text); }
+}
+function legacyCopy(text){
+  const ta = document.createElement("textarea");
+  ta.value = text;
+  ta.style.position = "fixed"; ta.style.opacity = "0";
+  document.body.appendChild(ta); ta.select();
+  let ok = false;
+  try{ ok = document.execCommand("copy"); }catch(e){ ok = false; }
+  ta.remove();
+  toast(ok ? ui("copied") : ui("copyFail"));
+}
+
+function render(){
+  renderChips(); renderTabs();
+  el("langLabel").textContent = ui("langLabel");
+  el("footNote").textContent = ui("foot");
+  el("interview").hidden = state.tab !== "interview";
+  el("report").hidden = state.tab !== "report";
+  el("prep").hidden = state.tab !== "prep";
+  el("storageWarn").innerHTML = state.store ? "" : '<div class="banner">'+esc(ui("storageWarn"))+'</div>';
+  document.documentElement.lang = (state.lang === "en") ? "en" : "id";
+  if(state.tab === "interview") renderInterview();
+  else if(state.tab === "report") renderReport();
+  else renderPrep();
+}
+
+function init(){
+  load();
+  el("langSel").value = state.lang;
+  el("langSel").onchange = function(){
+    state.lang = this.value;
+    render(); save();
+  };
+  window.addEventListener("beforeunload", function(){ if(state.store){ try{ localStorage.setItem(LS_KEY, JSON.stringify(state)); }catch(e){} } });
+  render();
+}
+
+init();
+</script>
+</body>
+</html>

@@ -157,6 +157,15 @@ ul.clean li{margin-bottom:.35em}
 .kv{display:grid;grid-template-columns:150px 1fr;gap:4px 14px;font-size:13.5px}
 .kv dt{color:var(--muted)}
 .kv dd{margin:0}
+.ansbox{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:12px 14px;font-size:13.5px;white-space:pre-wrap}
+.note{border-left:2px solid var(--line);padding-left:12px;margin:12px 0 0;font-size:13.5px}
+.note.good{border-left-color:var(--good)}
+.note.need{border-left-color:var(--warn)}
+.note.warn{border-left-color:var(--bad)}
+.note b{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:3px}
+.meta{display:flex;gap:12px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin:10px 0}
+.chip.good{color:var(--good);border-color:rgba(62,207,142,.4);background:rgba(62,207,142,.08)}
+.chip.skip{color:var(--muted)}
 footer{color:var(--muted);font-size:12.5px;padding:26px 0 50px;text-align:center}
 @media(max-width:820px){
   table.responsive thead{display:none}
@@ -200,6 +209,7 @@ footer{color:var(--muted);font-size:12.5px;padding:26px 0 50px;text-align:center
     <div id="interview"></div>
     <div id="report" hidden></div>
     <div id="prep" hidden></div>
+    <div id="st" hidden></div>
   </main>
   <footer id="footNote"></footer>
 </div>
@@ -486,6 +496,50 @@ const PREP = {
   ]
 };
 
+const ST = {
+  run:{ date:"2026-10-15", functional:[108,108], layout:[34,34], widths:"500 / 800 / 1400 px" },
+  items:[
+    { qid:"q1", status:"answered", seconds:128, hints:[2],
+      text:"At Bersama Zatta I owned the creator programme for two campaign seasons. I wrote down what a good post looked like before we briefed anyone, built the tracking sheet with the posting windows, and briefed each creator myself. Two creators kept slipping, so I flagged them early and replaced them before launch week. I sent the client a one-page Friday recap of what went live and what moved. Engagement in the launch month was the highest of the quarter and the client renewed for the next cycle.",
+      probes:[{i:1, text:"I checked the campaign report every week; after we replaced those two creators the late posts stopped showing up in the weekly recap."}],
+      dims:{structure:3, specificity:3, ownership:3, result:2, relevance:3, concision:3},
+      verdict:3,
+      quote:"I wrote down what a good post looked like before we briefed anyone",
+      works:{en:"Clear arc: context, then actions that are unmistakably yours (\"I wrote down\", \"I built\", \"I briefed\"), then two outcomes. The decision to flag and replace two creators early is what lifts it above a task list — it shows judgement, not just execution.",
+             id:"Alurnya jelas: konteks, lalu aksi yang jelas milikmu (\"I wrote down\", \"I built\", \"I briefed\"), lalu dua hasil. Keputusan menandai dan mengganti dua kreator lebih awal itulah yang mengangkat jawaban ini di atas sekadar daftar tugas — di situ terlihat judgment, bukan cuma eksekusi."},
+      needs:{en:"The Result is still soft: \"highest of the quarter\" has no baseline, and \"the client renewed\" is not linked to your work. Bring one figure you can source, or say plainly that it is your estimate.",
+             id:"Bagian hasilnya masih lemah: \"highest of the quarter\" tanpa pembanding, dan \"the client renewed\" tidak dikaitkan ke pekerjaanmu. Bawa satu angka yang bisa kamu jelaskan sumbernya, atau bilang terus terang bahwa itu perkiraanmu."},
+      need:[{en:"the real engagement figure or before/after comparison", id:"angka engagement yang sebenarnya, atau perbandingan sebelum/sesudah"},
+            {en:"whether the renewal actually followed from this campaign", id:"apakah perpanjangan kontrak itu memang buah dari campaign ini"}] },
+
+    { qid:"q2", status:"skipped",
+      empty:{en:"This is the question the self-test skipped — and the biggest hole in your CV against this JD: no Apollo, no CRM, no B2B prospecting. It is the first answer to write for yourself.",
+             id:"Pertanyaan ini di-skip saat self-test — sekaligus lubang terbesar di CV-mu untuk JD ini: tidak ada Apollo, tidak ada CRM, tidak ada prospecting B2B. Ini jawaban pertama yang harus kamu tulis sendiri."} },
+
+    { qid:"q3", status:"answered", seconds:74, hints:[],
+      text:"Honestly I have not judged a vendor proposal before. The closest thing was a creator who promised forty posts in ten days. I asked for the plan in writing and it did not add up, so I proposed a smaller first batch.",
+      probes:[{i:2, text:"I said it to the campaign lead, with the numbers, and we cut the first batch to twelve posts."}],
+      dims:{structure:3, specificity:3, ownership:3, result:2, relevance:3, concision:3},
+      verdict:2,
+      quote:"",
+      works:{en:"Honesty first, then the nearest real equivalent — that is exactly how to handle a competency you have not done yet. The method is visible: ask for the plan in writing, test it against something checkable, then propose a smaller batch instead of only objecting.",
+             id:"Jujur dulu, baru mencari padanan terdekat — itu cara yang tepat menghadapi kompetensi yang belum pernah kamu jalani. Metodenya terlihat: minta rencananya tertulis, uji dengan sesuatu yang bisa dicek, lalu tawarkan batch kecil sebagai ganti sekadar menolak."},
+      needs:{en:"At 42 words this is far too thin for a must-have competency, and the anchor level is a 2 for that reason. Extend the action: what exactly did not add up (capacity, timeline, price?), what alternatives you offered, and what happened after the first batch.",
+             id:"Di 42 kata ini terlalu tipis untuk kompetensi must-have, dan karena itu anchor-nya jatuh di level 2. Panjangkan aksinya: bagian mana yang tidak masuk akal (kapasitas, timeline, harga?), opsi apa yang kamu tawarkan, dan apa yang terjadi setelah batch pertama."},
+      need:[{en:"what the forty-post promise failed to account for", id:"apa yang tidak diperhitungkan dari janji 40 post itu"},
+            {en:"what happened after the twelve-post batch — did it convert better?", id:"apa yang terjadi setelah batch 12 post — apakah hasilnya lebih baik?"},
+            {en:"the technical side the JD asks for: what you would request in writing from an API or website vendor", id:"sisi teknis yang diminta JD: apa yang akan kamu minta tertulis dari vendor API atau website"}] },
+
+    { qid:"q4", status:"skipped",
+      empty:{en:"Skipped in the self-test. This is the situational question built straight from the JD's hardest responsibility, so it is the one most likely to actually be asked. Write it yourself before the interview.",
+             id:"Di-skip saat self-test. Ini pertanyaan situasional yang diambil langsung dari tanggung jawab tersulit di JD, jadi paling mungkin benar-benar ditanyakan. Tulis sendiri sebelum wawancara."} },
+
+    { qid:"q5", status:"skipped",
+      empty:{en:"Skipped in the self-test. This is the fit question where your organisational experience (MC at 500+ events, 30+ media partnerships, KOL negotiation) should be pulled out of the CV's organisational section and volunteered explicitly.",
+             id:"Di-skip saat self-test. Ini pertanyaan fit, tempat pengalaman organisasimu (MC di acara 500+ orang, 30+ media partnership, negosiasi KOL) seharusnya dikeluarkan dari bagian organisasi di CV dan disebutkan eksplisit."} }
+  ]
+};
+
 const UI = {
   id:{
     interview:"Wawancara", report:"Laporan", prep:"Persiapan", langLabel:"Bahasa",
@@ -546,7 +600,19 @@ const UI = {
     insufficient:"bukti belum cukup",
     notReached:"belum dicapai",
     exportHint:"Hasil export ini dirancang untuk ditempel ke chat coach: pertanyaan, jawaban, waktu bicara, hint yang dipakai, dan self-scoring-mu.",
-    roleCol:"Peran", notScored:"tidak dinilai"
+    roleCol:"Peran", notScored:"tidak dinilai",
+    selfTab:"Self Test AI",
+    stIntro:"Isi pengujian internal aplikasi ini: pertanyaan yang dijawab, jawaban yang dihasilkan AI, dan skor yang dicatat saat pengujian berjalan.",
+    stWarn:"Jawaban di bawah ditulis oleh AI untuk menguji aplikasi ini — bukan pengalamanmu. Jangan dipakai sebagai cerita di wawancara asli. Pakai hanya sebagai contoh struktur, dan perhatikan catatan [NEED]: bagian itu wajib kamu ganti dengan fakta sendiri.",
+    stAnswered:"Dijawab di self-test", stSkipped:"Di-skip di self-test",
+    stAnswer:"Jawaban yang dihasilkan AI", stProbe:"Jawaban probing", stTime:"Waktu bicara", stHints:"Hint",
+    stNoHint:"tanpa hint", stHintRung:"rung {n}", stVerdict:"Verdict", stScores:"Self-scores", stQuote:"Kutipan bukti",
+    stWorks:"Kenapa ini bekerja", stNeeds:"Yang masih kurang / wajib kamu ganti", stStillNeed:"Masih perlu kamu isi",
+    stRunTitle:"Catatan pengujian", stRunDate:"Tanggal",
+    stRunFunctional:"{a} dari {b} pemeriksaan fungsional lolos", stRunLayout:"{a} dari {b} pemeriksaan layout lolos di {c}",
+    stRunFixed:"Tiga bug ditemukan dan diperbaiki saat pengujian: panel self-scoring tidak terbuka otomatis, tabel Persiapan overflow di layar sempit, dan sesi kosong menampilkan vote \"No\".",
+    stRunEngine:"Dijalankan di Chrome headless, tanpa instalasi tambahan.",
+    stSkippedQ:"belum dijawab"
   },
   en:{
     interview:"Interview", report:"Report", prep:"Prep", langLabel:"Language",
@@ -607,7 +673,19 @@ const UI = {
     insufficient:"insufficient evidence",
     notReached:"not reached",
     exportHint:"This export is built to be pasted into the coach chat: questions, answers, speaking time, hints used, and your self-scores.",
-    roleCol:"Role", notScored:"not scored"
+    roleCol:"Role", notScored:"not scored",
+    selfTab:"Self Test AI",
+    stIntro:"The record of this app's own internal testing: the questions that were answered, the answers the AI produced, and the scores recorded while the tests ran.",
+    stWarn:"The answers below were written by the AI to test this app — they are not your experience. Do not use them as stories in the real interview. Treat them as a structural example only, and note the [NEED] markers: those parts must be replaced with your own facts.",
+    stAnswered:"Answered in the self-test", stSkipped:"Skipped in the self-test",
+    stAnswer:"Answer the AI produced", stProbe:"Probe answer", stTime:"Spoken time", stHints:"Hints",
+    stNoHint:"no hints", stHintRung:"rung {n}", stVerdict:"Verdict", stScores:"Self-scores", stQuote:"Evidence quote",
+    stWorks:"Why this works", stNeeds:"What is still missing / must be replaced", stStillNeed:"You still need to supply",
+    stRunTitle:"Test log", stRunDate:"Date",
+    stRunFunctional:"{a} of {b} functional checks passed", stRunLayout:"{a} of {b} layout checks passed at {c}",
+    stRunFixed:"Three bugs were found and fixed during testing: the self-scoring panel did not open automatically, the Prep table overflowed on narrow screens, and an empty session reported a vote of \"No\".",
+    stRunEngine:"Run in headless Chrome, with no extra install.",
+    stSkippedQ:"not answered"
   }
 };
 
@@ -715,7 +793,7 @@ function renderChips(){
 
 function renderTabs(){
   const t = el("tabs");
-  const items = [["interview","interview"],["report","report"],["prep","prep"]];
+  const items = [["interview","interview"],["report","report"],["prep","prep"],["st","selfTab"]];
   t.innerHTML = items.map(function(it){
     return '<button data-tab="'+it[0]+'"'+(state.tab===it[0]?' class="on"':'')+'>'+esc(ui(it[1]))+'</button>';
   }).join("");
@@ -1174,8 +1252,75 @@ function renderPrep(){
     '<div class="card"><h3>'+esc(ui("askTitle"))+'</h3><ul class="clean">'+ask+'</ul></div>';
 }
 
-function today(){ return new Date().toISOString().slice(0,10); }
+function renderSelfTest(){
+  const host = el("st");
+  const run = ST.run;
 
+  const intro =
+    '<div class="card"><h3>'+esc(ui("stRunTitle"))+'</h3>'+
+      '<p class="small" style="margin:0 0 10px">'+esc(ui("stIntro"))+'</p>'+
+      '<ul class="clean small" style="margin:0">'+
+        '<li>'+esc(ui("stRunFunctional", {a:run.functional[0], b:run.functional[1]}))+'</li>'+
+        '<li>'+esc(ui("stRunLayout", {a:run.layout[0], b:run.layout[1], c:run.widths}))+'</li>'+
+        '<li>'+esc(ui("stRunFixed"))+'</li>'+
+        '<li>'+esc(ui("stRunEngine"))+'</li>'+
+      '</ul>'+
+      '<p class="tiny muted" style="margin:12px 0 0">'+esc(ui("stRunDate"))+': '+esc(run.date)+'</p>'+
+    '</div>'+
+    '<div class="banner">'+esc(ui("stWarn"))+'</div>';
+
+  const cards = ST.items.map(function(it, i){
+    const q = QS.filter(function(x){ return x.id === it.qid; })[0];
+    const comp = q.comp.map(function(k){
+      return '<span class="chip '+(COMP[k].must?"must":"")+'">'+esc(L(COMP[k].label))+'</span>';
+    }).join("");
+    const badge = it.status === "answered"
+      ? '<span class="chip good">'+esc(ui("stAnswered"))+'</span>'
+      : '<span class="chip skip">'+esc(ui("stSkipped"))+'</span>';
+
+    let body = "";
+    if(it.status === "answered"){
+      const keys = Object.keys(it.dims);
+      const avg = keys.reduce(function(s,k){ return s + it.dims[k]; }, 0) / keys.length;
+      body += '<div class="meta">'+
+        '<span>'+esc(ui("stTime"))+': <b>'+it.seconds+'s</b></span>'+
+        '<span>'+esc(ui("words", {n:words(it.text)}))+'</span>'+
+        '<span>'+esc(ui("stHints"))+': <b>'+(it.hints.length ? esc(ui("stHintRung", {n:it.hints.join(", ")})) : esc(ui("stNoHint")))+'</b></span>'+
+        '<span>'+esc(ui("stVerdict"))+': <b>'+it.verdict+' '+esc(L(VERDICTS[it.verdict-1]))+'</b></span>'+
+        '<span>'+esc(ui("craft"))+': <b>'+round1(avg)+' / 4</b></span>'+
+      '</div>';
+      body += '<h3>'+esc(ui("stAnswer"))+'</h3><div class="ansbox">'+esc(it.text)+'</div>';
+      if(it.probes.length){
+        body += '<h3 style="margin-top:16px">'+esc(ui("stProbe"))+'</h3>';
+        it.probes.forEach(function(p){
+          body += '<div style="margin-bottom:10px"><div class="small" style="margin-bottom:6px"><b>'+(p.i+1)+'.</b> '+esc(Q(q.probes[p.i]))+'</div>'+
+                  '<div class="ansbox">'+esc(p.text)+'</div></div>';
+        });
+      }
+      body += '<div class="note good"><b>'+esc(ui("stWorks"))+'</b>'+esc(L(it.works))+'</div>';
+      body += '<div class="note need"><b>'+esc(ui("stNeeds"))+'</b>'+esc(L(it.needs))+'</div>';
+      body += '<div class="note warn"><b>'+esc(ui("stStillNeed"))+'</b><ul class="clean small" style="margin:0">'+
+        it.need.map(function(n){ return '<li>[NEED] '+esc(L(n))+'</li>'; }).join("")+'</ul></div>';
+      body += '<h3 style="margin-top:16px">'+esc(ui("stScores"))+'</h3><table><tbody>'+
+        DIMS.map(function(d){
+          return '<tr><td>'+esc(L(d.name))+'</td><td><b>'+it.dims[d.k]+'</b> <span class="tiny muted">'+esc(L(d.lv[it.dims[d.k]-1]))+'</span></td></tr>';
+        }).join("")+
+      '</tbody></table>';
+      if(it.quote) body += '<p class="tiny muted" style="margin:10px 0 0">'+esc(ui("stQuote"))+': “'+esc(it.quote)+'”</p>';
+    }else{
+      body += '<p class="small" style="margin:0">'+esc(L(it.empty))+'</p>';
+    }
+
+    return '<div class="card"><div class="q-head"><span class="chip hot">Q'+(i+1)+'</span>'+
+      '<span class="chip">'+esc(L(q.tag))+'</span>'+comp+badge+
+      (it.status === "skipped" ? '<span class="qnum">'+esc(ui("stSkippedQ"))+'</span>' : '')+'</div>'+
+      '<p class="lead" style="font-size:15px">'+esc(Q(q.lead))+'</p>'+body+'</div>';
+  }).join("");
+
+  host.innerHTML = intro + cards;
+}
+
+function today(){ return new Date().toISOString().slice(0,10); }
 function buildMarkdown(){
   const out = [];
   out.push("# Mock interview — Digital Marketing Executive @ Y Ventures Enterprise");
@@ -1268,11 +1413,13 @@ function render(){
   el("interview").hidden = state.tab !== "interview";
   el("report").hidden = state.tab !== "report";
   el("prep").hidden = state.tab !== "prep";
+  el("st").hidden = state.tab !== "st";
   el("storageWarn").innerHTML = state.store ? "" : '<div class="banner">'+esc(ui("storageWarn"))+'</div>';
   document.documentElement.lang = (state.lang === "en") ? "en" : "id";
   if(state.tab === "interview") renderInterview();
   else if(state.tab === "report") renderReport();
-  else renderPrep();
+  else if(state.tab === "prep") renderPrep();
+  else renderSelfTest();
 }
 
 function init(){
